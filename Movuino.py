@@ -106,7 +106,6 @@ class Movuino(Thread):
 		#############   CLIENT   #############
 		self.osc_client = OSCclient(movuinoIP_, portOut_) # Init client communication on specific Ip and port
 		######################################
-
 		self.isMovuinoRunning = True
 		self.thrd = Thread.__init__(self)
 

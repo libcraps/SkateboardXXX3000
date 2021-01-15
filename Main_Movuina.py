@@ -8,18 +8,17 @@ import Movuino as mvn
 #####################################################################
 
 # COMPUTER
-computerIP = "127.0.0.1" # set local ip adress
+computerIP = "127.0.0.1"  # set local ip adress
 
 # MOVUINO MASTER
 movuinoIP = "127.0.0.1"  # set local ip adress
-movuino = mvn.Movuino(computerIP, movuinoIP, 3000, 3001) # port in // port out
+movuino = mvn.Movuino(computerIP, movuinoIP, 3000, 3001)  # port in // port out
 
 #####################################################################
 ####################		 MAIN				#####################
 #####################################################################
 def main(args = None):
 	movuino.start() # start thread and OSC communication
-	
 	#-----------------------#
 	#-----------------------#
 	#-----------------------#
@@ -29,7 +28,7 @@ def main(args = None):
 	movuino.vibroNow(False) # turn off vibration on Movuino
 
 	timer0 = time.time()
-	while (time.time()-timer0 < 2):
+	while (time.time() - timer0 < 2):
 		movuino.dataPrint()	# print incoming data and device id
 		#print movuino.ax # or print individual data from Movuina
 		time.sleep(.01)									# let quick sleep to avoid overload
