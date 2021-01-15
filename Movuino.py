@@ -36,7 +36,7 @@ class OSCclient():
 #####################################################################
 class OSCserver():
 	def __init__(self, ip, port):
-		self.receive_address = ip, port
+		self.receive_address = (ip, port)
 		self.s = OSC.ThreadingOSCServer(self.receive_address)
 		self.s.addDefaultHandlers() # this registers a 'default' handler (for unmatched messages)
 		self.st = threading.Thread(target=self.s.serve_forever)
@@ -89,6 +89,12 @@ class Movuino(Thread):
 		self.mx = 0.0 # magnetometer X
 		self.my = 0.0
 		self.mz = 0.0
+
+		self.repAcc = False
+		self.repGyr = False
+		self.repMag = False
+		self.xmmGestId = 0
+		self.xmmGestProg = 0
 		
 		# Light
 		self.red = 0
@@ -128,6 +134,10 @@ class Movuino(Thread):
 				self.my = curVal[8]
 				self.mz = curVal[9]
 
+			if curAddr == "gesture":
+				self.xmmGestId = int(curVal[0])
+				self.xmmGestProg = float(curVal[1])
+
 			time.sleep(0.01)
 
 	def stop(self):
@@ -143,7 +153,9 @@ class Movuino(Thread):
 		print ("Accelerometer data:", self.ax, self.ay, self.az)
 		print ("Gyroscope data:", self.gx, self.gy, self.gz)
 		print ("Magnetometer data:", self.mx, self.my, self.mz)
-		print ("")
+		#print("Repetitions:", self.repAcc, self.repGyr, self.repMag);
+		print("Gesture recognition:", self.xmmGestId, self.xmmGestProg);
+		print ("--------------------------------------")
 
 	def vibroNow(self,isVib):
 		if isVib:

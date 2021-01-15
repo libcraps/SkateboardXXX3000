@@ -28,9 +28,9 @@ def main(args = None):
 	movuino.vibroNow(False) # turn off vibration on Movuino
 
 	timer0 = time.time()
-	while (time.time() - timer0 < 2):
+	while (time.time() - timer0 < 5):
 		movuino.dataPrint()	# print incoming data and device id
-		#print movuino.ax # or print individual data from Movuina
+
 		time.sleep(.01)									# let quick sleep to avoid overload
 	
 	movuino.vibroPulse(150, 100, 3)						# make pulsation on Movuino master (vibration time, vibration off, number of pulsation)
