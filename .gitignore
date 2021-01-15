@@ -1,10 +1,6 @@
 
 .idea/workspace.xml
 *.pyc
-*.pyc
-*.pyc
-*.pyc
-Movuino.pyc
-*.pyc
-*.pyc
-*.pyc
+*\venv
+*\.idea
+*.h
