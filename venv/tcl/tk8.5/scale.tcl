@@ -223,13 +223,7 @@ proc ::tk::ScaleIncrement {w dir big repeat} {
 	set inc [$w cget -resolution]
     }
     if {([$w cget -from] > [$w cget -to]) ^ ($dir eq "up")} {
-        if {$inc > 0} {
-            set inc [expr {-$inc}]
-        }
-    } else {
-        if {$inc < 0} {
-            set inc [expr {-$inc}]
-        }
+	set inc [expr {-$inc}]
     }
     $w set [expr {[$w get] + $inc}]
 
