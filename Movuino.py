@@ -38,12 +38,12 @@ class OSCserver():
 	def __init__(self, ip, port):
 		self.receive_address = (ip, port)
 		self.s = OSC.ThreadingOSCServer(self.receive_address)
-		self.s.addDefaultHandlers() # this registers a 'default' handler (for unmatched messages)
+		self.s.addDefaultHandlers()  # this registers a 'default' handler (for unmatched messages)
 		self.st = threading.Thread(target=self.s.serve_forever)
 		self.st.start()
 
 		#Initialize variables
-		self.curAddr = "No OSC address"
+		self.curAddr = "No OSC address" # It can take the value of "movuino", "streamo", "gesture", "repetions"
 		self.curMess = "No OSC message"
 
 		print("Starting OSCServer")
@@ -94,7 +94,7 @@ class Movuino(Thread):
 		self.repGyr = False
 		self.repMag = False
 		self.xmmGestId = 0
-		self.xmmGestProg = 0
+		self.xmmGestProg = 0.0
 		
 		# Light
 		self.red = 0
