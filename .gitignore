@@ -1,6 +1,5 @@
 
 .idea/workspace.xml
 *.pyc
-*\venv
 *\.idea
 *.h
