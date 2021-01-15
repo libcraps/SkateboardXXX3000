@@ -3,7 +3,7 @@ import time
 from threading import Thread
 import Movuino as mvn
 import matplotlib.pyplot as plt
-# ok
+# ok ok
 #####################################################################
 #####################		MOVUINO			#########################
 #####################################################################
