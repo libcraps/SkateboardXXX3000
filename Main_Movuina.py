@@ -2,6 +2,7 @@ import sys
 import time
 from threading import Thread
 import Movuino as mvn
+import matplotlib.pyplot as plt
 
 #####################################################################
 #####################		MOVUINO			#########################
@@ -28,9 +29,11 @@ def main(args = None):
 	movuino.vibroNow(False) # turn off vibration on Movuino
 
 	timer0 = time.time()
-	while (time.time() - timer0 < 5):
-		movuino.dataPrint()	# print incoming data and device id
+	while (time.time() - timer0 < 10):
 
+		movuino.dataPrint()	# print incoming data and device id
+		if (movuino.xmmGestId == 1) :
+			plt.text()
 		time.sleep(.01)									# let quick sleep to avoid overload
 	
 	movuino.vibroPulse(150, 100, 3)						# make pulsation on Movuino master (vibration time, vibration off, number of pulsation)
