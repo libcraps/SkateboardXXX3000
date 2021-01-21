@@ -156,8 +156,8 @@ class Movuino(Thread):
         print ("Accelerometer data:", self.ax, self.ay, self.az)
         print ("Gyroscope data:", self.gx, self.gy, self.gz)
         print ("Magnetometer data:", self.mx, self.my, self.mz)
-        # print("Repetitions:", self.repAcc, self.repGyr, self.repMag);
-        print("Gesture recognition:", self.xmmGestId, self.xmmGestProg);
+        # print("Repetitions:", self.repAcc, self.repGyr, self.repMag)
+        print("Gesture recognition:", self.xmmGestId, self.xmmGestProg)
         print ("--------------------------------------")
 
     def vibroNow(self, isVib):

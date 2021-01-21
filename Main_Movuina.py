@@ -33,11 +33,13 @@ def main(args = None):
 	while (time.time() - timer0 < 10):
 
 		movuino.dataPrint()	# print incoming data and device id
-		if (movuino.xmmGestId == 1) :
-			plt.text()
+		if (movuino.xmmGestId == 1 and movuino.xmmGestProg >= 0.75) :
+			plt.text(0.5, 0.5, "ooook")
+			plt.show()
+
 		time.sleep(.01)									# let quick sleep to avoid overload
 	
-	movuino.vibroPulse(150, 100, 3)						# make pulsation on Movuino master (vibration time, vibration off, number of pulsation)
+	#movuino.vibroPulse(150, 100, 3)						# make pulsation on Movuino master (vibration time, vibration off, number of pulsation)
 
 	#-----------------------#
 	#-----------------------#

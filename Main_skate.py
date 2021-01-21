@@ -32,10 +32,9 @@ def main(args=None):
     while (time.time() - timer0 < 5):
         movuino.dataPrint()  # print incoming data and device id
 
-        time.sleep(.01)  # let quick sleep to avoid overload
+        time.sleep(.05)  # let quick sleep to avoid overload
 
-    movuino.vibroPulse(150, 100,
-                       3)  # make pulsation on Movuino master (vibration time, vibration off, number of pulsation)
+    movuino.vibroPulse(150, 100,3)  # make pulsation on Movuino master (vibration time, vibration off, number of pulsation)
 
     # -----------------------#
     # -----------------------#
