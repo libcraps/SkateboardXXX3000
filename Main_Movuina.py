@@ -29,13 +29,22 @@ def main(args = None):
 	time.sleep(0.5)
 	movuino.vibroNow(False) # turn off vibration on Movuino
 
+	tricks = []
+
 	timer0 = time.time()
-	while (time.time() - timer0 < 10):
+	plt.figure()
+	plt.show()
+	while (time.time() - timer0 < 30):
 
 		movuino.dataPrint()	# print incoming data and device id
-		if (movuino.xmmGestId == 1 and movuino.xmmGestProg >= 0.75) :
-			plt.text(0.5, 0.5, "ooook")
-			plt.show()
+		if (movuino.xmmGestId == 1 and movuino.xmmGestProg >= 0.9) :
+			tricks.append("ollie")
+			time.sleep(2)
+
+			#plt.close()
+		elif (movuino.xmmGestId == 2 and movuino.xmmGestProg >= 0.9) :
+			tricks.append("kickflip")
+			time.sleep(2)
 
 		time.sleep(.01)									# let quick sleep to avoid overload
 	
@@ -46,6 +55,8 @@ def main(args = None):
 	#-----------------------#
 
 	movuino.stop() # stop thread and OSC communication
+
+	print(tricks)
 
 if __name__ == '__main__':
 	sys.exit(main())

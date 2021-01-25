@@ -140,6 +140,7 @@ class Movuino(Thread):
                 self.xmmGestId = int(curVal[0])
                 self.xmmGestProg = float(curVal[1])
 
+
             time.sleep(0.01)
 
     def stop(self):
@@ -162,11 +163,9 @@ class Movuino(Thread):
 
     def vibroNow(self, isVib):
         if isVib:
-            self.osc_client.sendOSCMessage('vibro/now',
-                                           1)  # send value True to address "/vibroNow" on IP 127.0.0.1 port 3011
+            self.osc_client.sendOSCMessage('vibro/now',1)  # send value True to address "/vibroNow" on IP 127.0.0.1 port 3011
         else:
-            self.osc_client.sendOSCMessage('vibro/now',
-                                           0)  # send value False to address "/vibroNow" on IP 127.0.0.1 port 3011
+            self.osc_client.sendOSCMessage('vibro/now',0)  # send value False to address "/vibroNow" on IP 127.0.0.1 port 3011
 
     def vibroPulse(self, on_, off_, rep_):
         self.osc_client.sendOSCMessage('vibro/pulse', on_, off_, rep_)
