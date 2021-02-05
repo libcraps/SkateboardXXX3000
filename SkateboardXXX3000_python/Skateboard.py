@@ -1,0 +1,5 @@
+"""
+Class of the skateboard
+
+"""
+
