@@ -2,10 +2,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from integratinoFunctions import Euler, Offset
 from DisplayFunctions import Display
+from mvtAnalyseFunctions import OnGround
 import os
 
 dataPath = "..\\Data\\"
-fileName = "Movuino-heel_50HZ_smooth15\\Movuino-heel_50HZ_smooth15"
+fileName = "Chute_libre_movuino\\Chute_libre_movuino2"
 #fileName = "dataTestTemplate.csv"
 
 rawData = pd.read_csv(dataPath + fileName + ".csv", sep=",")
@@ -31,6 +32,8 @@ gyroscope[2] = list(rawData["gyroZ"])
 magnetometer[0] = list(rawData["magX"])
 magnetometer[1] = list(rawData["magY"])
 magnetometer[2] = list(rawData["magZ"])
+
+OnGround(time, acceleration[2], [], 5)
 
 #acceleration[2] = Offset(acceleration[2])
 for i in range(3):
