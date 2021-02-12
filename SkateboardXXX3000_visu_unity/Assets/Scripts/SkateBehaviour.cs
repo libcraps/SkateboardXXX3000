@@ -28,7 +28,7 @@ public class SkateBehaviour : MonoBehaviour
         if (i < rawData.Count-1)
         {
             Debug.Log(new Vector3(rawData[5][10], rawData[2][11], rawData[2][12]));
-            Vector3 velocity = new Vector3(-rawData[i][13] * (float)0.5, -rawData[i][14] * (float)0.5, -rawData[i][15] * (float)0.5);
+            //Vector3 velocity = new Vector3(-rawData[i][13] * (float)0.5, -rawData[i][14] * (float)0.5, -rawData[i][15] * (float)0.5);
             //this.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(rawData[i][1], rawData[i][3], rawData[i][2]), ForceMode.Acceleration);
             float deltaRotX = (rawData[i + 1][10] - rawData[i][10]) * (float)(360 / 0.25);
             float deltaRotY = (rawData[i + 1][11] - rawData[i][11]) * (float)(360 / 0.25);

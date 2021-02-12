@@ -6,7 +6,7 @@ from mvtAnalyseFunctions import OnGround
 import os
 
 dataPath = "..\\Data\\"
-fileName = "Chute_libre_movuino\\Chute_libre_movuino2"
+fileName = "rota_180_z_2\\rota_180_z_2"
 #fileName = "dataTestTemplate.csv"
 
 rawData = pd.read_csv(dataPath + fileName + ".csv", sep=",")
