@@ -4,8 +4,8 @@
 #include "FS.h"
 #include <Yabl.h>
 
-
 MPU6050 mpu6050;
+
 int16_t ax, ay, az; // store accelerometre values
 int16_t gx, gy, gz; // store gyroscope values
 int16_t mx, my, mz; // store magneto values
@@ -13,6 +13,10 @@ int magRange[] = {666, -666, 666, -666, 666, -666}; // magneto range values for 
 
 // Button variables
 const int pinBtn = 13;     // the number of the pushbutton pin
+Button button;
+bool buttonFlash = false;
+bool buttonPressed = false;
+float startPush;
 
 // LEDs
 const int pinLedESP = 2; // wifi led indicator
@@ -20,12 +24,18 @@ const int pinLedBat = 0;  // battery led indicator
 const int pinLedNeopix = 15;
 
 bool test = false;
+float testMillis;
 
 void setup() {
   // pin setup
-  pinMode(pinBtn, INPUT_PULLUP); // pin for the button
+  //pinMode(pinBtn, INPUT_PULLUP); // pin for the button
   pinMode(pinLedESP, OUTPUT);   // pin for the wifi led
   pinMode(pinLedBat, OUTPUT);    // pin for the battery led
+  button.attach(pinBtn, INPUT_PULLUP); // pin configured to pull-up mode
+  
+  button.callback(onButtonPress, PRESS);
+  button.callback(onButtonRelease, RELEASE);
+  button.callback(onButtonHold, HOLD | DOUBLE_TAP); // called on either event
 
   Wire.begin();
   Serial.begin(115200);
@@ -34,9 +44,8 @@ void setup() {
   // initialize device
   Serial.println("Initializing I2C devices...");
   mpu6050.initialize();
-
+  testMillis = millis();
   createFile("/data/file.txt");
-
 }
 
 void loop() {
@@ -46,12 +55,16 @@ void loop() {
   //mpu6050.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); // Get only axis from acc & gyr
 
   magnetometerAutoCallibration();
-
-  if (!test && millis() > 5000) {
-    Serial.println("ok");
-    test =true;
+  button.update();
+  if (buttonFlash) {
+    Serial.println(startPush);
+    
+    if (millis()-startPush > 1500){
+      digitalWrite(pinLedESP, LOW); // Flash every 80ms
+    } else {
+      digitalWrite(pinLedESP, millis() % 80 < 40); // Flash every 80ms
+    }
   }
-  
   delay(1);
 }
 
