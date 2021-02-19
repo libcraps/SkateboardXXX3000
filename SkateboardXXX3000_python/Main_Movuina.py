@@ -14,7 +14,7 @@ computerIP = "127.0.0.1"  # set local ip adress
 
 # MOVUINO MASTER
 movuinoIP = "127.0.0.1"  # set local ip adress
-movuino = mvn.Movuino(computerIP, movuinoIP, 3000, 3001)  # port in // port out
+movuino = mvn.Movuino(computerIP, movuinoIP, 7400, 7401)  # port in // port out
 
 #####################################################################
 ####################		 MAIN				#####################

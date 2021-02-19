@@ -110,6 +110,7 @@ class Movuino(Thread):
         self.osc_server.addListener(self.listenOSCAdr2)  # add listener
         self.osc_server.addListener('gesture')
         self.osc_server.addListener('repetitions')
+        self.osc_server.addListener('theta')
 
         #############   CLIENT   #############
         self.osc_client = OSCclient(movuinoIP_, portOut_)  # Init client communication on specific Ip and port
@@ -136,10 +137,14 @@ class Movuino(Thread):
                 self.my = curVal[8]
                 self.mz = curVal[9]
 
+
+
             if curAddr == "gesture":
                 self.xmmGestId = int(curVal[0])
                 self.xmmGestProg = float(curVal[1])
-
+            if curAddr == "theta":
+                print(curVal)
+            print(self.osc_server.get_CurrentMessage())
 
             time.sleep(0.01)
 
