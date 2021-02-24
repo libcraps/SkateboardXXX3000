@@ -2,8 +2,8 @@
 	"name" : "PatchMovuino",
 	"version" : 1,
 	"creationdate" : 3695978259,
-	"modificationdate" : 3695978322,
-	"viewrect" : [ 348.0, 164.0, 300.0, 500.0 ],
+	"modificationdate" : 3697008820,
+	"viewrect" : [ 303.0, 172.0, 300.0, 500.0 ],
 	"autoorganize" : 1,
 	"hideprojectwindow" : 0,
 	"showdependencies" : 1,
@@ -15,10 +15,49 @@
 				"local" : 1,
 				"toplevel" : 1
 			}
+,
+			"freefall.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
+,
+			"intensity.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
+,
+			"kick.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
+,
+			"shake.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
+,
+			"spin.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
+,
+			"still.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
+,
+			"riot.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
 
 		}
 ,
 		"code" : 		{
+
+		}
+,
+		"externals" : 		{
 
 		}
 
