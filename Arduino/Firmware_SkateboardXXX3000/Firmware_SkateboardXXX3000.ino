@@ -32,7 +32,8 @@ File file;
 bool isEditable = false;
 String serialMessage;
 String dirPath = "/data";
-String filePath = "/data/file.csv";
+String filePath = "/data/file2.txt";
+bool formatted;
 
 
 void setup() {
@@ -50,7 +51,9 @@ void setup() {
   Wire.begin();
   Serial.begin(115200);
   delay(2000);
-
+  
+  SPIFFS.begin();
+  
   // initialize device
   Serial.println("Initializing I2C devices...");
   mpu6050.initialize();
@@ -76,6 +79,18 @@ void loop() {
 
     switch (serialMessage)
     {
+      case 'f':
+        formatted = SPIFFS.format();
+        Serial.println(formatted);
+        if(formatted)
+        {
+          Serial.println("\n\nSuccess formatting");
+        }
+        else
+        {
+          Serial.println("\n\nError formatting");
+        }
+       break;
       case 'c':
         Serial.println("Creation of  " + filePath);
         createFile(filePath);
@@ -92,8 +107,8 @@ void loop() {
         Serial.println("Adding a new line to " + filePath);
         writeData(filePath);
         break;
-      case 'i':
-        Serial.println(filePath + " information :");
+      case 'l':
+        listingDir(dirPath);
         break;
       default:
         Serial.println("No command associated");
@@ -110,7 +125,7 @@ void loop() {
       createFile(filePath);
     } 
     else 
-    {
+    {Serial.println("Stopping the continue edition of " + filePath);
       isEditable = false;
     }
   }
@@ -120,10 +135,6 @@ void loop() {
   {
     writeData(filePath);
   }
-  
-  
-
-  
 
   // DEBUG
   if (buttonFlash) 

@@ -1,13 +1,5 @@
-void createFile(String filepath) {
-    
-  bool success = SPIFFS.begin();
- 
-  if (success) {
-    Serial.println("File system mounted with success");
-  } else {
-    Serial.println("Error mounting the file system");
-  }
- 
+void createFile(String filepath)
+{
   File file = SPIFFS.open(filepath, "w");
  
   if (!file) {
@@ -18,9 +10,11 @@ void createFile(String filepath) {
   file.println("TEST SPIFFS REDING and wrintng");
   
   initialiseFileMovuinoData(file);
+  file.close();
 }
 
-void readFile(String filepath){
+void readFile(String filepath)
+{
   
   File file = SPIFFS.open(filepath, "r");
   
@@ -32,9 +26,11 @@ void readFile(String filepath){
   while(file.available()){
     Serial.write(file.read());
   }
+  file.close();
 }
 
-void writeData(String filePath){
+void writeData(String filePath)
+{
   
   file = SPIFFS.open(filePath, "a");
   if (!file) 
@@ -44,4 +40,19 @@ void writeData(String filePath){
   }
   writeInFileMovuinoData(file);
   file.close();
+}
+
+void listingDir(String dirPath)
+{
+  Serial.println("Listing dir :");
+  Dir dir = SPIFFS.openDir(dirPath);
+  while (dir.next()) 
+  {
+    Serial.print(dir.fileName());
+    File f = dir.openFile("r");
+    Serial.print(" ");
+    Serial.println(f.size());
+    f.close();
+  }
+  Serial.println("End of listing");
 }
