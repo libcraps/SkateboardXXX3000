@@ -1,6 +1,8 @@
 /*
  * Main program of the firmware of the movuino.
  * This firmware allows us to store data in the Spiffs and to get it after
+ * Utilisation :
+ * Double tap a first time the button to record a new session and double tap a second time to stop the record
  * 
  */
 
@@ -45,6 +47,7 @@ String dirPath = "/data";
 String filePath = "/data/file2.txt";
 String serialMessage;
 bool isEditable = false;
+bool isReadable = false;
 bool formatted;
 
 
@@ -96,7 +99,7 @@ void loop() {
         Serial.println("Formating the SPIFFS (data files)...");
         formatingSPIFFS();
         break;
-      case CMD_CREATE_FILE:
+      case CMD_CREATE_FILE: //Create a new file and replace the previous one
         Serial.println("Creation of  " + filePath);
         createFile(filePath);
         break;
@@ -124,6 +127,7 @@ void loop() {
   //---------- Creating File -----------
   if (doubleTap)
   {
+    doubleTap = false;
     if(isEditable == false)
     {
       isEditable = true;
@@ -148,18 +152,31 @@ void loop() {
   }
 
   //------- Writing in File ------------
-  if (isEditable == true)
+  if (isEditable)
   {
     writeData(filePath);
+  }
+  if (isReadable)
+  {
+    isReadable = false;
+    readFile(filePath);
   }
 
   // DEBUG
   if (buttonFlash) 
   {
-    digitalWrite(pinLedESP, millis() % 80 < 40); // Flash every 80ms
+    if(millis()-startPush > 2500)
+    {
+      Serial.println("reading " + filePath + "...");
+      isReadable = true;
+      startPush = millis();
+    }
+    else
+    {
+      digitalWrite(pinLedESP, millis() % 80 < 40); // Flash every 80ms
+    }
   }
 
-  doubleTap = false;
   delay(1);
 }
 
