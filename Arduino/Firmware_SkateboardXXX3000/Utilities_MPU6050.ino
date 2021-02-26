@@ -18,43 +18,43 @@ void printMovuinoData() {
   Serial.print(mz);
   Serial.println();
 }
-void writeInFileMovuinoData(File file) {
+void writeInFileMovuinoData(File file, String sep) {
   file.print(ax / float(32768));
-  file.print("\t ");
+  file.print(sep);
   file.print(ay / float(32768));
-  file.print("\t ");
+  file.print(sep);
   file.print(az / float(32768));
-  file.print("\t ");
+  file.print(sep);
   file.print(gx / float(32768));
-  file.print("\t ");
+  file.print(sep);
   file.print(gy / float(32768));
-  file.print("\t ");
+  file.print(sep);
   file.print(gz / float(32768));
-  file.print("\t ");
+  file.print(sep);
   file.print(mx);
-  file.print("\t ");
+  file.print(sep);
   file.print(my);
-  file.print("\t ");
+  file.print(sep);
   file.print(mz);
   file.println();
 }
-void initialiseFileMovuinoData(File file) {
+void initialiseFileMovuinoData(File file, String sep) {
   file.print("ax");
-  file.print("\t ");
+  file.print(sep);
   file.print("ay");
-  file.print("\t ");
+  file.print(sep);
   file.print("az");
-  file.print("\t ");
+  file.print(sep);
   file.print("gx");
-  file.print("\t ");
+  file.print(sep);
   file.print("gy");
-  file.print("\t ");
+  file.print(sep);
   file.print("gz");
-  file.print("\t ");
+  file.print(sep);
   file.print("mx");
-  file.print("\t ");
+  file.print(sep);
   file.print("my");
-  file.print("\t ");
+  file.print(sep);
   file.print("mz");
   file.println();
 }

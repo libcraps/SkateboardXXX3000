@@ -1,6 +1,6 @@
 import serial
 
-arduino = serial.Serial('COM9', baudrate=115200, timeout=0.01)
-arduino.readline()
+arduino = serial.Serial('COM9', baudrate=115200, timeout=1.)
 while (True):
-    print(arduino.readline())
+    line = arduino.readline()
+    print(line[:-2])

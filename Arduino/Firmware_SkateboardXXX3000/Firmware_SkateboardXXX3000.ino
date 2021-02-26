@@ -45,6 +45,7 @@ const int pinLedNeopix = 15;
 File file;
 String dirPath = "/data";
 String filePath = "/data/file2.txt";
+String sep = ",";
 String serialMessage;
 bool isEditable = false;
 bool isReadable = false;
@@ -127,6 +128,7 @@ void loop() {
   //---------- Creating File -----------
   if (doubleTap)
   {
+    Serial.println("Writing in " + filePath);
     doubleTap = false;
     if(isEditable == false)
     {
@@ -135,7 +137,7 @@ void loop() {
       {
         file = SPIFFS.open(filePath, "a");     
         file.println("-----------------   NEW RECORD   ---------------------");
-        initialiseFileMovuinoData(file);
+        initialiseFileMovuinoData(file, sep);
         file.close();
       } 
       else 
@@ -146,6 +148,7 @@ void loop() {
     } 
     else 
     {
+      Serial.println();
       Serial.println("Stopping the continue edition of " + filePath);
       isEditable = false;
     }
@@ -158,8 +161,11 @@ void loop() {
   }
   if (isReadable)
   {
-    isReadable = false;
+    Serial.println();
+    Serial.println("reading " + filePath + "...");
     readFile(filePath);
+    
+    isReadable = false;
   }
 
   // DEBUG
@@ -167,7 +173,6 @@ void loop() {
   {
     if(millis()-startPush > 2500)
     {
-      Serial.println("reading " + filePath + "...");
       isReadable = true;
       startPush = millis();
     }

@@ -13,7 +13,7 @@ void createFile(String filepath)
   
   file.println("TEST SPIFFS REDING and wrintng");
   
-  initialiseFileMovuinoData(file);
+  initialiseFileMovuinoData(file, sep);
   file.close();
 }
 
@@ -39,10 +39,11 @@ void writeData(String filePath)
   file = SPIFFS.open(filePath, "a");
   if (!file) 
   {
+    Serial.println();
     Serial.println("Error opening file for writing");
     return;
   }
-  writeInFileMovuinoData(file);
+  writeInFileMovuinoData(file, sep);
   file.close();
 }
 
