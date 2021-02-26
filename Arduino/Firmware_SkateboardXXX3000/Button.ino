@@ -1,3 +1,7 @@
+/*
+ * Function that allows us to handle button
+ */
+
 void onButtonPress() {
   digitalWrite(pinLedESP, HIGH);
   buttonPressed = true;

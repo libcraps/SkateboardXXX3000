@@ -1,3 +1,7 @@
+/*
+ * Functions that allows us to manage files in the firmware
+ */
+
 void createFile(String filepath)
 {
   File file = SPIFFS.open(filepath, "w");
@@ -55,4 +59,16 @@ void listingDir(String dirPath)
     f.close();
   }
   Serial.println("End of listing");
+}
+
+void formatingSPIFFS(){
+  bool formatted = SPIFFS.format();
+  if(formatted)
+  {
+    Serial.println("\n\nSuccess formatting");
+  }
+  else
+  {
+    Serial.println("\n\nError formatting");
+  }
 }
