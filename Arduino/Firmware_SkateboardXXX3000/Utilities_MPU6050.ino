@@ -18,6 +18,46 @@ void printMovuinoData() {
   Serial.print(mz);
   Serial.println();
 }
+void writeInFileMovuinoData(File file) {
+  file.print(ax / float(32768));
+  file.print("\t ");
+  file.print(ay / float(32768));
+  file.print("\t ");
+  file.print(az / float(32768));
+  file.print("\t ");
+  file.print(gx / float(32768));
+  file.print("\t ");
+  file.print(gy / float(32768));
+  file.print("\t ");
+  file.print(gz / float(32768));
+  file.print("\t ");
+  file.print(mx);
+  file.print("\t ");
+  file.print(my);
+  file.print("\t ");
+  file.print(mz);
+  file.println();
+}
+void initialiseFileMovuinoData(File file) {
+  file.print("ax");
+  file.print("\t ");
+  file.print("ay");
+  file.print("\t ");
+  file.print("az");
+  file.print("\t ");
+  file.print("gx");
+  file.print("\t ");
+  file.print("gy");
+  file.print("\t ");
+  file.print("gz");
+  file.print("\t ");
+  file.print("mx");
+  file.print("\t ");
+  file.print("my");
+  file.print("\t ");
+  file.print("mz");
+  file.println();
+}
 
 void magnetometerAutoCallibration() {
   int magVal[] = {mx, my, mz};

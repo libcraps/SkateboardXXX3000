@@ -14,3 +14,7 @@ void onButtonRelease() {
 void onButtonHold() {
   buttonFlash = true;
 }
+
+void onButtondoubleTap(){
+  doubleTap = true;
+}

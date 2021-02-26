@@ -14,17 +14,34 @@ void createFile(String filepath) {
     Serial.println("Error opening file for writing");
     return;
   }
- 
-  int bytesWritten = file.print("TEST SPIFFS");
-  Serial.println("File was written");
-  if (bytesWritten > 0) {
-    Serial.println("File was written");
-    Serial.println(bytesWritten);
- 
-  } else {
-    Serial.println("File write failed");
-  }
   
+  file.println("TEST SPIFFS REDING and wrintng");
+  
+  initialiseFileMovuinoData(file);
+}
+
+void readFile(String filepath){
+  
+  File file = SPIFFS.open(filepath, "r");
+  
+  if (!file) {
+    Serial.println("Error opening file for reading");
+    return;
+  }
+
+  while(file.available()){
+    Serial.write(file.read());
+  }
+}
+
+void writeData(String filePath){
+  
+  file = SPIFFS.open(filePath, "a");
+  if (!file) 
+  {
+    Serial.println("Error opening file for writing");
+    return;
+  }
+  writeInFileMovuinoData(file);
   file.close();
-  
-  }
+}

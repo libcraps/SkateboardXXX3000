@@ -16,6 +16,7 @@ const int pinBtn = 13;     // the number of the pushbutton pin
 Button button;
 bool buttonFlash = false;
 bool buttonPressed = false;
+bool doubleTap = false;
 float startPush;
 
 // LEDs
@@ -26,6 +27,14 @@ const int pinLedNeopix = 15;
 bool test = false;
 float testMillis;
 
+//FILE
+File file;
+bool isEditable = false;
+String serialMessage;
+String dirPath = "/data";
+String filePath = "/data/file.csv";
+
+
 void setup() {
   // pin setup
   //pinMode(pinBtn, INPUT_PULLUP); // pin for the button
@@ -35,8 +44,9 @@ void setup() {
   
   button.callback(onButtonPress, PRESS);
   button.callback(onButtonRelease, RELEASE);
-  button.callback(onButtonHold, HOLD | DOUBLE_TAP); // called on either event
-
+  button.callback(onButtonHold, HOLD); // called on either event
+  button.callback(onButtondoubleTap, DOUBLE_TAP);
+  
   Wire.begin();
   Serial.begin(115200);
   delay(2000);
@@ -45,7 +55,6 @@ void setup() {
   Serial.println("Initializing I2C devices...");
   mpu6050.initialize();
   testMillis = millis();
-  createFile("/data/file.txt");
 }
 
 void loop() {
@@ -53,18 +62,76 @@ void loop() {
   mpu6050.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz); // Get all 9 axis data (acc + gyro + magneto)
   //---- OR -----//
   //mpu6050.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); // Get only axis from acc & gyr
-
   magnetometerAutoCallibration();
+
   button.update();
-  if (buttonFlash) {
-    Serial.println(startPush);
-    
-    if (millis()-startPush > 1500){
-      digitalWrite(pinLedESP, LOW); // Flash every 80ms
-    } else {
-      digitalWrite(pinLedESP, millis() % 80 < 40); // Flash every 80ms
+
+  //------ Read serial Monitor -----------
+  if (Serial.available()>0)
+  {
+    char serialMessage = Serial.read();
+    Serial.print("\n");
+    Serial.print("Message received : ");
+    Serial.println(serialMessage);  
+
+    switch (serialMessage)
+    {
+      case 'c':
+        Serial.println("Creation of  " + filePath);
+        createFile(filePath);
+        break;
+      case 'r': //Reading File
+        Serial.println("reading " + filePath + "...");
+        readFile(filePath);
+        break;
+      case 's': //Stop the record
+        Serial.println("Stopping the edition of " + filePath);
+        isEditable = false;
+        break;
+      case 'a':
+        Serial.println("Adding a new line to " + filePath);
+        writeData(filePath);
+        break;
+      case 'i':
+        Serial.println(filePath + " information :");
+        break;
+      default:
+        Serial.println("No command associated");
+        break;
     }
   }
+
+  //---------- Creating File -----------
+  if (doubleTap)
+  {
+    if(isEditable == false)
+    {
+      isEditable = true;
+      createFile(filePath);
+    } 
+    else 
+    {
+      isEditable = false;
+    }
+  }
+
+  //------- Writing in File ------------
+  if (isEditable == true)
+  {
+    writeData(filePath);
+  }
+  
+  
+
+  
+
+  // DEBUG
+  if (buttonFlash) 
+  {
+    digitalWrite(pinLedESP, millis() % 80 < 40); // Flash every 80ms
+  }
+
+  doubleTap = false;
   delay(1);
 }
 
