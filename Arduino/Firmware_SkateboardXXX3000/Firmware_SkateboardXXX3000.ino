@@ -128,11 +128,11 @@ void loop() {
   //---------- Creating File -----------
   if (doubleTap)
   {
-    Serial.println("Writing in " + filePath);
     doubleTap = false;
     if(isEditable == false)
     {
       isEditable = true;
+      Serial.println("Writing in " + filePath);
       if (SPIFFS.exists(filePath))
       {
         file = SPIFFS.open(filePath, "a");     
