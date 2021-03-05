@@ -43,6 +43,7 @@ void writeData(String filePath)
     Serial.println("Error opening file for writing");
     return;
   }
+  digitalWrite(pinLedBat, HIGH);
   writeInFileMovuinoData(file, sep);
   file.close();
 }

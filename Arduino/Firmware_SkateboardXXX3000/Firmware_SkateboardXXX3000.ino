@@ -4,12 +4,15 @@
  * Utilisation :
  * Double tap a first time the button to record a new session and double tap a second time to stop the record
  * 
+ * https://arduino.esp8266.com/stable/package_esp8266com_index.json
+ * 
  */
 
 #include "Wire.h"
 #include "I2Cdev.h"
 #include "MPU6050.h"
 #include "FS.h"
+#include <Adafruit_NeoPixel.h>
 #include <Yabl.h>
 
 //Command for serial messages
@@ -41,6 +44,12 @@ const int pinLedESP = 2; // wifi led indicator
 const int pinLedBat = 0;  // battery led indicator
 const int pinLedNeopix = 15;
 
+//NEO PIXEL
+Adafruit_NeoPixel pixel(1, pinLedNeopix, NEO_GRB + NEO_KHZ800);
+uint32_t Red = pixel.Color(255,0,0);
+uint32_t Blue = pixel.Color(0,0,255);
+uint32_t Green = pixel.Color(0,255,0);
+
 //FILE
 File file;
 String dirPath = "/data";
@@ -59,6 +68,8 @@ void setup() {
   pinMode(pinLedBat, OUTPUT);    // pin for the battery led
   button.attach(pinBtn, INPUT_PULLUP); // pin configured to pull-up mode
 
+  //NEOPIXEL setup
+  pixel.begin();
   //Button - function that we will use
   button.callback(onButtonPress, PRESS);
   button.callback(onButtonRelease, RELEASE);
@@ -77,6 +88,7 @@ void setup() {
 }
 
 void loop() {
+
   // GET MOVUINO DATA
   mpu6050.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz); // Get all 9 axis data (acc + gyro + magneto)
   //---- OR -----//
@@ -119,6 +131,9 @@ void loop() {
       case CMD_LISTING_DIR:
         listingDir(dirPath);
         break;
+      case 'b': //Light tests
+        Serial.println("ligth");
+        break;
       default:
         Serial.println("No command associated");
         break;
@@ -132,6 +147,7 @@ void loop() {
     if(isEditable == false)
     {
       isEditable = true;
+      blink3Times();
       Serial.println("Writing in " + filePath);
       if (SPIFFS.exists(filePath))
       {
@@ -149,6 +165,7 @@ void loop() {
     else 
     {
       Serial.println();
+      blinkLongTimes();
       Serial.println("Stopping the continue edition of " + filePath);
       isEditable = false;
     }
@@ -158,7 +175,9 @@ void loop() {
   if (isEditable)
   {
     writeData(filePath);
+    
   }
+  
   if (isReadable)
   {
     Serial.println();
@@ -175,6 +194,8 @@ void loop() {
     {
       isReadable = true;
       startPush = millis();
+      digitalWrite(pinLedESP, HIGH);
+      delay(250);
     }
     else
     {
@@ -184,6 +205,40 @@ void loop() {
 
   delay(1);
 }
+
+void blink3Times()
+{
+  digitalWrite(pinLedESP, LOW);
+  delay(250);
+  digitalWrite(pinLedESP, HIGH);
+  delay(250);
+  digitalWrite(pinLedESP, LOW);
+  delay(250);
+  digitalWrite(pinLedESP, HIGH);
+  delay(250);
+  digitalWrite(pinLedESP, LOW);
+  delay(250);
+  digitalWrite(pinLedESP, HIGH);
+  delay(250);
+  digitalWrite(pinLedESP, LOW);
+}
+void blinkLongTimes()
+{
+  digitalWrite(pinLedESP, LOW);
+  delay(500);
+  digitalWrite(pinLedESP, HIGH);
+  delay(1000);
+  digitalWrite(pinLedESP, LOW);
+  delay(500);
+  digitalWrite(pinLedESP, HIGH);
+  delay(1000);
+  digitalWrite(pinLedESP, LOW);
+  delay(500);
+  digitalWrite(pinLedESP, HIGH);
+  delay(1000);
+  digitalWrite(pinLedESP, LOW);
+}
+
 
 float splitFloatDecimal(float f_) {
   int i_ = f_ * 1000;
