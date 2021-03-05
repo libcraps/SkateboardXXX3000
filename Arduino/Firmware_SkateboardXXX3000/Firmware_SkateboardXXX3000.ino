@@ -190,7 +190,7 @@ void loop() {
   // DEBUG
   if (buttonFlash) 
   {
-    if(millis()-startPush > 2500)
+    if(millis()-startPush > 2500) //If the button is pressed more the 2.5sec
     {
       isReadable = true;
       startPush = millis();
@@ -208,6 +208,7 @@ void loop() {
 
 void blink3Times()
 {
+  //USed when the record start
   digitalWrite(pinLedESP, LOW);
   delay(250);
   digitalWrite(pinLedESP, HIGH);
@@ -224,6 +225,7 @@ void blink3Times()
 }
 void blinkLongTimes()
 {
+  //Used when the record stop
   digitalWrite(pinLedESP, LOW);
   delay(500);
   digitalWrite(pinLedESP, HIGH);
