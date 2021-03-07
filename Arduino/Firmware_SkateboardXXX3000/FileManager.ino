@@ -10,9 +10,6 @@ void createFile(String filepath)
     Serial.println("Error opening file for writing");
     return;
   }
-  
-  file.println("TEST SPIFFS REDING and wrintng");
-  
   initialiseFileMovuinoData(file, sep);
   file.close();
 }
@@ -26,23 +23,26 @@ void readFile(String filepath)
     Serial.println("Error opening file for reading");
     return;
   }
-
+  Serial.write("XXX_beginning");
   while(file.available()){
     Serial.write(file.read());
   }
   file.close();
+  Serial.write("XXX_end");
 }
 
 void writeData(String filePath)
 {
   
   file = SPIFFS.open(filePath, "a");
+  
   if (!file) 
   {
     Serial.println();
     Serial.println("Error opening file for writing");
     return;
   }
+  
   digitalWrite(pinLedBat, HIGH);
   writeInFileMovuinoData(file, sep);
   file.close();

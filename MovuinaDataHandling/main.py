@@ -6,7 +6,7 @@ from mvtAnalyseFunctions import OnGround
 import os
 
 dataPath = "..\\Data\\"
-fileName = "rota_180_z_2\\rota_180_z_2"
+fileName = "DropIn\\data_session"
 #fileName = "dataTestTemplate.csv"
 
 rawData = pd.read_csv(dataPath + fileName + ".csv", sep=",")
@@ -23,19 +23,20 @@ posAng = [[0],[0],[0]]
 print(rawData)
 time = list(rawData["time"])
 
-acceleration[0] = list(rawData["accelX"])
-acceleration[1] = list(rawData["accelY"])
-acceleration[2] = list(rawData["accelZ"])
-gyroscope[0] = list(rawData["gyroX"])
-gyroscope[1] = list(rawData["gyroY"])
-gyroscope[2] = list(rawData["gyroZ"])
-magnetometer[0] = list(rawData["magX"])
-magnetometer[1] = list(rawData["magY"])
-magnetometer[2] = list(rawData["magZ"])
+acceleration[0] = list(rawData["ax"]) #accelX
+acceleration[1] = list(rawData["ay"]) #accelY
+acceleration[2] = list(rawData["az"]) #accelZ
+gyroscope[0] = list(rawData["gx"]) #gyroX
+gyroscope[1] = list(rawData["gy"]) #gyroY
+gyroscope[2] = list(rawData["gz"]) #gyroZ
+magnetometer[0] = list(rawData["mx"]) #magX
+magnetometer[1] = list(rawData["my"]) #magY
+magnetometer[2] = list(rawData["mz"]) #magZ
 
-OnGround(time, acceleration[2], [], 5)
-
+#OnGround(time, acceleration[2], [], 5)
+print(type(acceleration[2][2]))
 #acceleration[2] = Offset(acceleration[2])
+"""
 for i in range(3):
     velocity[i] = Euler(time, acceleration[i], velocity[i][0])
     pos[i] = Euler(time, velocity[i], pos[i][0])
@@ -44,6 +45,8 @@ for i in range(3):
 Display("a,v,pos", time, acceleration, velocity, pos)
 Display("omega, theta", time, gyroscope, posAng)
 Display("Magnetometer", time, magnetometer)
+"""
+Display("a", time, acceleration)
 
 
 rawData["posAngX"] = posAng[0]

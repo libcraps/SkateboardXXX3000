@@ -187,13 +187,11 @@ void loop() {
     isReadable = false;
   }
 
-  // DEBUG
   if (buttonFlash) 
   {
-    if(millis()-startPush > 2500) //If the button is pressed more the 2.5sec
+    if(millis()-startPush > 2500) //If the button is pressed more than 2.5sec
     {
       isReadable = true;
-      startPush = millis();
       digitalWrite(pinLedESP, HIGH);
       delay(250);
     }
