@@ -22,7 +22,7 @@ public class SkateBehaviour : MonoBehaviour
         //this.gameObject.transform.Rotate(new Vector3(5, 0, 0));
 
     }
-    private void Update()
+    private void FixedUpdate()
     {
         //if (i < rawData.Count && Time.time - startTime >= rawData[i][0] * 0.001 && Time.time - startTime <= rawData[i + 1][0] * 0.001)
         if (i < rawData.Count-1)
