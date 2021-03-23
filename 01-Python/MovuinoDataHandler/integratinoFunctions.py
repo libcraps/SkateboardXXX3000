@@ -9,13 +9,13 @@ def Euler(T, A, y0):
         Y.append(yt1)
 
     return Y
-
+"""
 def Offset(L):
     offset = L[0]
     for i in range(len(L)):
         L[i] =L[i]-offset
     return L
-
+"""
 def EuclidienNorm(V):
     norm = 0
     for i in range(len(V)):
@@ -31,6 +31,10 @@ def EuclidienNormListVector(listV):
     listNorm = []
 
     for i in range(len(listV[0])):
-        listNorm.append(EuclidienNorm(listV[0][i]))
-
+        V = [0]*3
+        V[0] = listV[0][i]
+        V[1] = listV[1][i]
+        V[2] = listV[2][i]
+        listNorm.append(EuclidienNorm(V))
+    print(listNorm)
     return listNorm

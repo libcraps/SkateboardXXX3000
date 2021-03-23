@@ -9,7 +9,7 @@ import os
 
 
 folderPath = "..\\_data\\"
-fileName = "data_session2"
+fileName = "test_mov_lateral"
 fullDataPath = folderPath + fileName
 
 isReading = False
@@ -48,6 +48,7 @@ with open(fullDataPath + ".csv", "w") as file:
 
 #Data MAnage
 if ExtractionCompleted and dataManage:
+
     rawData = pd.read_csv(fullDataPath + ".csv", sep=",")
 
     print(rawData.columns)
@@ -78,9 +79,6 @@ if ExtractionCompleted and dataManage:
     magnetometer[1] = list(rawData["my"])  # magY
     magnetometer[2] = list(rawData["mz"])  # magZ
 
-    # OnGround(time, acceleration[2], [], 5)
-    print(type(acceleration[2][10]))
-    # acceleration[2] = Offset(acceleration[2])
     """
     for i in range(3):
         velocity[i] = Euler(time, acceleration[i], velocity[i][0])
@@ -111,7 +109,9 @@ if ExtractionCompleted and dataManage:
 
     rawData["normAccel"] = normAcceleration
     rawData["normGyr"] = normGyroscope
+    plt.figure()
+    plt.plot(time, normAcceleration)
+    plt.show()
 
-    Display("norm a", time, normAcceleration)
 
     rawData.to_csv(fullDataPath + "treated" + ".csv", sep=",", index=False, index_label=False)
