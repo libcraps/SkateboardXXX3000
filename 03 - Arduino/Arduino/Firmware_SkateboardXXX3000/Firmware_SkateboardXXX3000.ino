@@ -193,6 +193,7 @@ void loop() {
     {
       isReadable = true;
       digitalWrite(pinLedESP, HIGH);
+      startPush = millis()+10000;
       delay(250);
     }
     else

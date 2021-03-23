@@ -23,12 +23,12 @@ void readFile(String filepath)
     Serial.println("Error opening file for reading");
     return;
   }
-  Serial.write("XXX_beginning");
+  Serial.println("XXX_beginning");
   while(file.available()){
     Serial.write(file.read());
   }
   file.close();
-  Serial.write("XXX_end");
+  Serial.println("XXX_end");
 }
 
 void writeData(String filePath)
