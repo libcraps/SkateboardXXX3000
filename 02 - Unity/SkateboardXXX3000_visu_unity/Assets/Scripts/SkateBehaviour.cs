@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class SkateBehaviour : MonoBehaviour
 {
-    string dataPath = ".\\Data_visu\\Movuino-heel_50HZ_smooth15integrate.csv";
+    public string dataPath = ".\\Data_visu\\Movuino-heel_50HZ_smooth15integrate.csv";
     List<float[]> rawData = new List<float[]>();
     Dictionary<string, List<float>> completeCSV = new Dictionary<string, List<float>>();
     float startTime;
@@ -27,7 +27,6 @@ public class SkateBehaviour : MonoBehaviour
         //if (i < rawData.Count && Time.time - startTime >= rawData[i][0] * 0.001 && Time.time - startTime <= rawData[i + 1][0] * 0.001)
         if (i < rawData.Count-1)
         {
-            Debug.Log(new Vector3(rawData[5][10], rawData[2][11], rawData[2][12]));
             //Vector3 velocity = new Vector3(-rawData[i][13] * (float)0.5, -rawData[i][14] * (float)0.5, -rawData[i][15] * (float)0.5);
             //this.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(rawData[i][1], rawData[i][3], rawData[i][2]), ForceMode.Acceleration);
             float deltaRotX = (rawData[i + 1][10] - rawData[i][10]) * (float)(360 / 0.25);
