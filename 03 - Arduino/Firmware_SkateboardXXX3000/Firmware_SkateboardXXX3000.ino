@@ -10,7 +10,7 @@
 
 #include "Wire.h"
 #include "I2Cdev.h"
-#include "MPU6050.h"
+#include "MPU9250.h"
 #include "FS.h"
 #include <Adafruit_NeoPixel.h>
 #include <Yabl.h>
@@ -23,12 +23,15 @@
 #define  CMD_STOP_RECORD   's' //Stop the record
 #define  CMD_LISTING_DIR   'l' //List files in the directory
 
-// SENSOR
-MPU6050 mpu6050;
+#define MPU_I2C_ADDRESS 0x69
 
-int16_t ax, ay, az; // store accelerometre values
-int16_t gx, gy, gz; // store gyroscope values
-int16_t mx, my, mz; // store magneto values
+// SENSOR
+MPU9250 IMU(Wire, MPU_I2C_ADDRESS);
+int status;
+
+float ax, ay, az; // store accelerometre values
+float gx, gy, gz; // store gyroscope values
+float mx, my, mz; // store magneto values
 int magRange[] = {666, -666, 666, -666, 666, -666}; // magneto range values for callibration
 
 // BUTTON
@@ -84,17 +87,23 @@ void setup() {
   
   // initialize device
   Serial.println("Initializing I2C devices...");
-  mpu6050.initialize();
+  status = IMU.begin();
+  
+  if (status < 0) {
+    Serial.println("IMU initialization unsuccessful");
+    Serial.println("Check IMU wiring or try cycling power");
+    Serial.print("Status: ");
+    Serial.println(status);
+    while(1) {}
+  }
 }
 
 void loop() {
-
+  
   // GET MOVUINO DATA
-  mpu6050.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz); // Get all 9 axis data (acc + gyro + magneto)
-  //---- OR -----//
-  //mpu6050.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); // Get only axis from acc & gyr
-  magnetometerAutoCallibration();
-
+  IMU.readSensor();
+  //print9axesDataMPU(IMU);
+  get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
   button.update();
 
   //------ Read serial Monitor -----------
@@ -143,6 +152,7 @@ void loop() {
   //---------- Creating File -----------
   if (doubleTap)
   {
+    Serial.print(isEditable);
     doubleTap = false;
     if(isEditable == false)
     {
@@ -165,8 +175,9 @@ void loop() {
     else 
     {
       Serial.println();
-      blinkLongTimes();
+      
       Serial.println("Stopping the continue edition of " + filePath);
+      blinkLongTimes();
       isEditable = false;
     }
   }
@@ -175,7 +186,6 @@ void loop() {
   if (isEditable)
   {
     writeData(filePath);
-    
   }
   
   if (isReadable)

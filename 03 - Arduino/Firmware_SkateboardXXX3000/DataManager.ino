@@ -1,15 +1,15 @@
 void printMovuinoData() {
-  Serial.print(ax / float(32768));
+  Serial.print(ax);
   Serial.print("\t ");
-  Serial.print(ay / float(32768));
+  Serial.print(ay);
   Serial.print("\t ");
-  Serial.print(az / float(32768));
+  Serial.print(az);
   Serial.print("\t ");
-  Serial.print(gx / float(32768));
+  Serial.print(gx);
   Serial.print("\t ");
-  Serial.print(gy / float(32768));
+  Serial.print(gy);
   Serial.print("\t ");
-  Serial.print(gz / float(32768));
+  Serial.print(gz);
   Serial.print("\t ");
   Serial.print(mx);
   Serial.print("\t ");
@@ -19,17 +19,17 @@ void printMovuinoData() {
   Serial.println();
 }
 void writeInFileMovuinoData(File file, String sep) {
-  file.print(ax / float(32768));
+  file.print(ax);
   file.print(sep);
-  file.print(ay / float(32768));
+  file.print(ay);
   file.print(sep);
-  file.print(az / float(32768));
+  file.print(az);
   file.print(sep);
-  file.print(gx / float(32768));
+  file.print(gx);
   file.print(sep);
-  file.print(gy / float(32768));
+  file.print(gy);
   file.print(sep);
-  file.print(gz / float(32768));
+  file.print(gz);
   file.print(sep);
   file.print(mx);
   file.print(sep);

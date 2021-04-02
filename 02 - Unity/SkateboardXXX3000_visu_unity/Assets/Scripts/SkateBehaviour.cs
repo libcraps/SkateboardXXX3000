@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class SkateBehaviour : MonoBehaviour
 {
-    public string dataPath = ".\\Data_visu\\Movuino-heel_50HZ_smooth15integrate.csv";
+    private string dataPath = ".\\Data_visu\\Movuino-360flip_50HZ_smooth15treated.csv";
     List<float[]> rawData = new List<float[]>();
     Dictionary<string, List<float>> completeCSV = new Dictionary<string, List<float>>();
     float startTime;
@@ -39,7 +39,6 @@ public class SkateBehaviour : MonoBehaviour
             i += 1;
         }
 
-        Debug.Log(startTime - Time.time);
     }
 
 
@@ -48,7 +47,7 @@ public class SkateBehaviour : MonoBehaviour
         StreamReader sr = new StreamReader(dataPath);
 
         List<float[]> data = new List<float[]>();
-        float[] tData = new float[19];
+        float[] tData = new float[21];
         string value = "";
 
         string line = sr.ReadLine();
@@ -62,6 +61,7 @@ public class SkateBehaviour : MonoBehaviour
                 if (a == ',')
                 {
                     tData[i] = float.Parse(value, CultureInfo.InvariantCulture);
+                    Debug.Log(i);
                     value = "";
                     i += 1;
                 } 
@@ -73,7 +73,7 @@ public class SkateBehaviour : MonoBehaviour
             }
             i = 0;
             data.Add(tData);
-            tData = new float[19];
+            tData = new float[21];
             value = "";
             line = sr.ReadLine();
         }

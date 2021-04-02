@@ -16,6 +16,8 @@ def Offset(L):
         L[i] =L[i]-offset
     return L
 """
+
+
 def EuclidienNorm(V):
     norm = 0
     for i in range(len(V)):

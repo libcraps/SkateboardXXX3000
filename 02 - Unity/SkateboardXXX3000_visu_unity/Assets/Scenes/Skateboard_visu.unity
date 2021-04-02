@@ -426,7 +426,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e82b7891e78107b4fad9c80cfa1bc079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataPath: .\Data_visu\Movuino-heel_50HZ_smooth15integrate.csv
 --- !u!54 &989633278
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -441,7 +440,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!65 &989633279
 BoxCollider:
