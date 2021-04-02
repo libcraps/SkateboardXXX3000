@@ -13,9 +13,23 @@ public class SkateBehaviour : MonoBehaviour
     float startTime;
     int i;
     bool end;
+
+    float[] time;
+    Vector3[] acceleration;
+    Vector3[] gyroscope;
+    Vector3[] magnetometer;
+
+    Vector3[] theta;
+    Vector3[] velocity;
+    Vector3[] pos;
+
+    float[] normAccel;
+    float[] normGyr;
     void Start()
     {
         rawData = ReadCSV(dataPath);
+        time = rawData[0];
+
         i = 0;
         startTime = Time.time;
         end = false;
