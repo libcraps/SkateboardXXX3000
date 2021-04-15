@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class SkateBehaviour : MonoBehaviour
 {
-    private string dataPath = ".\\Data_visu\\Movuino-360flip_50HZ_smooth15treated.csv";
+    private string dataPath = ".\\Data_visu\\Movuino-heel_50HZ_smooth15treated.csv";
     List<float[]> rawData = new List<float[]>();
     Dictionary<string, List<float>> completeCSV = new Dictionary<string, List<float>>();
     float startTime;

@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 
 def Euler(T, A, y0):
@@ -38,5 +39,7 @@ def EuclidienNormListVector(listV):
         V[1] = listV[1][i]
         V[2] = listV[2][i]
         listNorm.append(EuclidienNorm(V))
-    print(listNorm)
     return listNorm
+
+def G(n,fc,f):
+    return 1.0/math.sqrt(1+(f/fc)**(2*n))

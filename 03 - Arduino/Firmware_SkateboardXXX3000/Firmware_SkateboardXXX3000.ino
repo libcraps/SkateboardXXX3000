@@ -29,6 +29,7 @@
 MPU9250 IMU(Wire, MPU_I2C_ADDRESS);
 int status;
 
+float time, startTime;
 float ax, ay, az; // store accelerometre values
 float gx, gy, gz; // store gyroscope values
 float mx, my, mz; // store magneto values
@@ -100,10 +101,6 @@ void setup() {
 
 void loop() {
   
-  // GET MOVUINO DATA
-  IMU.readSensor();
-  //print9axesDataMPU(IMU);
-  get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
   button.update();
 
   //------ Read serial Monitor -----------
@@ -156,8 +153,10 @@ void loop() {
     doubleTap = false;
     if(isEditable == false)
     {
-      isEditable = true;
       blink3Times();
+      isEditable = true;
+      startTime = millis();
+      
       Serial.println("Writing in " + filePath);
       if (SPIFFS.exists(filePath))
       {
@@ -168,6 +167,7 @@ void loop() {
       } 
       else 
       {
+        
         createFile(filePath);
       }
 
@@ -177,11 +177,19 @@ void loop() {
       Serial.println();
       
       Serial.println("Stopping the continue edition of " + filePath);
-      blinkLongTimes();
       isEditable = false;
+      blinkLongTimes();
+      
     }
   }
 
+
+    // GET MOVUINO DATA
+  IMU.readSensor();
+  //print9axesDataMPU(IMU);
+  get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
+  time = millis() - startTime;
+  
   //------- Writing in File ------------
   if (isEditable)
   {
@@ -212,7 +220,7 @@ void loop() {
     }
   }
 
-  delay(1);
+  delay(25);
 }
 
 void blink3Times()

@@ -8,12 +8,12 @@ from mvtAnalyseFunctions import OnGround
 import os
 
 
-folderPath = "..\\..\\Data\\SeshTricksAtrierOlliePopFlipHeel\\"
-fileName = "SeshTricksAtrierOlliePopFlipHeel_2"
+folderPath = "..\\..\\Data\\TestSImpleMouvement\\"
+fileName = "TestSImpleMouvement"
 fullDataPath = folderPath + fileName
 
 isReading = False
-ExtractionCompleted = True
+ExtractionCompleted = False
 dataManage = True
 
 arduino = serial.Serial('COM9', baudrate=115200, timeout=1.)
@@ -33,7 +33,7 @@ while ExtractionCompleted != True :
         ExtractionCompleted = True
         print("End of data sheet")
 
-        with open(fullDataPath + "_" + str(nbRecord) + ".csv", "w") as file:
+        with open(fullDataPath + ".csv", "w") as file:
             file.writelines(datafile)
 
     if ("NEW RECORD" in line_str and isReading == True):
@@ -56,7 +56,6 @@ if ExtractionCompleted and dataManage:
 
     rawData = pd.read_csv(fullDataPath + ".csv", sep=",")
 
-    print(rawData.columns)
     time = []
     acceleration = [[], [], []]
     gyroscope = [[], [], []]
@@ -69,8 +68,6 @@ if ExtractionCompleted and dataManage:
     velocity = [[0], [0], [0]]
     pos = [[0], [0], [0]]
     posAng = [[0], [0], [0]]
-
-    print(rawData)
     rawData["time"] = [k for k in range(len(rawData["ax"]))]
     time = list(rawData["time"])
 
@@ -83,7 +80,6 @@ if ExtractionCompleted and dataManage:
     magnetometer[0] = list(rawData["mx"])  # magX
     magnetometer[1] = list(rawData["my"])  # magY
     magnetometer[2] = list(rawData["mz"])  # magZ
-
 
     for i in range(3):
         velocity[i] = Euler(time, acceleration[i], velocity[i][0])
@@ -117,4 +113,4 @@ if ExtractionCompleted and dataManage:
     plt.show()
 
 
-    rawData.to_csv(fullDataPath + "treated" + ".csv", sep=",", index=False, index_label=False)
+    rawData.to_csv(fullDataPath + "_treated" + ".csv", sep=",", index=False, index_label=False)

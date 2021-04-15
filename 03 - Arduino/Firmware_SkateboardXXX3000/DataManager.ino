@@ -1,4 +1,6 @@
 void printMovuinoData() {
+  Serial.print(time);
+  Serial.print("\t ");
   Serial.print(ax);
   Serial.print("\t ");
   Serial.print(ay);
@@ -19,6 +21,8 @@ void printMovuinoData() {
   Serial.println();
 }
 void writeInFileMovuinoData(File file, String sep) {
+  file.print(time);
+  file.print(sep);
   file.print(ax);
   file.print(sep);
   file.print(ay);
@@ -39,6 +43,8 @@ void writeInFileMovuinoData(File file, String sep) {
   file.println();
 }
 void initialiseFileMovuinoData(File file, String sep) {
+  file.print("time");
+  file.print(sep);
   file.print("ax");
   file.print(sep);
   file.print("ay");
