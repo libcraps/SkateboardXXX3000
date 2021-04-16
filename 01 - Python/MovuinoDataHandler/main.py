@@ -2,6 +2,7 @@ import serial
 import csv
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 from integratinoFunctions import *
 from DisplayFunctions import Display
 from mvtAnalyseFunctions import OnGround
@@ -9,50 +10,54 @@ import os
 
 
 folderPath = "..\\..\\Data\\TestSImpleMouvement\\"
-fileName = "TestSImpleMouvement"
+fileName = "TestSImpleMouvement2"
 fullDataPath = folderPath + fileName
 
-isReading = False
-ExtractionCompleted = False
-dataManage = True
 
-arduino = serial.Serial('COM9', baudrate=115200, timeout=1.)
-line_byte = ''
-line_str = ''
-datafile = []
-nbRecord = 1
+toDataManage = True
+toExtract = False
+
 
 # --------- Data Extraction from Movuino ----------
-while ExtractionCompleted != True :
+if toExtract:
 
-    line_byte = arduino.readline()
-    line_str = line_byte.decode("utf-8")
+    isReading = False
+    ExtractionCompleted = False
+    arduino = serial.Serial('COM9', baudrate=115200, timeout=1.)
+    line_byte = ''
+    line_str = ''
+    datafile = []
+    nbRecord = 1
+    while ExtractionCompleted != True :
 
-    if ("XXX_end" in line_str and isReading == True):
-        isReading = False
-        ExtractionCompleted = True
-        print("End of data sheet")
+        line_byte = arduino.readline()
+        line_str = line_byte.decode("utf-8")
 
-        with open(fullDataPath + ".csv", "w") as file:
-            file.writelines(datafile)
+        if ("XXX_end" in line_str and isReading == True):
+            isReading = False
+            ExtractionCompleted = True
+            print("End of data sheet")
 
-    if ("NEW RECORD" in line_str and isReading == True):
-        nbRecord += 0
-        print("NEW RECORD : " + str(nbRecord))
+            with open(fullDataPath + ".csv", "w") as file:
+                file.writelines(datafile)
 
-        with open(fullDataPath + "_" + str(nbRecord) + ".csv", "w") as file:
-            file.writelines(datafile)
-        datafile = []
+        if ("NEW RECORD" in line_str and isReading == True):
+            nbRecord += 0
+            print("NEW RECORD : " + str(nbRecord))
 
-    if (isReading):
-        datafile.append(line_str[:-1])
-        print("Add Data")
+            with open(fullDataPath + "_" + str(nbRecord) + ".csv", "w") as file:
+                file.writelines(datafile)
+            datafile = []
 
-    if ("XXX_beginning" in line_str):
-        isReading = True
+        if (isReading):
+            datafile.append(line_str[:-1])
+            print("Add Data")
+
+        if ("XXX_beginning" in line_str):
+            isReading = True
 
 #Data MAnage
-if ExtractionCompleted and dataManage:
+if toDataManage:
 
     rawData = pd.read_csv(fullDataPath + ".csv", sep=",")
 
@@ -71,7 +76,7 @@ if ExtractionCompleted and dataManage:
     rawData["time"] = [k for k in range(len(rawData["ax"]))]
     time = list(rawData["time"])
 
-    acceleration[0] = list(rawData["ax"])  # accelX
+    acceleration[0] = np.append(acceleration[0], list(rawData["ax"])) # accelX
     acceleration[1] = list(rawData["ay"])  # accelY
     acceleration[2] = list(rawData["az"])  # accelZ
     gyroscope[0] = list(rawData["gx"])  # gyroX

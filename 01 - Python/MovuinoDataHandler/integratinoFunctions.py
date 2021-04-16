@@ -6,7 +6,7 @@ def Euler(T, A, y0):
     Y = [y0]
     for i in range(len(T)-1):
         pas = T[i+1]-T[i]
-        yt1 = A[i]*pas*0.001 + Y[i]
+        yt1 = A[i]*pas*0.025 + Y[i]
         Y.append(yt1)
 
     return Y
