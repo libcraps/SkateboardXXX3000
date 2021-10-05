@@ -1,121 +1,110 @@
 import serial
-import csv
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-from integratinoFunctions import *
-from DisplayFunctions import Display
-from mvtAnalyseFunctions import OnGround
+import dataSet.SensitivePenDataSet as sp
+import dataSet.SkateboardXXX3000DataSet as sk
+import dataSet.GlobalDataSet as gds
+import dataSet.MovuinoDataSet as dm
+import tools.DisplayFunctions as df
 import os
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
 
 
-folderPath = "..\\..\\Data\\TestSImpleMouvement\\"
-fileName = "TestSImpleMouvement2"
-fullDataPath = folderPath + fileName
 
+############   SETTINGS   #############
 
-toDataManage = True
+device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
+
+folderPath = "..\\data_usefull\\tricks_come\\"
+fileName = "record"  # generic name numbers will be added for duplicates
+
+serialPort = 'COM6'
+
 toExtract = False
+toDataManage = True
+toVisualize = True
 
+filter = 25
 
+##### If only data manage
+file_start = 15
+nbRecord = 16
+
+###################################
+
+nb_files = 0
+
+path = folderPath + fileName
+
+c=0
 # --------- Data Extraction from Movuino ----------
 if toExtract:
-
+    print("data extraction")
     isReading = False
     ExtractionCompleted = False
-    arduino = serial.Serial('COM9', baudrate=115200, timeout=1.)
+    arduino = serial.Serial(serialPort, baudrate=115200, timeout=1.)
     line_byte = ''
     line_str = ''
-    datafile = []
+    datafile = ''
     nbRecord = 1
-    while ExtractionCompleted != True :
 
+    while ExtractionCompleted != True:
         line_byte = arduino.readline()
         line_str = line_byte.decode("utf-8")
 
-        if ("XXX_end" in line_str and isReading == True):
+        if "XXX_end" in line_str and isReading == True :
             isReading = False
             ExtractionCompleted = True
             print("End of data sheet")
 
-            with open(fullDataPath + ".csv", "w") as file:
-                file.writelines(datafile)
+            with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
+                file.write(datafile)
 
-        if ("NEW RECORD" in line_str and isReading == True):
-            nbRecord += 0
-            print("NEW RECORD : " + str(nbRecord))
+        if "NEW RECORD" in line_str and isReading == True :
+            print("Add new file")
+            with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
+                file.write(datafile)
 
-            with open(fullDataPath + "_" + str(nbRecord) + ".csv", "w") as file:
-                file.writelines(datafile)
-            datafile = []
+            datafile = ''
+            line_str = ''
+            nbRecord += 1
 
         if (isReading):
-            datafile.append(line_str[:-1])
-            print("Add Data")
+            if line_str != '':
+                datafile += line_str.strip() + '\n'
+                c+=1
+                if c%1000==1:
+                    print("Adding data")
+
 
         if ("XXX_beginning" in line_str):
             isReading = True
+            print("Record begins")
 
-#Data MAnage
+
+
 if toDataManage:
+    print(nbRecord)
+    #nbRecord = 1
+    for i in range(file_start, file_start+nbRecord+1):
+        if (device == 'sensitivePen'):
+            print("--- Processing : " + folderPath + fileName + "_" + str(i) + " --- ")
+            dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i), filter)
+        elif (device == 'skateboardXXX3000'):
+            print("Processing : " + folderPath + fileName + "_" + str(i))
+            dataSet = sk.SkateboardXXX3000DataSet(folderPath + fileName + "_" + str(i), filter)
+        elif (device == 'globalDataSet'):
+            print("Processing : " + folderPath + fileName + "_" + str(i))
+            dataSet = gds.GlobalDataSet(folderPath + fileName + "_" + str(i), filter)
+        else:
+            print("No device matching")
 
-    rawData = pd.read_csv(fullDataPath + ".csv", sep=",")
+        dataSet.DataManage()
+        Te = dataSet.Te
+        print("sample frequency : "+str(1/Te))
 
-    time = []
-    acceleration = [[], [], []]
-    gyroscope = [[], [], []]
-    magnetometer = [[], [], []]
-
-    normAcceleration = []
-    normGyroscope = []
-    normMagnetometer = []
-
-    velocity = [[0], [0], [0]]
-    pos = [[0], [0], [0]]
-    posAng = [[0], [0], [0]]
-    rawData["time"] = [k for k in range(len(rawData["ax"]))]
-    time = list(rawData["time"])
-
-    acceleration[0] = np.append(acceleration[0], list(rawData["ax"])) # accelX
-    acceleration[1] = list(rawData["ay"])  # accelY
-    acceleration[2] = list(rawData["az"])  # accelZ
-    gyroscope[0] = list(rawData["gx"])  # gyroX
-    gyroscope[1] = list(rawData["gy"])  # gyroY
-    gyroscope[2] = list(rawData["gz"])  # gyroZ
-    magnetometer[0] = list(rawData["mx"])  # magX
-    magnetometer[1] = list(rawData["my"])  # magY
-    magnetometer[2] = list(rawData["mz"])  # magZ
-
-    for i in range(3):
-        velocity[i] = Euler(time, acceleration[i], velocity[i][0])
-        pos[i] = Euler(time, velocity[i], pos[i][0])
-        posAng[i] = Euler(time, gyroscope[i], posAng[i][0])
-
-    normAcceleration = EuclidienNormListVector(acceleration)
-    normGyroscope = EuclidienNormListVector(gyroscope)
-    normMagnetometer = EuclidienNormListVector(magnetometer)
-
-    Display("a,v,pos", time, acceleration, velocity, pos)
-    Display("omega, theta", time, gyroscope, posAng)
-    Display("Magnetometer", time, magnetometer)
-
-    Display("a", time, acceleration)
-
-    rawData["posAngX"] = posAng[0]
-    rawData["posAngY"] = posAng[1]
-    rawData["posAngZ"] = posAng[2]
-    rawData["VelocityX"] = velocity[0]
-    rawData["VelocityY"] = velocity[1]
-    rawData["VelocityZ"] = velocity[2]
-    rawData["posX"] = pos[0]
-    rawData["posY"] = pos[1]
-    rawData["posZ"] = pos[2]
-
-    rawData["normAccel"] = normAcceleration
-    rawData["normGyr"] = normGyroscope
-    plt.figure()
-    plt.plot(time, normAcceleration)
-    plt.show()
+        if toVisualize:
+            dataSet.VisualizeData()
 
 
-    rawData.to_csv(fullDataPath + "_treated" + ".csv", sep=",", index=False, index_label=False)
+
