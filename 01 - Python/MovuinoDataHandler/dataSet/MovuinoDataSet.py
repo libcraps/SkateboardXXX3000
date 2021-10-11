@@ -66,7 +66,7 @@ class MovuinoDataSet():
         """
 
         self.filepath = filepath
-        self.rawData = pd.read_csv(filepath + ".csv", sep=",")
+        self.rawData = pd.read_csv(filepath, sep=",")
 
         self.nbPointFilter = nbPointfilter
 
@@ -101,6 +101,22 @@ class MovuinoDataSet():
 
         # number of row
         self.nb_row = len(self.time)
+
+
+        # ------ STOCK COLUMN OF DF IN VARIABLES ------
+        for k in range(self.nb_row): #We stock rawData in variables
+            self.acceleration.append(np.array([self.rawData["ax"][k], self.rawData["ay"][k], self.rawData["az"][k]]))
+            self.gyroscope.append(np.array([self.rawData["gx"][k], self.rawData["gy"][k], self.rawData["gz"][k]])*180/np.pi)
+            self.magnetometer.append(np.array([self.rawData["mx"][k], self.rawData["my"][k], self.rawData["mz"][k]]))
+
+            if k < self.nb_row-1: #Calculation of the norm
+                self.normAcceleration.append(np.linalg.norm(self.acceleration[k]))
+                self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
+                self.normMagnetometer.append(np.linalg.norm(self.magnetometer[k]))
+
+        self.acceleration = np.array(self.acceleration)
+        self.gyroscope = np.array(self.gyroscope)
+        self.magnetometer = np.array(self.magnetometer)
 
     def DataManage(self):
         """

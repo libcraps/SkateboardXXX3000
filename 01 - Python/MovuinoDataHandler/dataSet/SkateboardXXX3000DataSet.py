@@ -1,21 +1,73 @@
 from dataSet.MovuinoDataSet import *
-
+import serial
 class SkateboardXXX3000DataSet(MovuinoDataSet):
     """
 
     """
-    def __init__(self, filepath, nbPointfilter = 50):
+    def __init__(self, filepath, nbPointfilter):
         """
 
         :param filepath:
         :param nbPointfilter:
         """
-        MovuinoDataSet.__init__(self, filepath, nbPointfilter)
         self.name = "skateboardXXX3000"
 
+        self.filepath = filepath
+        print("Reading : " + filepath)
+        self.rawData = pd.read_csv(filepath, sep=",")
+        self.processedData = self.rawData.copy()
+
+        self.nbPointFilter = nbPointfilter
+
+        self.time = []
+
+        # basic data from the movuino
+        self.acceleration = []
+        self.gyroscope = []
+        self.magnetometer = []
+
+        # basic data filtered
+        self.acceleration_lp = []
+        self.gyroscope_lp = []
+        self.magnetometer_lp = []
+
+        # norms
+        self.normAcceleration = [0]
+        self.normGyroscope = [0]
+        self.normMagnetometer = [0]
+
+        #Integration values
         self.velocity = [np.array([0, 0, 0])]
         self.pos = [np.array([0, 0, 0])]
         self.ThetaGyr = [np.array([0, 0, 0])]
+
+        # Time list in seconds
+        self.time = list(self.rawData["time"] * 0.001)
+        self.rawData["time"] = self.time
+
+        # Sample rate
+        self.Te = (self.time[-1] - self.time[0]) / (len(self.time))
+
+        # Number of row
+        self.nb_row = len(self.time)
+
+        # ------ STOCK COLUMN OF DF IN VARIABLES ------
+        for k in range(self.nb_row):  # We stock rawData in variables
+            self.acceleration.append(np.array([self.rawData["ax"][k], self.rawData["ay"][k], self.rawData["az"][k]]))
+            self.gyroscope.append(
+                np.array([self.rawData["gx"][k], self.rawData["gy"][k], self.rawData["gz"][k]]) * 180 / np.pi)
+            self.magnetometer.append(np.array([self.rawData["mx"][k], self.rawData["my"][k], self.rawData["mz"][k]]))
+
+            if k < self.nb_row - 1:  # Calculation of the norm
+                self.normAcceleration.append(np.linalg.norm(self.acceleration[k]))
+                self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
+                self.normMagnetometer.append(np.linalg.norm(self.magnetometer[k]))
+
+        self.acceleration = np.array(self.acceleration)
+        self.gyroscope = np.array(self.gyroscope)
+        self.magnetometer = np.array(self.magnetometer)
+
+
 
 
     def DataManage(self):
@@ -69,24 +121,39 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         patchZ = mpatches.Patch(color='blue', label='z')
         plt.legend(handles=[patchX, patchY, patchZ], loc="center right", bbox_to_anchor=(-2.5, 3.6), ncol=1)
 
-    def AddingRawData(self):
+    def StockProcessedData(self, filepath):
         """
 
         :return:
         """
-        MovuinoDataSet.AddingRawData(self)
+        self.processedData["normAccel"] = self.normAcceleration
+        self.processedData["normMag"] = self.normMagnetometer
+        self.processedData["normGyr"] = self.normGyroscope
 
-        self.rawData["thetaGyrx"] = self.ThetaGyr[:, 0]
-        self.rawData["thetaGyry"] = self.ThetaGyr[:, 1]
-        self.rawData["thetaGyrz"] = self.ThetaGyr[:, 2]
+        self.processedData["ax_filter"] = self.acceleration_lp[:, 0]
+        self.processedData["ay_filter"] = self.acceleration_lp[:, 1]
+        self.processedData["az_filter"] = self.acceleration_lp[:, 2]
 
-        self.rawData["vx"] = self.velocity[:, 0]
-        self.rawData["vy"] = self.velocity[:, 1]
-        self.rawData["vz"] = self.velocity[:, 2]
+        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0] * 180 / np.pi
+        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1] * 180 / np.pi
+        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2] * 180 / np.pi
 
-        self.rawData["posx"] = self.pos[:, 0]
-        self.rawData["posy"] = self.pos[:, 1]
-        self.rawData["posz"] = self.pos[:, 2]
+        self.processedData["mx_filter"] = self.magnetometer_lp[:, 0]
+        self.processedData["my_filter"] = self.magnetometer_lp[:, 1]
+        self.processedData["mz_filter"] = self.magnetometer_lp[:, 2]
+
+        self.processedData["thetaGyrx"] = self.ThetaGyr[:, 0]
+        self.processedData["thetaGyry"] = self.ThetaGyr[:, 1]
+        self.processedData["thetaGyrz"] = self.ThetaGyr[:, 2]
+
+        self.processedData["vx"] = self.velocity[:, 0]
+        self.processedData["vy"] = self.velocity[:, 1]
+        self.processedData["vz"] = self.velocity[:, 2]
+
+        self.processedData["posx"] = self.pos[:, 0]
+        self.processedData["posy"] = self.pos[:, 1]
+        self.processedData["posz"] = self.pos[:, 2]
+        self.processedData.to_csv(filepath + "_treated_" + self.name + ".csv", sep=",", index=False, index_label=False)
 
     @staticmethod
     def PlotCompleteFile(filepath, sep, dec):
@@ -114,4 +181,104 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
 
         plt.show()
         return
+    def stockProcessedData(self, filepath):
+        """
+
+        :param self:
+        :param folderpath:
+        :return:
+        """
+
+        self.processedData = self.rawData.copy()
+
+        self.processedData["normAccel"] = self.normAcceleration
+        self.processedData["normMag"] = self.normMagnetometer
+        self.processedData["normGyr"] = self.normGyroscope
+
+        self.processedData["ax_filter"] = self.acceleration_lp[:, 0]
+        self.processedData["ay_filter"] = self.acceleration_lp[:, 1]
+        self.processedData["az_filter"] = self.acceleration_lp[:, 2]
+
+        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0] * 180 / np.pi
+        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1] * 180 / np.pi
+        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2] * 180 / np.pi
+
+        self.processedData["mx_filter"] = self.magnetometer_lp[:, 0]
+        self.processedData["my_filter"] = self.magnetometer_lp[:, 1]
+        self.processedData["mz_filter"] = self.magnetometer_lp[:, 2]
+
+
+        self.processedData.to_csv(filepath, sep=",", index=False, index_label=False)
+
+
+    @staticmethod
+    def MovuinoExtraction(serialPort, path):
+        isReading = False
+        ExtractionCompleted = False
+        print("-> Opening serial port {}".format(serialPort))
+        arduino = serial.Serial(serialPort, baudrate=115200, timeout=1.)
+        line_byte = ''
+        line_str = ''
+        datafile = ''
+        nbRecord = 1
+
+        while ExtractionCompleted != True:
+            line_byte = arduino.readline()
+            line_str = line_byte.decode("utf-8")
+
+            if "XXX_end" in line_str and isReading == True:
+                isReading = False
+                ExtractionCompleted = True
+                print("End of data sheet")
+
+                with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
+                    print("Add new file : {}".format(path + "_" + str(nbRecord) + ".csv"))
+                    file.write(datafile)
+
+            if "XXX_newRecord" in line_str and isReading == True:
+                with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
+                    print("Add new file : {}".format(path + "_" + str(nbRecord) + ".csv"))
+                    file.write(datafile)
+
+                datafile = ''
+                line_str = ''
+                nbRecord += 1
+
+            if (isReading):
+                if line_str != '':
+                    datafile += line_str.strip() + '\n'
+
+            if ("XXX_beginning" in line_str):
+                isReading = True
+                print("Record begins")
+
+    def DispRawData(self):
+        time_list = self.time
+        df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)
+        df.PlotVector(time_list, self.magnetometer, 'Magnetometer', 222)
+        df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 223)
+
+        pressure = plt.subplot(224)
+        pressure.plot(time_list, self.pressure)
+        pressure.set_title('Pressure (pressure unit)')
+        plt.show()
+
+    def DispProcessedData(self):
+        """
+        Add processed data usefull for skateboarding
+        :return:
+        """
+        time_list = self.time
+        df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 331)
+        df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 333)
+        df.PlotVector(time_list, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
+        df.PlotVector(time_list, self.magnetometer_lp, 'Magnetometer filtered (LP)', 335)
+
+
+        normAcc = plt.subplot(337)
+        normAcc.plot(time_list, self.normAcceleration, color="black")
+        normAcc.set_title("Norm Acceleration")
+
+
+        plt.show()
 

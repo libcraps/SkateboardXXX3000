@@ -16,6 +16,7 @@ def EulerIntegration(Uprime, dt):
         Uy = Uprime[k][1] * dt + U[k][1]
         Uz = Uprime[k][2] * dt + U[k][2]
         U.append(np.array([Ux, Uy, Uz]))
+    U=np.array(U)
     return U
 
 

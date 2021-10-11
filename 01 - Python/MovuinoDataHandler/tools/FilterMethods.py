@@ -1,19 +1,28 @@
 import numpy as np
 from scipy import signal
 
-def MeandDat(rawDat, nbPointFilter, listMean):
-    meanDat = np.array([0.,0.,0.])
-    listMean.append(rawDat)
+def MeanFilter(dat_to_filter, nbPoint):
+    """
 
-    if len(listMean) - nbPointFilter > 0:
-        # remove oldest data if N unchanged(i=0 removed)
-        # remove from 0 to rawdat.length - N + 1 if new N < old N
-        for i in range(len(listMean) - nbPointFilter) :
-            listMean.pop(0)
+    :param dat_to_filter: rawData list to filter
+    :param nbPoint: filtering level
+    :return: list of filterd dat
+    """
+    meanDat = []
 
-    for k in range(len(listMean)):
-        meanDat += listMean[k]
-    meanDat /= len(listMean)
+    for i in range(len(dat_to_filter)):
+        meanVal = 0
+        if (i < nbPoint):
+            for k in range(i+1):
+                meanVal += dat_to_filter[k]
+            meanVal /= (i+1)
+        else :
+            for k in range(nbPoint):
+                meanVal += dat_to_filter[i-k]
+
+            meanVal /= nbPoint
+        meanDat.append(meanVal)
+    meanDat = np.array(meanDat)
     return meanDat
 
 def LowPassFilter(x, y, Te, fc):
