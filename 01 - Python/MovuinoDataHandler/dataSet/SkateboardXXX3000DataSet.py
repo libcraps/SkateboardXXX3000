@@ -42,7 +42,7 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         self.ThetaGyr = [np.array([0, 0, 0])]
 
         # Time list in seconds
-        self.time = list(self.rawData["time"] * 0.001)
+        self.time = list(self.rawData["time"])
         self.rawData["time"] = self.time
 
         # Sample rate
@@ -257,10 +257,6 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)
         df.PlotVector(time_list, self.magnetometer, 'Magnetometer', 222)
         df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 223)
-
-        pressure = plt.subplot(224)
-        pressure.plot(time_list, self.pressure)
-        pressure.set_title('Pressure (pressure unit)')
         plt.show()
 
     def DispProcessedData(self):

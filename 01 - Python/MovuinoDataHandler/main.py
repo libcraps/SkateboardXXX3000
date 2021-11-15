@@ -1,9 +1,4 @@
-import serial
-import dataSet.SensitivePenDataSet as sp
 import dataSet.SkateboardXXX3000DataSet as sk
-import dataSet.GlobalDataSet as gds
-import dataSet.MovuinoDataSet as dm
-import tools.DisplayFunctions as df
 import tools.FilterMethods as fm
 import tools.integratinoFunctions as ef
 import os
@@ -23,7 +18,7 @@ fileName = "record"  # generic name numbers will be added for duplicates
 serialPort = 'COM6'
 
 toExtract = False
-toDataManage = True
+toDataManage = False
 toVisualize = True
 
 filter = 5
@@ -36,7 +31,7 @@ nbRecord = 16
 
 nb_files = 0
 
-path = folderPath
+path = folderPath + fileName
 
 # --------- Data Extraction from Movuino ----------
 if toExtract:
@@ -71,5 +66,17 @@ if toDataManage:
             """
 
             """
+#Display
+if toVisualize:
+    for filename in os.listdir(folderPath):
+        print("Processing : " + folderPath + filename)
+        skateDataSet = sk.SkateboardXXX3000DataSet(folderPath + filename, filter)
+        #skateDataSet.DataManage()
+        Te = skateDataSet.Te
 
+        if "treated" in os.path.basename(skateDataSet.filepath):
+            skateDataSet.DispRawData()
+            """
+            
+            """
 
