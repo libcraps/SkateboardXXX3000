@@ -1,0 +1,15 @@
+# Compte-Rendu des avancés du projet
+
+## Réunion du 17/11/2021:
+
+- Présentation du projet et de ce qui a déjà été fait
+- Discussion de ce qui faut faire sur court terme : Comment automatiser la localisation et l'extraction des figures sur une séquence donnée ?
+- Organisation du taffe
+
+### Automatisation de la localisation et l'extraction des figures sur une séquence donnée :
+- 2 objectifs :
+-> Isoler les figures de manière pertinente et similaire (méthode : calcul du temps moyen)
+-> Automatiser la localisation des figures  (méthode : calcul d'une amplitude moyenne)
+-> + normalisation des figures avec énergie
+
+
