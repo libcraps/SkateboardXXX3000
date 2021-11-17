@@ -14,4 +14,22 @@
 
 => Organisation dans dossier == ++ importante
 
+#### Isolation des figures : 
+1. Isolation à la main de manière arbitraire (peut être automatisé ?)
+2. Calcul de l'instant moyen de la figure :
+	t_mean = (somme(ti * y(ti)^2)/(somme(y(ti)^2))
+3. Réisolation de la figure avec t_mean au centre => figure = [y(t_mean) - delta_figure/2: y(t_mean) + delta_figure/2]
+
+#### Automatisation de la localisation des figures:
+1. Estimation d'une Amplitude moyenne de figure (en norme ou en V.A de chaque composante, pour accélération ou gyroscope)
+2. Premier choix de localisation de figure (1. de "Isolation des figures")
+3. Isolation des figures
+
+#### Normalisation des figures :
+- 
+
+
+#### Organisation des dossiers :
+
+
 
