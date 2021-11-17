@@ -12,7 +12,7 @@ from scipy import signal
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-folderPath = "..\\data_usefull\\tricks_come\\"
+folderPath = "..\\..\\06 - Data\\tricks_come\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = 'COM6'

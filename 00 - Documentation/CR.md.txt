@@ -10,6 +10,8 @@
 - 2 objectifs :
 -> Isoler les figures de manière pertinente et similaire (méthode : calcul du temps moyen)
 -> Automatiser la localisation des figures  (méthode : calcul d'une amplitude moyenne)
--> + normalisation des figures avec énergie
+-> + Normalisation des figures avec énergie
+
+=> Organisation dans dossier == ++ importante
 
 
