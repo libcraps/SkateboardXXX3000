@@ -1,10 +1,12 @@
 from dataSet.MovuinoDataSet import *
 import serial
+import os
+
 class SkateboardXXX3000DataSet(MovuinoDataSet):
     """
 
     """
-    def __init__(self, filepath, nbPointfilter):
+    def __init__(self, filepath):
         """
 
         :param filepath:
@@ -16,8 +18,6 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         print("Reading : " + filepath)
         self.rawData = pd.read_csv(filepath, sep=",")
         self.processedData = self.rawData.copy()
-
-        self.nbPointFilter = nbPointfilter
 
         self.time = []
 
@@ -212,7 +212,7 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
 
 
     @staticmethod
-    def MovuinoExtraction(serialPort, path):
+    def MovuinoExtraction(serialPort, folderpath, gen_filename):
         isReading = False
         ExtractionCompleted = False
         print("-> Opening serial port {}".format(serialPort))
@@ -222,6 +222,10 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         datafile = ''
         nbRecord = 1
 
+        filename = gen_filename + "_" + str(nbRecord) + ".csv"
+        dir = os.path.dirname(folderpath)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
         while ExtractionCompleted != True:
             line_byte = arduino.readline()
             line_str = line_byte.decode("utf-8")
@@ -231,18 +235,19 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
                 ExtractionCompleted = True
                 print("End of data sheet")
 
-                with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
-                    print("Add new file : {}".format(path + "_" + str(nbRecord) + ".csv"))
+                with open(folderpath + filename + ".csv", "w") as file:
+                    print("Add new file : {}".format(folderpath + filename))
                     file.write(datafile)
 
             if "XXX_newRecord" in line_str and isReading == True:
-                with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
-                    print("Add new file : {}".format(path + "_" + str(nbRecord) + ".csv"))
+                with open(folderpath +filename, "w") as file:
+                    print("Add new file : {}".format(folderpath + filename))
                     file.write(datafile)
 
                 datafile = ''
                 line_str = ''
                 nbRecord += 1
+                filename = gen_filename + "_" + str(nbRecord) + ".csv"
 
             if (isReading):
                 if line_str != '':
@@ -255,8 +260,13 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
     def DispRawData(self):
         time_list = self.time
         df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)
-        df.PlotVector(time_list, self.magnetometer, 'Magnetometer', 222)
         df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 223)
+        plt.subplot(224)
+        plt.plot(time_list, self.normGyroscope, label="Norme gyroscope", color="black")
+        plt.legend(loc='upper right')
+        plt.subplot(222)
+        plt.plot(time_list, self.normAcceleration, label='Norme Accélération',color="black")
+        plt.legend(loc='upper right')
         plt.show()
 
     def DispProcessedData(self):

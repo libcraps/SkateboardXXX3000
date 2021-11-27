@@ -13,7 +13,7 @@ from scipy import signal
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
 folderPath = "..\\..\\06 - Data\\tricks_come\\"
-fileName = "record"  # generic name numbers will be added for duplicates
+gen_filename = "record"  # generic name numbers will be added for duplicates
 
 serialPort = 'COM6'
 
@@ -23,12 +23,12 @@ toVisualize = True
 
 filter = 5
 
-path = folderPath + fileName
+
 
 # --------- Data Extraction from Movuino ----------
 if toExtract:
     print("data extraction")
-    sk.SkateboardXXX3000DataSet.MovuinoExtraction(serialPort, path)
+    sk.SkateboardXXX3000DataSet.MovuinoExtraction(serialPort, folderPath, gen_filename)
 
 # -------- Data processing ----------------------
 if toDataManage:
