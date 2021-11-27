@@ -23,14 +23,6 @@ toVisualize = True
 
 filter = 5
 
-##### If only data manage
-file_start =7
-nbRecord = 16
-
-###################################
-
-nb_files = 0
-
 path = folderPath + fileName
 
 # --------- Data Extraction from Movuino ----------
