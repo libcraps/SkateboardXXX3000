@@ -9,8 +9,6 @@ def mean_time(dat):
     :return:
     """
     i_mean = 0
-
-
     E_t = 0
     E = 0
     for i in range(len(dat)):
