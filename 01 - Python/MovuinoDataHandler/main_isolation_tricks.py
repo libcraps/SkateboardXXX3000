@@ -7,31 +7,33 @@ import matplotlib.pyplot as plt
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121\\record_4.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\ollie_nb_3.csv"
 print("Opening : " + completeSequencesPath)
 skateDataSet = sk.SkateboardXXX3000DataSet(completeSequencesPath)
-Te = skateDataSet.Te
+skateDataSet.time =[t/1000 for t in skateDataSet.time]
+skateDataSet.rawData["time"] /=1000
+Te = skateDataSet.Te/1000
 print("sample frequency : " + str(1 / Te))
 skateDataSet.DispRawData()
 
 toExtract = str(input("Vous les vous extraire les données d'une figure y/n :"))
 
-if toExtract=="y":
+if toExtract == "y":
     #Tricks to isolate
+    tricks_name = "ollie" # choose btw : ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip
+    tricks_interval = (23.5, 24.5) #secondes
 
-    #tricks_name = "fs_shovit" # choose btw : ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip
-    #tricks_interval = (7.8, 9) #secondes
-
-    tricks_name = str(input("Quelle figure voulez vous extraitre (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip) :"))
-    tricks_interval = tuple(input("Dans quel interval de temps se situe la figure ?"))
+    #tricks_name = str(input("Quelle figure voulez vous extraitre (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip) :"))
+    #str_interval = input("Dans quel interval de temps se situe la figure ?")
+    #tricks_interval = tuple(float(x) for x in str_interval.split(","))
     num_figure = int(input("C'est la combien-ième figure que vous avez enregistré ?"))
 
     fileTricksPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\" + tricks_name + "_" + str(num_figure)+".csv"
 
     dt = 0.6
 
-    index_init = int(float(tricks_interval[0]-1)*1/Te)
-    index_end = int(float(tricks_interval[1]-1)*1/Te)
+    index_init = int((float(tricks_interval[0])-1)*1/Te)
+    index_end = int((float(tricks_interval[1])-1)*1/Te)
 
     while skateDataSet.time[index_init] < tricks_interval[0]:
         index_init += 1

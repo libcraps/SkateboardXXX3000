@@ -41,7 +41,6 @@ sysinfo.txt
 *\venv
 *\.idea
 *.h
-*.csv
 *.xlsx
 *.fbx
 *.SLDPRT
