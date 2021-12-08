@@ -11,8 +11,8 @@ from scipy import signal
 ############   SETTINGS   #############
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
-
-folderPath = "..\\..\\06 - Data\\tricks_come\\"
+# choose btw : ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip
+folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\"
 gen_filename = "record"  # generic name numbers will be added for duplicates
 
 serialPort = 'COM6'
@@ -34,7 +34,7 @@ if toExtract:
 if toDataManage:
     for filename in os.listdir(folderPath):
         print("Processing : " + folderPath + filename)
-        skateDataSet = sk.SkateboardXXX3000DataSet(folderPath + filename, filter)
+        skateDataSet = sk.SkateboardXXX3000DataSet(folderPath + filename)
         #skateDataSet.DataManage()
         Te = skateDataSet.Te
         print("sample frequency : "+str(1/Te))
@@ -62,13 +62,11 @@ if toDataManage:
 if toVisualize:
     for filename in os.listdir(folderPath):
         print("Processing : " + folderPath + filename)
-        skateDataSet = sk.SkateboardXXX3000DataSet(folderPath + filename, filter)
+        skateDataSet = sk.SkateboardXXX3000DataSet(folderPath + filename)
         #skateDataSet.DataManage()
         Te = skateDataSet.Te
-
-        if "treated" in os.path.basename(skateDataSet.filepath):
-            skateDataSet.DispRawData()
-            """
-            
-            """
+        skateDataSet.DispRawData()
+        """
+        
+        """
 
