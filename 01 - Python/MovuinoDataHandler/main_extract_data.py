@@ -1,7 +1,6 @@
 import dataSet.SkateboardXXX3000DataSet as sk
 
 ############   SETTINGS   #############
-
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
 folderPath = "..\\..\\06 - Data\\sesh_011221\\"

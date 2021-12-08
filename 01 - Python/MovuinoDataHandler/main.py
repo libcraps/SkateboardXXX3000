@@ -23,8 +23,6 @@ toVisualize = True
 
 filter = 5
 
-
-
 # --------- Data Extraction from Movuino ----------
 if toExtract:
     print("data extraction")
