@@ -217,6 +217,16 @@ PrefabInstance:
       propertyPath: objectVisu
       value: 
       objectReference: {fileID: 989633277}
+    - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
+        type: 3}
+      propertyPath: _yMax
+      value: 360
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
+        type: 3}
+      propertyPath: nbDot
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8168271861586752217, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -682,8 +692,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a21445e18272e4291ebe1854bf30cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  folderPath: .\\Data_visu\\
-  filename: record_test_1_treated_skateboardXXX3000.csv
+  folderPath: .\\..\\..\\06 - Data\\Isolated_Tricks\\ollie\\
+  filename: ollie_1.csv
   i: 0
 --- !u!114 &989633281
 MonoBehaviour:

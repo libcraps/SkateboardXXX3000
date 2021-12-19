@@ -20,29 +20,33 @@ namespace Skateboard
         private Vector3 initAngle;
         private Vector3 _initObjAngle;
 
-        public Vector3 angleGyr { get { return movuinoDataSet.GetVector("thetaGyrx", "thetaGyry", "thetaGyrz", movuinoDataSet.i); } }
+        //public Vector3 angleGyr { get { return movuinoDataSet.GetVector("thetaGyrx", "thetaGyry", "thetaGyrz", movuinoDataSet.i); } }
 
         private void Start()
         {
+            /*
             //movuinoDataSet.showColumns();
             print(movuinoDataSet);
             T = (movuinoDataSet.GetValue("time", 1) - movuinoDataSet.GetValue("time", 0));
             InvokeRepeating("Rotate", 2f,T);
-            initAngle = movuinoDataSet.GetVector("thetaGyrx", "thetaGyry", "thetaGyrz", 2);
+            //initAngle = movuinoDataSet.GetVector("thetaGyrx", "thetaGyry", "thetaGyrz", 2);
+            initAngle = new Vector3(0, 0, 0);
             _initObjAngle = this.gameObject.transform.localEulerAngles;
             
             print(T);
-
+            */
         }
 
         private void FixedUpdate()
         {
-            graphData = angleGyr;
+            graphData = movuinoDataSet.gyroscope;
+            movuinoDataSet.i++;
+            print(graphData);
         }
 
         private void Rotate()
         {
-            this.gameObject.transform.localEulerAngles = _initObjAngle + new Vector3(angleGyr.y, angleGyr.x, angleGyr.z) - new Vector3(initAngle.y, initAngle.x, initAngle.z);
+            //this.gameObject.transform.localEulerAngles = _initObjAngle + new Vector3(angleGyr.y, angleGyr.x, angleGyr.z) - new Vector3(initAngle.y, initAngle.x, initAngle.z);
             //this.gameObject.transform.localEulerAngles += new Vector3(movuinoDataSet.gyroscope.y, movuinoDataSet.gyroscope.x, movuinoDataSet.gyroscope.z)*T*MovuinoDataProcessing.RAD_TO_DEG;
             
             movuinoDataSet.i++;
