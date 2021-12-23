@@ -138,9 +138,10 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         self.processedData["ay_filter"] = self.acceleration_lp[:, 1]
         self.processedData["az_filter"] = self.acceleration_lp[:, 2]
 
-        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0] * 180 / np.pi
-        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1] * 180 / np.pi
-        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2] * 180 / np.pi
+        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0]
+        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1]
+        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2]
+
 
         self.processedData["mx_filter"] = self.magnetometer_lp[:, 0]
         self.processedData["my_filter"] = self.magnetometer_lp[:, 1]
@@ -203,14 +204,29 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         self.processedData["ay_filter"] = self.acceleration_lp[:, 1]
         self.processedData["az_filter"] = self.acceleration_lp[:, 2]
 
-        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0] * 180 / np.pi
-        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1] * 180 / np.pi
-        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2] * 180 / np.pi
+        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0]
+        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1]
+        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2]
+
+        self.processedData["gx"] = self.gyroscope[:, 0]
+        self.processedData["gy"] = self.gyroscope[:, 1]
+        self.processedData["gz"] = self.gyroscope[:, 2]
 
         self.processedData["mx_filter"] = self.magnetometer_lp[:, 0]
         self.processedData["my_filter"] = self.magnetometer_lp[:, 1]
         self.processedData["mz_filter"] = self.magnetometer_lp[:, 2]
 
+        self.processedData["thetaGyrx"] = self.ThetaGyr[:, 0]
+        self.processedData["thetaGyry"] = self.ThetaGyr[:, 1]
+        self.processedData["thetaGyrz"] = self.ThetaGyr[:, 2]
+
+        self.processedData["vx"] = self.velocity[:, 0]
+        self.processedData["vy"] = self.velocity[:, 1]
+        self.processedData["vz"] = self.velocity[:, 2]
+
+        self.processedData["posx"] = self.pos[:, 0]
+        self.processedData["posy"] = self.pos[:, 1]
+        self.processedData["posz"] = self.pos[:, 2]
 
         self.processedData.to_csv(filepath, sep=",", index=False, index_label=False)
 

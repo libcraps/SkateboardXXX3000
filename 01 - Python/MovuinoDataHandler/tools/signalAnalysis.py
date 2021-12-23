@@ -17,3 +17,14 @@ def mean_time(dat):
 
     i_mean = int(E_t/E)
     return i_mean
+
+def normalizeDat(dat):
+    dat_normalized = dat.copy()
+
+    norm_dat = np.sum(dat**2)
+
+
+    for i in range(len(dat)):
+
+
+    return norm_dat
