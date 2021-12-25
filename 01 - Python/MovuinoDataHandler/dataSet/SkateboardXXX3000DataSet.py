@@ -30,8 +30,8 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
         self.gyroscope_lp = []
 
         # norms
-        self.normAcceleration = [0]
-        self.normGyroscope = [0]
+        self.normAcceleration = []
+        self.normGyroscope = []
 
         #Integration values
         self.velocity = [np.array([0, 0, 0])]
@@ -54,9 +54,8 @@ class SkateboardXXX3000DataSet(MovuinoDataSet):
             self.gyroscope.append(
                 np.array([self.rawData["gx"][k], self.rawData["gy"][k], self.rawData["gz"][k]]) * 180 / np.pi)
 
-            if k < self.nb_row - 1:  # Calculation of the norm
-                self.normAcceleration.append(np.linalg.norm(self.acceleration[k]))
-                self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
+            self.normAcceleration.append(np.linalg.norm(self.acceleration[k]))
+            self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
 
         self.acceleration = np.array(self.acceleration)
         self.gyroscope = np.array(self.gyroscope)

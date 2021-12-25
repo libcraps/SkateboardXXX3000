@@ -1,8 +1,10 @@
 import dataSet.SkateboardXXX3000DataSet as sk
 import pandas as pd
 import tools.signalAnalysis as sa
+import tools.DisplayFunctions as df
 import os
 import matplotlib.pyplot as plt
+import numpy as np
 ############   SETTINGS   #############
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
@@ -15,8 +17,47 @@ skateDataSet.time =[t/1000 for t in skateDataSet.time]
 skateDataSet.rawData["time"] /=1000
 Te = skateDataSet.Te/1000
 print("sample frequency : " + str(1 / Te))
-skateDataSet.DispRawData()
 
+nb_window = 71
+window = [0,nb_window]
+overlap = 35
+
+sum_acc = []
+sum_gyr = []
+time_win = []
+
+normAcc = np.pad(skateDataSet.normAcceleration, (int(nb_window//2), int(nb_window//2)))
+normGyr = np.pad(skateDataSet.normGyroscope, (int(nb_window/2), int(nb_window/2)))
+
+while window[1] < len(skateDataSet.time):
+    time_win.append(skateDataSet.time[(window[0]+window[1])//2])
+    sum_acc.append(np.sum(normAcc[window[0]:window[1]]))
+    sum_gyr.append(np.sum(normGyr[window[0]:window[1]]))
+
+    window[0] += nb_window - overlap
+    window[1] += nb_window - overlap
+
+print(len(sum_acc))
+print(len(skateDataSet.time))
+print(len(skateDataSet.time)/len(sum_acc))
+#skateDataSet.DispRawData()
+
+time_list = skateDataSet.time
+df.PlotVector(time_list, skateDataSet.acceleration, 'Acceleration (m/s2)', 321)
+plt.subplot(323)
+plt.plot(time_list, skateDataSet.normAcceleration, label='Norme Accélération', color="black")
+plt.legend(loc='upper right')
+plt.subplot(325)
+plt.plot(time_win,sum_acc,'-o', markersize=2)
+df.PlotVector(time_list, skateDataSet.gyroscope, 'Gyroscope (deg/s)', 322)
+plt.subplot(324)
+plt.plot(time_list, skateDataSet.normGyroscope, label="Norme gyroscope", color="black")
+plt.legend(loc='upper right')
+plt.subplot(326)
+plt.plot(time_win,sum_gyr,'-o',markersize=2)
+
+plt.show()
+"""
 toExtract = str(input("Vous les vous extraire les données d'une figure y/n :"))
 
 if toExtract == "y":
@@ -82,3 +123,4 @@ if toExtract == "y":
 
     tricks = sk.SkateboardXXX3000DataSet(fileTricksPath)
     tricks.DispRawData()
+"""
