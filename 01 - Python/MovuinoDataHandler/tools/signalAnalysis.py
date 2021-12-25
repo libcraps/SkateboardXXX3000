@@ -19,12 +19,15 @@ def mean_time(dat):
     return i_mean
 
 def normalizeDat(dat):
+    """
+    Normalized the data using the energie of the signal
+    :param dat:
+    :return:
+    """
     dat_normalized = dat.copy()
 
     norm_dat = np.sum(dat**2)
-
-
     for i in range(len(dat)):
+        dat_normalized[i]/=norm_dat
 
-
-    return norm_dat
+    return dat_normalized
