@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
 completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\ollie_nb_3.csv"
+
 print("Opening : " + completeSequencesPath)
 skateDataSet = sk.SkateboardXXX3000DataSet(completeSequencesPath)
 skateDataSet.time =[t/1000 for t in skateDataSet.time]
