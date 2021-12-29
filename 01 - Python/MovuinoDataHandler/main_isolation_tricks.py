@@ -11,7 +11,7 @@ from scipy.signal import find_peaks
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\record_8.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\record_12.csv"
 
 print("Opening : " + completeSequencesPath)
 skateDataSet = sk.SkateboardXXX3000DataSet(completeSequencesPath)
@@ -117,7 +117,7 @@ for k in range(len(tricks_interval)):
     mean_time = skateDataSet.time[i_start] + index_mean_loc*Te
     index_mean_glob = 0
 
-    new_tricks_interval = (mean_time-dt_f, mean_time+dt_f)
+    new_tricks_interval = [mean_time-dt_f, mean_time+dt_f]
     i_start=0
     i_end=0
     while skateDataSet.time[i_start] < new_tricks_interval[0]:
@@ -128,7 +128,6 @@ for k in range(len(tricks_interval)):
 
     print("Tricks' start time : " + str(skateDataSet.time[i_start]))
     print("Tricks' end time : " + str(skateDataSet.time[i_end]))
-    df_iso_tricks = skateDataSet.rawData.iloc[i_start:i_end,:]
 
     time_list = skateDataSet.time[i_start:i_end]
     plt.subplot(321)
@@ -164,73 +163,56 @@ for k in range(len(tricks_interval)):
     plt.grid()
     plt.show()
 
+    toExtract = str(input("Voulez vous extraire les données d'une figure y/n - other (o):"))
 
+    if toExtract == "y":
+        # Tricks to isolate
+        tricks_name = str(input("Quelle figure voulez vous extraitre (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip) :"))
+        num_figure = int(input("C'est la combien-ième figure que vous avez enregistré ?"))
 
+        fileTricksPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\" + tricks_name + "_" + str(
+            num_figure) + ".csv"
 
-"""
-toExtract = str(input("Vous les vous extraire les données d'une figure y/n :"))
+        df_iso_tricks = skateDataSet.rawData.iloc[i_start:i_end, :]
 
-if toExtract == "y":
-    #Tricks to isolate
-    tricks_name = "ollie" # choose btw : ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip
-    tricks_interval = (23.5, 24.5) #secondes
+        dir = os.path.dirname(fileTricksPath)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        df_iso_tricks.to_csv(fileTricksPath, sep=",", index=False, index_label=False)
 
-    #tricks_name = str(input("Quelle figure voulez vous extraitre (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip) :"))
-    #str_interval = input("Dans quel interval de temps se situe la figure ?")
-    #tricks_interval = tuple(float(x) for x in str_interval.split(","))
-    num_figure = int(input("C'est la combien-ième figure que vous avez enregistré ?"))
+        tricks = sk.SkateboardXXX3000DataSet(fileTricksPath)
+        tricks.DispRawData()
 
-    fileTricksPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\" + tricks_name + "_" + str(num_figure)+".csv"
+    elif toExtract == "o":
+        new_mean_time = float(input("Nouveau temps moyen de la figure : "))
+        new_tricks_interval[0] = new_mean_time - dt_f
+        new_tricks_interval[1] = new_mean_time + dt_f
+        i_start = 0
+        i_end = 0
+        while skateDataSet.time[i_start] < new_tricks_interval[0]:
+            i_start += 1
+        while skateDataSet.time[i_end] < new_tricks_interval[1]:
+            i_end += 1
+        df_iso_tricks = skateDataSet.rawData.iloc[i_start:i_end, :]
 
-    dt = 0.6
+        plt.plot(df_iso_tricks["time"],df_iso_tricks["normGyr"])
+        plt.show()
 
-    index_init = int((float(tricks_interval[0])-1)*1/Te)
-    index_end = int((float(tricks_interval[1])-1)*1/Te)
+        toExtract = str(input("Voulez vous extraire les données d'une figure y/n - other (o):"))
 
-    while skateDataSet.time[index_init] < tricks_interval[0]:
-        index_init += 1
+        if toExtract == "y":
+            tricks_name = str(input(
+                "Quelle figure voulez vous extraitre (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip, pivot) :"))
+            num_figure = int(input("C'est la combien-ième figure que vous avez enregistré ?"))
 
-    while skateDataSet.time[index_end] < tricks_interval[1]:
-        index_end += 1
+            fileTricksPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\" + tricks_name + "_" + str(
+                num_figure) + ".csv"
 
-    print("Tricks' start time : " + str(skateDataSet.time[index_init]))
-    print("Tricks' end time : " + str(skateDataSet.time[index_end]))
+            df_iso_tricks = skateDataSet.rawData.iloc[i_start:i_end, :]
 
-    df_iso_tricks = skateDataSet.rawData.iloc[index_init:index_end,:]
+            dir = os.path.dirname(fileTricksPath)
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+            df_iso_tricks.to_csv(fileTricksPath, sep=",", index=False, index_label=False)
 
-    normGyroscope = list(df_iso_tricks["normGyr"])
-    time = list(df_iso_tricks["time"])
-
-    plt.plot(time,normGyroscope)
-    plt.show()
-
-    # ---- Temps moyen de la norme du gyrosocpe ------
-    index_mean_loc = sa.mean_time(normGyroscope)
-    print("Index mean : " + str(index_mean_loc))
-    print("Mean time  : " + str(skateDataSet.time[index_init] + index_mean_loc*Te))
-
-    mean_time = skateDataSet.time[index_init] + index_mean_loc*Te
-    index_mean_glob = 0
-
-    new_tricks_interval = (mean_time-dt, mean_time+dt)
-    index_init=0
-    index_end=0
-    while skateDataSet.time[index_init] < new_tricks_interval[0]:
-        index_init += 1
-
-    while skateDataSet.time[index_end] < new_tricks_interval[1]:
-        index_end += 1
-
-    print(new_tricks_interval)
-    print("Tricks' start time : " + str(skateDataSet.time[index_init]))
-    print("Tricks' end time : " + str(skateDataSet.time[index_end]))
-    df_iso_tricks = skateDataSet.rawData.iloc[index_init:index_end,:]
-
-    dir = os.path.dirname(fileTricksPath)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    df_iso_tricks.to_csv(fileTricksPath, sep=",", index=False, index_label=False)
-
-    tricks = sk.SkateboardXXX3000DataSet(fileTricksPath)
-    tricks.DispRawData()
-"""
+            tricks = sk.SkateboardXXX3000DataSet(fileTricksPath)

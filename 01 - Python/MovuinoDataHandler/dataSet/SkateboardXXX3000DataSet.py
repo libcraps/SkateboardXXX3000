@@ -2,7 +2,7 @@ from dataSet.MovuinoDataSet import *
 import serial
 import os
 
-class SkateboardXXX3000DataSet(MovuinoDataSet):
+class SkateboardXXX3000DataSet():
     """
 
     """
