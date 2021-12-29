@@ -206,7 +206,7 @@ class SkateboardXXX3000DataSet():
         self.processedData["posx"] = self.pos[:, 0]
         self.processedData["posy"] = self.pos[:, 1]
         self.processedData["posz"] = self.pos[:, 2]
-
+        print("Stocking data in : " + filepath)
         self.processedData.to_csv(filepath, sep=",", index=False, index_label=False)
 
 

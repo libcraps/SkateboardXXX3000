@@ -26,7 +26,7 @@ def normalizeDat(dat):
     """
     dat_normalized = dat.copy()
 
-    norm_dat = np.sum(dat**2)
+    norm_dat = np.sqrt(np.sum(dat**2))
     for i in range(len(dat)):
         dat_normalized[i]/=norm_dat
 
