@@ -1,3 +1,8 @@
+"""
+Program for event detection
+
+"""
+
 import dataSet.SkateboardXXX3000DataSet as sk
 import pandas as pd
 import tools.signalAnalysis as sa
@@ -11,7 +16,7 @@ from scipy.signal import find_peaks
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\record_12.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\ollie_nb_3.csv"
 
 print("Opening : " + completeSequencesPath)
 skateDataSet = sk.SkateboardXXX3000DataSet(completeSequencesPath)
