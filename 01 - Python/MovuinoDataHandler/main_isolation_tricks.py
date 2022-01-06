@@ -168,6 +168,7 @@ for k in range(len(tricks_interval)):
     plt.grid()
     plt.show()
 
+"""
     toExtract = str(input("Voulez vous extraire les données d'une figure y/n - other (o):"))
 
     if toExtract == "y":
@@ -175,8 +176,7 @@ for k in range(len(tricks_interval)):
         tricks_name = str(input("Quelle figure voulez vous extraitre (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip) :"))
         num_figure = int(input("C'est la combien-ième figure que vous avez enregistré ?"))
 
-        fileTricksPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\" + tricks_name + "_" + str(
-            num_figure) + ".csv"
+        fileTricksPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\" + tricks_name + "_" + str(num_figure) + ".csv"
 
         df_iso_tricks = skateDataSet.rawData.iloc[i_start:i_end, :]
 
@@ -221,3 +221,4 @@ for k in range(len(tricks_interval)):
             df_iso_tricks.to_csv(fileTricksPath, sep=",", index=False, index_label=False)
 
             tricks = sk.SkateboardXXX3000DataSet(fileTricksPath)
+"""
