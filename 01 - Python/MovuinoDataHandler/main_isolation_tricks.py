@@ -28,39 +28,52 @@ print("sample frequency : " + str(1 / Te))
 
 
 #------- PEAK DETECTION ----------
-nb_window = int(1/Te*0.5)
+size_window = int(0.8*1/Te)
+overlap = int(size_window // 2)
 
-if nb_window%2 == 0 :
-    nb_window+=1
+if size_window%2 == 0 :
+    size_window+=1
 
-window = [0,nb_window]
-overlap = int(nb_window//2)
-
-retard = nb_window//2
+window = [0, size_window]
+retard = size_window // 2
 
 sum_acc = []
 sum_gyr = []
+area_acc = []
+area_gyr = []
 time_win = []
 
+#----Evolution du temps d'aquisition----
+"""
 list_dt = [skateDataSet.time[i]-skateDataSet.time[i-1] for i in range(1,skateDataSet.nb_row)]
 list_dt=np.pad(list_dt, (1,0))
-
 plt.plot(skateDataSet.time,list_dt)
+plt.title("Sample rate evolution")
+plt.ylabel("dt (s)")
+plt.xlabel("Time (s)")
 plt.show()
-normAcc = np.pad(skateDataSet.normAcceleration, (int(nb_window//2), int(nb_window//2)))
-normGyr = np.pad(skateDataSet.normGyroscope, (int(nb_window/2), int(nb_window/2)))
+"""
+#-------------------------------------
+
+normAcc = np.pad(skateDataSet.normAcceleration, (int(size_window // 2), int(size_window // 2)))
+normGyr = np.pad(skateDataSet.normGyroscope, (int(size_window // 2), int(size_window // 2)))
 
 while window[1] < len(skateDataSet.time):
     time_win.append(skateDataSet.time[(window[0]+window[1])//2 - retard])
     sum_acc.append(np.mean(normAcc[window[0]:window[1]]))
     sum_gyr.append(np.mean(normGyr[window[0]:window[1]]))
 
-    window[0] += nb_window - overlap
-    window[1] += nb_window - overlap
+    window[0] += size_window - overlap
+    window[1] += size_window - overlap
 
-sum_gyr=np.array(sum_gyr)
-peaks_gyr, _ = find_peaks(sum_gyr, prominence=10)
+sum_gyr = np.array(sum_gyr)
+sum_acc = np.array(sum_acc)
+peaks_gyr, _gyr = find_peaks(sum_gyr, prominence=10)
+peaks_acc, _acc = find_peaks(sum_acc, prominence=3, distance=4)
 time_win = np.array(time_win)
+
+peaks_ga = []
+
 
 dt_i = 0.8
 dt_f = 0.6
@@ -71,17 +84,19 @@ for i in peaks_gyr:
         tricks_interval.append([0.1, time_win[i] + dt_i])
     else:
         tricks_interval.append([time_win[i]-dt_i, time_win[i]+dt_i])
-print(tricks_interval)
+
 #skateDataSet.DispRawData()
 time_list = np.array(skateDataSet.time)
 df.PlotVector(time_list, skateDataSet.acceleration, 'Acceleration (m/s2)', 321)
 plt.plot(time_win,sum_acc,'-o', markersize=2, color="grey")
+plt.plot(time_win[peaks_acc], sum_acc[peaks_acc], "v", markersize=5, color="orange", label="Peaks")
 plt.legend(loc='upper right')
 plt.subplot(323)
 plt.plot(time_list, skateDataSet.normAcceleration, label='Norme Accélération', color="black")
 plt.legend(loc='upper right')
 plt.subplot(325)
 plt.plot(time_win,sum_acc,'-o', markersize=2)
+plt.plot(time_win[peaks_acc], sum_acc[peaks_acc], "v", markersize=5, color="orange", label="Peaks")
 df.PlotVector(time_list, skateDataSet.gyroscope, 'Gyroscope (deg/s)', 322)
 plt.plot(time_win, sum_gyr,'-o', markersize=2, color="grey")
 plt.plot(time_win[peaks_gyr], sum_gyr[peaks_gyr], "v", markersize=5, color="orange", label="Peaks")
@@ -91,11 +106,12 @@ plt.plot(time_list, skateDataSet.normGyroscope, label="Norme gyroscope", color="
 plt.legend(loc='upper right')
 plt.subplot(326)
 plt.plot(time_win, sum_gyr,'-o', markersize=2)
+plt.plot(time_win[peaks_gyr], sum_gyr[peaks_gyr], "v", markersize=5, color="orange", label="Peaks")
 plt.grid()
 plt.show()
 
 #------------ PEAKS ISOLATION ------------------
-
+"""
 for k in range(len(tricks_interval)):
     i_start = int(float(tricks_interval[k][0]-0.1)/Te)
     i_end = int(float(tricks_interval[k][1]-0.1)/Te)
@@ -167,7 +183,8 @@ for k in range(len(tricks_interval)):
     plt.legend(loc='upper right')
     plt.grid()
     plt.show()
-
+"""
+#---- File extraction ----
 """
     toExtract = str(input("Voulez vous extraire les données d'une figure y/n - other (o):"))
 

@@ -37,6 +37,7 @@ for k in range(len(skateDataSet.time)-1):
     dt=skateDataSet.time[k+1]-skateDataSet.time[k]
     airG+=(skateDataSet.normGyroscope[k+1]+skateDataSet.normGyroscope[k])*dt/2
     airA+=(skateDataSet.normAcceleration[k+1]+skateDataSet.normAcceleration[k])*dt/2
+
 skateDataSet.rawData['ax_normalized'] = skateDataSet.rawData['ax']/airA
 skateDataSet.rawData['ay_normalized'] = skateDataSet.rawData['ay']/airA
 skateDataSet.rawData['az_normalized'] = skateDataSet.rawData['az']/airA

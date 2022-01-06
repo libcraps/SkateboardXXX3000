@@ -31,3 +31,18 @@ def normalizeDat(dat):
         dat_normalized[i]/=norm_dat
 
     return dat_normalized
+
+def areaUnderCurve(x,y):
+    """
+    Calculate the area under a curve of a signal y given its timeLine x
+
+    :param x:
+    :param y:
+    :return:
+    """
+    area = 0
+    for k in range(len(x) - 1):
+        dt = x[k + 1] - x[k]
+        area += (y[k + 1] + y[k]) * dt / 2
+
+    return area
