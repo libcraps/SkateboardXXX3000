@@ -21,19 +21,90 @@ folderPath_1 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_1_tre
 folderPath_2 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_2_treated.csv"
 folderPath_3 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_3_treated.csv"
 
+folderPath_tricks = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\360_flip_1_treated.csv"
+
+folderPath_ollie = "..\\..\\06 - Data\\Isolated_Tricks\\ollie\\ollie_1_treated.csv"
+folderPath_kickflip = "..\\..\\06 - Data\\Isolated_Tricks\\kickflip\\kickflip_1_treated.csv"
+folderPath_heelflip = "..\\..\\06 - Data\\Isolated_Tricks\\heelflip\\heelflip_1_treated.csv"
+folderPath_pop_shov = "..\\..\\06 - Data\\Isolated_Tricks\\pop_shovit\\pop_shovit_1_treated.csv"
+folderPath_fs_shov = "..\\..\\06 - Data\\Isolated_Tricks\\fs_shovit\\fs_shovit_1_treated.csv"
+folderPath_360_flip = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\360_flip_1_treated.csv"
 # -------- Data processing ----------------------
 
-print("Processing : " + folderPath_1)
-dataSet1 = sk.SkateboardXXX3000DataSet(folderPath_1)
-print("Processing : " + folderPath_2)
-dataSet2 = sk.SkateboardXXX3000DataSet(folderPath_2)
-print("Processing : " + folderPath_3)
-dataSet3 = sk.SkateboardXXX3000DataSet(folderPath_3)
+
+dataSet_ollie = sk.SkateboardXXX3000DataSet(folderPath_ollie) #0
+dataSet_kickflip = sk.SkateboardXXX3000DataSet(folderPath_kickflip) #1
+dataSet_heelflip = sk.SkateboardXXX3000DataSet(folderPath_heelflip) #2
+dataSet_pop_shov = sk.SkateboardXXX3000DataSet(folderPath_pop_shov) #3
+dataSet_fs_shov = sk.SkateboardXXX3000DataSet(folderPath_fs_shov) #4
+dataSet_360_flip = sk.SkateboardXXX3000DataSet(folderPath_360_flip) #5
+
+dataSet_tricks = sk.SkateboardXXX3000DataSet(folderPath_tricks)
+
+
+def correlate_tricks(dataSet1, dataSet2):
+    cor = [0]*6
+    cor_gx = signal.correlate(dataSet1.rawData["gx_normalized_1"], dataSet2.rawData["gx_normalized_1"])
+    cor_gy = signal.correlate(dataSet1.rawData["gy_normalized_1"], dataSet2.rawData["gy_normalized_1"])
+    cor_gz = signal.correlate(dataSet1.rawData["gz_normalized_1"], dataSet2.rawData["gz_normalized_1"])
+    cor_ax = signal.correlate(dataSet1.rawData["ax_normalized_1"], dataSet2.rawData["ax_normalized_1"])
+    cor_ay = signal.correlate(dataSet1.rawData["ay_normalized_1"], dataSet2.rawData["ay_normalized_1"])
+    cor_az = signal.correlate(dataSet1.rawData["az_normalized_1"], dataSet2.rawData["az_normalized_1"])
+
+    cor[0] = max(cor_ax)
+    cor[1] = max(cor_ay)
+    cor[2] = max(cor_az)
+    cor[3] = max(cor_gx)
+    cor[4] = max(cor_gy)
+    cor[5] = max(cor_gz)
+
+    return cor
+"""
+cor = {}
+cor["cor_ollie"] = correlate_tricks(dataSet_tricks, dataSet_ollie)
+cor["cor_kickflip"] = correlate_tricks(dataSet_tricks, dataSet_kickflip)
+cor["cor_heelflip"] = correlate_tricks(dataSet_tricks, dataSet_heelflip)
+cor["cor_pop_shovit"] = correlate_tricks(dataSet_tricks, dataSet_pop_shov)
+cor["cor_fs_shovit"] = correlate_tricks(dataSet_tricks, dataSet_fs_shov)
+cor["cor_360flip"] = correlate_tricks(dataSet_tricks, dataSet_360_flip)
+"""
+cor1 = correlate_tricks(dataSet_tricks, dataSet_ollie)
+cor2 = correlate_tricks(dataSet_tricks, dataSet_kickflip)
+cor3 = correlate_tricks(dataSet_tricks, dataSet_heelflip)
+cor4 = correlate_tricks(dataSet_tricks, dataSet_pop_shov)
+cor5 = correlate_tricks(dataSet_tricks, dataSet_fs_shov)
+cor6 = correlate_tricks(dataSet_tricks, dataSet_360_flip)
+
+print(cor1)
+print(cor2)
+print(cor3)
+print(cor4)
+print(cor5)
+print(cor6)
+
+correlation_list = np.array([cor1,cor2,cor3,cor4,cor5,cor6])
+idx_max=idx = np.argmax(correlation_list)
+
+index_max=[]
+for k in range(len(cor1)):
+    idx = np.argmax(correlation_list[:,k])
+    index_max.append(idx)
+cor_mean = np.mean(correlation_list, axis=1)
+print("Mean index : ", cor_mean)
+print("Tricks : ", os.path.basename(folderPath_tricks))
+print("------------------")
+print("Vote index : ",index_max)
+print("Max de chez max : ", idx_max//6)
+print("Mean cor : ", np.argmax(cor_mean))
+
+#l = list(cor.keys())
+
 """
 dataSet1.time = list((dataSet1.rawData["time"]-8.2)/(8.85-8.2))
 dataSet2.time = list((dataSet2.rawData["time"]-14.85)/(15.5-14.85))
 dataSet3.time = list((dataSet3.rawData["time"]-5.5)/(6.1-5.5))
-"""
+
+
 plt.subplot(321)
 plt.plot(dataSet1.time, dataSet1.rawData["gx_normalized"], color="r")
 plt.plot(dataSet1.time, dataSet1.rawData["gy_normalized"], color="g")
@@ -80,10 +151,4 @@ plt.subplot(313)
 plt.plot(signal.correlate(dataSet1.rawData["ax_normalized"], dataSet2.rawData["ax_normalized"]), color="brown")
 plt.plot(signal.correlate(dataSet1.rawData["ax_normalized"], dataSet3.rawData["ax_normalized"]), color="grey")
 plt.show()
-
-f, t, Sxx = signal.spectrogram(dataSet1.rawData["gx_normalized"], 1000, nperseg=4)
-print(Sxx)
-plt.pcolormesh(t, f, Sxx, shading='gouraud')
-plt.ylabel('Frequency [Hz]')
-plt.xlabel('Time [sec]')
-plt.show()
+"""

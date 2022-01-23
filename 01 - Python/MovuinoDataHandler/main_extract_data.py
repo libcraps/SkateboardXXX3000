@@ -3,7 +3,7 @@ import dataSet.SkateboardXXX3000DataSet as sk
 ############   SETTINGS   #############
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-folderPath = "..\\..\\06 - Data\\sesh_011221\\"
+folderPath = "..\\..\\06 - Data\\sesh_160122\\"
 gen_filename = "record"  # generic name, numbers will be added for duplicates
 
 serialPort = 'COM6'

@@ -13,15 +13,18 @@ import numpy as np
 
 from scipy.signal import find_peaks
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\record_13.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_160122\\record_6.csv"
 
 
 #--- Opening file ---
 print("Opening : " + completeSequencesPath)
 skateDataSet = sk.SkateboardXXX3000DataSet(completeSequencesPath)
+"""
 skateDataSet.time =[t/1000 for t in skateDataSet.time]
 skateDataSet.rawData["time"] /=1000
 Te = skateDataSet.Te/1000
+"""
+Te = skateDataSet.Te
 print("sample period : " + str(Te))
 print("sample frequency : " + str(1 / Te))
 
