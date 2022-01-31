@@ -19,7 +19,7 @@ class SkateboardXXX3000DataSet():
         print("Reading : " + filepath)
         self.rawData = pd.read_csv(filepath, sep=",")
         self.processedData = self.rawData.copy()
-
+        self.interpolateData = pd.DataFrame()
         self.time = []
 
         # basic data from the movuino
@@ -39,9 +39,13 @@ class SkateboardXXX3000DataSet():
         self.pos = [np.array([0, 0, 0])]
         self.ThetaGyr = [np.array([0, 0, 0])]
 
+        self.interpolate_skate_data()
+
         # Time list in seconds
-        self.time = list(self.rawData["time"])
-        self.rawData["time"] = self.time
+        self.time = list(self.interpolateData["time"])
+        self.interpolateData["time"] = self.time
+        print(len(self.time))
+
 
         # Sample rate
         self.Te = (self.time[-1] - self.time[0]) / (len(self.time))
@@ -53,9 +57,9 @@ class SkateboardXXX3000DataSet():
 
         # ------ STOCK COLUMN OF DF IN VARIABLES ------
         for k in range(self.nb_row):  # We stock rawData in variables
-            self.acceleration.append(np.array([self.rawData["ax"][k], self.rawData["ay"][k], self.rawData["az"][k]]))
+            self.acceleration.append(np.array([self.interpolateData["ax"][k], self.interpolateData["ay"][k], self.interpolateData["az"][k]]))
             self.gyroscope.append(
-                np.array([self.rawData["gx"][k], self.rawData["gy"][k], self.rawData["gz"][k]]) * 180 / np.pi)
+                np.array([self.interpolateData["gx"][k], self.interpolateData["gy"][k], self.interpolateData["gz"][k]]) * 180 / np.pi)
 
             self.normAcceleration.append(np.linalg.norm(self.acceleration[k]))
             self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
@@ -63,23 +67,24 @@ class SkateboardXXX3000DataSet():
         self.acceleration = np.array(self.acceleration)
         self.gyroscope = np.array(self.gyroscope)
 
-        self.rawData["normAccel"] = self.normAcceleration
-        self.rawData["normGyr"] = self.normGyroscope
+        self.interpolateData["normAccel"] = self.normAcceleration
+        self.interpolateData["normGyr"] = self.normGyroscope
 
     def interpolate_skate_data(self, ecart_min=0.01):
         new_time = []
+        time = self.rawData["time"]
         # ------ CREATION D'UNE NOUVELLE LISTE DE TEMPS -----
-        for k in range(len(self.time) - 1):
-            t_0 = self.time[k]
-            t_1 = self.time[k + 1]
+        for k in range(len(time) - 1):
+            t_0 = time[k]
+            t_1 = time[k + 1]
             dt = t_1 - t_0
-            new_time.append(self.time[k])
+            new_time.append(time[k])
             if dt > ecart_min:
                 nb_pt_lost = round(dt / ecart_min - 1)
                 for i in range(1, nb_pt_lost + 1):
-                    new_time.append(self.time[k] + i * ecart_min)
+                    new_time.append(time[k] + i * ecart_min)
 
-        xp = self.time
+        xp = time
         ax = self.rawData["ax"]
         ay = self.rawData["ay"]
         az = self.rawData["az"]
@@ -97,16 +102,16 @@ class SkateboardXXX3000DataSet():
         gx_interp = f(new_time)
         f = interp1d(xp, gy)
         gy_interp = f(new_time)
-        f = interp1d(xp, ay)
+        f = interp1d(xp, gz)
         gz_interp = f(new_time)
 
-        self.rawData["time"] = new_time
-        self.rawData["ax"] = ax_interp
-        self.rawData["ay"] = ay_interp
-        self.rawData["az"] = az_interp
-        self.rawData["gx"] = gx_interp
-        self.rawData["gy"] = gy_interp
-        self.rawData["gz"] = gz_interp
+        self.interpolateData["time"] = new_time
+        self.interpolateData["ax"] = ax_interp
+        self.interpolateData["ay"] = ay_interp
+        self.interpolateData["az"] = az_interp
+        self.interpolateData["gx"] = gx_interp
+        self.interpolateData["gy"] = gy_interp
+        self.interpolateData["gz"] = gz_interp
 
     def DataManage(self):
         """

@@ -14,18 +14,17 @@ from scipy.interpolate import interp1d
 
 from scipy.signal import find_peaks
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_160122\\record_1.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\ollie_nb_3.csv"
 
 
 #--- Opening file ---
 print("Opening : " + completeSequencesPath)
 skateDataSet = sk.SkateboardXXX3000DataSet(completeSequencesPath)
 
-"""
+
 skateDataSet.time =[t/1000 for t in skateDataSet.time]
-skateDataSet.rawData["time"] /=1000
+skateDataSet.interpolateData["time"] /=1000
 Te = skateDataSet.Te/1000
-"""
 
 Te = skateDataSet.Te
 print("sample period : " + str(Te))
@@ -147,7 +146,7 @@ for k in range(len(tricks_interval)):
     print("Tricks' start time : " + str(skateDataSet.time[i_start]))
     print("Tricks' end time : " + str(skateDataSet.time[i_end]))
 
-    df_iso_tricks = skateDataSet.rawData.iloc[i_start:i_end,:]
+    df_iso_tricks = skateDataSet.interpolateData.iloc[i_start:i_end,:]
 
     normGyroscope = list(df_iso_tricks["normGyr"])
     time = list(df_iso_tricks["time"])
