@@ -1,4 +1,5 @@
 from dataSet.MovuinoDataSet import *
+from scipy.interpolate import interp1d
 import serial
 import os
 
@@ -48,6 +49,8 @@ class SkateboardXXX3000DataSet():
         # Number of row
         self.nb_row = len(self.time)
 
+        #Linear interpolation if missing data :
+
         # ------ STOCK COLUMN OF DF IN VARIABLES ------
         for k in range(self.nb_row):  # We stock rawData in variables
             self.acceleration.append(np.array([self.rawData["ax"][k], self.rawData["ay"][k], self.rawData["az"][k]]))
@@ -63,8 +66,47 @@ class SkateboardXXX3000DataSet():
         self.rawData["normAccel"] = self.normAcceleration
         self.rawData["normGyr"] = self.normGyroscope
 
+    def interpolate_skate_data(self, ecart_min=0.01):
+        new_time = []
+        # ------ CREATION D'UNE NOUVELLE LISTE DE TEMPS -----
+        for k in range(len(self.time) - 1):
+            t_0 = self.time[k]
+            t_1 = self.time[k + 1]
+            dt = t_1 - t_0
+            new_time.append(self.time[k])
+            if dt > ecart_min:
+                nb_pt_lost = round(dt / ecart_min - 1)
+                for i in range(1, nb_pt_lost + 1):
+                    new_time.append(self.time[k] + i * ecart_min)
 
+        xp = self.time
+        ax = self.rawData["ax"]
+        ay = self.rawData["ay"]
+        az = self.rawData["az"]
+        gx = self.rawData["gx"]
+        gy = self.rawData["gy"]
+        gz = self.rawData["gz"]
 
+        f = interp1d(xp, ax)
+        ax_interp = f(new_time)
+        f = interp1d(xp, ay)
+        ay_interp = f(new_time)
+        f = interp1d(xp, az)
+        az_interp = f(new_time)
+        f = interp1d(xp, gx)
+        gx_interp = f(new_time)
+        f = interp1d(xp, gy)
+        gy_interp = f(new_time)
+        f = interp1d(xp, ay)
+        gz_interp = f(new_time)
+
+        self.rawData["time"] = new_time
+        self.rawData["ax"] = ax_interp
+        self.rawData["ay"] = ay_interp
+        self.rawData["az"] = az_interp
+        self.rawData["gx"] = gx_interp
+        self.rawData["gy"] = gy_interp
+        self.rawData["gz"] = gz_interp
 
     def DataManage(self):
         """

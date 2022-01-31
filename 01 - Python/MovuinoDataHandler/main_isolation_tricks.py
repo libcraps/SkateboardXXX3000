@@ -10,20 +10,23 @@ import tools.DisplayFunctions as df
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.interpolate import interp1d
 
 from scipy.signal import find_peaks
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_160122\\record_6.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_160122\\record_1.csv"
 
 
 #--- Opening file ---
 print("Opening : " + completeSequencesPath)
 skateDataSet = sk.SkateboardXXX3000DataSet(completeSequencesPath)
+
 """
 skateDataSet.time =[t/1000 for t in skateDataSet.time]
 skateDataSet.rawData["time"] /=1000
 Te = skateDataSet.Te/1000
 """
+
 Te = skateDataSet.Te
 print("sample period : " + str(Te))
 print("sample frequency : " + str(1 / Te))
@@ -44,15 +47,23 @@ sum_gyr = []
 time_win = []
 
 #----Evolution du temps d'aquisition----
-"""
+
 list_dt = [skateDataSet.time[i]-skateDataSet.time[i-1] for i in range(1,skateDataSet.nb_row)]
+ecart_min = min(list_dt)
 list_dt=np.pad(list_dt, (1,0))
 plt.plot(skateDataSet.time,list_dt)
 plt.title("Sample rate evolution")
 plt.ylabel("dt (s)")
 plt.xlabel("Time (s)")
 plt.show()
-"""
+
+ecart_min = round(ecart_min*1000)/1000
+
+
+
+
+
+
 #-------------------------------------
 
 normAcc = np.pad(skateDataSet.normAcceleration, (int(size_window // 2), int(size_window // 2)))
@@ -150,6 +161,7 @@ for k in range(len(tricks_interval)):
     mean_time = skateDataSet.time[i_start] + index_mean_loc*Te
 
     """
+    #TO KEEP
     index_mean_glob = 0
     size = 20 #nb points
 
@@ -234,6 +246,7 @@ for k in range(len(tricks_interval)):
     plt.legend(loc='upper right')
     plt.grid()
     plt.show()
+
 #---- File extraction ----
 """
     toExtract = str(input("Voulez vous extraire les données d'une figure y/n - other (o):"))

@@ -21,7 +21,7 @@ folderPath_1 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_1_tre
 folderPath_2 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_2_treated.csv"
 folderPath_3 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_3_treated.csv"
 
-folderPath_tricks = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\360_flip_1_treated.csv"
+folderPath_tricks = "..\\..\\06 - Data\\Isolated_Tricks\\heelflip\\heelflip_2_treated.csv"
 
 folderPath_ollie = "..\\..\\06 - Data\\Isolated_Tricks\\ollie\\ollie_1_treated.csv"
 folderPath_kickflip = "..\\..\\06 - Data\\Isolated_Tricks\\kickflip\\kickflip_1_treated.csv"
@@ -41,6 +41,16 @@ dataSet_360_flip = sk.SkateboardXXX3000DataSet(folderPath_360_flip) #5
 
 dataSet_tricks = sk.SkateboardXXX3000DataSet(folderPath_tricks)
 
+sp_ollie = np.fft.fft(dataSet_kickflip.rawData["gx_normalized_1"], n=8*len(dataSet_kickflip.rawData["gx"]))
+freq_ollie = np.fft.fftfreq(len(sp_ollie), 0.001/dataSet_kickflip.Te)
+sp_heel = np.fft.fft(dataSet_heelflip.rawData["gx_normalized_1"], n=8*len(dataSet_heelflip.rawData["gx"]))
+freq_heel = np.fft.fftfreq(len(sp_heel), 0.001/dataSet_heelflip.Te)
+sp_360= np.fft.fft(dataSet_360_flip.rawData["gx_normalized_1"], n=8*len(dataSet_360_flip.rawData["gx"]))
+freq_360= np.fft.fftfreq(len(sp_360), 0.001/dataSet_360_flip.Te)
+plt.plot(freq_ollie,np.abs(sp_ollie), color="b")
+plt.plot(freq_heel,np.abs(sp_heel), color="orange")
+plt.plot(freq_360, np.abs(sp_360), color="black")
+plt.show()
 
 def correlate_tricks(dataSet1, dataSet2):
     cor = [0]*6
@@ -90,20 +100,45 @@ for k in range(len(cor1)):
     idx = np.argmax(correlation_list[:,k])
     index_max.append(idx)
 cor_mean = np.mean(correlation_list, axis=1)
-print("Mean index : ", cor_mean)
+
 print("Tricks : ", os.path.basename(folderPath_tricks))
 print("------------------")
 print("Vote index : ",index_max)
 print("Max de chez max : ", idx_max//6)
+print("Mean index : ", cor_mean)
 print("Mean cor : ", np.argmax(cor_mean))
 
 #l = list(cor.keys())
+
+dataSet1 = sk.SkateboardXXX3000DataSet(folderPath_1) #0
+dataSet2 = sk.SkateboardXXX3000DataSet(folderPath_2) #0
+dataSet3 = sk.SkateboardXXX3000DataSet(folderPath_3) #0
+
+
+normGyroscope = list(dataSet1.rawData["normGyr"])
+time = list(dataSet1.rawData["time"])
+# ---- Temps moyen de la norme du gyrosocpe ------
+index_mean_loc = sa.mean_time(normGyroscope)
+print("Index mean : " + str(index_mean_loc))
+print("Time mean : " + str(time[index_mean_loc]))
+normGyroscope = list(dataSet2.rawData["normGyr"])
+time = list(dataSet2.rawData["time"])
+# ---- Temps moyen de la norme du gyrosocpe ------
+index_mean_loc = sa.mean_time(normGyroscope)
+print("Index mean : " + str(index_mean_loc))
+print("Time mean : " + str(time[index_mean_loc]))
+normGyroscope = list(dataSet3.rawData["normGyr"])
+time = list(dataSet3.rawData["time"])
+# ---- Temps moyen de la norme du gyrosocpe ------
+index_mean_loc = sa.mean_time(normGyroscope)
+print("Index mean : " + str(index_mean_loc))
+print("Time mean : " + str(time[index_mean_loc]))
 
 """
 dataSet1.time = list((dataSet1.rawData["time"]-8.2)/(8.85-8.2))
 dataSet2.time = list((dataSet2.rawData["time"]-14.85)/(15.5-14.85))
 dataSet3.time = list((dataSet3.rawData["time"]-5.5)/(6.1-5.5))
-
+"""
 
 plt.subplot(321)
 plt.plot(dataSet1.time, dataSet1.rawData["gx_normalized"], color="r")
@@ -151,4 +186,3 @@ plt.subplot(313)
 plt.plot(signal.correlate(dataSet1.rawData["ax_normalized"], dataSet2.rawData["ax_normalized"]), color="brown")
 plt.plot(signal.correlate(dataSet1.rawData["ax_normalized"], dataSet3.rawData["ax_normalized"]), color="grey")
 plt.show()
-"""

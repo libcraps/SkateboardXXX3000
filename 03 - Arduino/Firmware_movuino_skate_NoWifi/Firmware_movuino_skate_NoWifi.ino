@@ -12,7 +12,6 @@
 #include "I2Cdev.h"
 #include "MPU9250.h"
 #include "FS.h"
-#include <Adafruit_NeoPixel.h>
 #include <Yabl.h>
 
 //Command for serial messages
@@ -33,7 +32,7 @@ MPU9250 IMU(Wire, MPU_I2C_ADDRESS);
 float time, startTime;
 float ax, ay, az; // store accelerometre values
 float gx, gy, gz; // store gyroscope values
-float mx, my, mz; // store magneto values
+
 int magRange[] = {666, -666, 666, -666, 666, -666}; // magneto range values for callibration
 
 // BUTTON
@@ -48,12 +47,6 @@ float startPush;
 const int pinLedESP = 2; // wifi led indicator
 const int pinLedBat = 0;  // battery led indicator
 const int pinLedNeopix = 15;
-
-//NEO PIXEL
-Adafruit_NeoPixel pixel(1, pinLedNeopix, NEO_GRB + NEO_KHZ800);
-uint32_t Red = pixel.Color(255,0,0);
-uint32_t Blue = pixel.Color(0,0,255);
-uint32_t Green = pixel.Color(0,255,0);
 
 //FILE
 File file;
@@ -134,7 +127,7 @@ void loop() {
     char serialMessage = Serial.read();
     Serial.print("\n");
     Serial.print("Message received : ");
-    Serial.println(serialMessage);  
+    Serial.println(serialMessage);
 
     //--------- Serial command -------------
     switch (serialMessage)
@@ -161,9 +154,6 @@ void loop() {
         break;
       case CMD_LISTING_DIR:
         listingDir(dirPath);
-        break;
-      case 'b': //Light tests
-        pixel.setPixelColor(0, pixel.Color(100, 0, 0));
         break;
       case CMD_PRINT_DAT:
         printMovuinoData();
@@ -214,8 +204,7 @@ void loop() {
   //----- GET MPU DATA ------
   IMU.readSensor();
   //print9axesDataMPU(IMU);
-  get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-  magnetometerAutoCallibration();
+  get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz);
   time = millis() - startTime;
 
   //------- Writing in File ------------
