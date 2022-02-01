@@ -19,7 +19,7 @@ void printMovuinoData()
   Serial.println();
 }
 void writeInFileMovuinoData(File file, String sep) {
-  file.print(time);
+  file.print(time*1000);
   file.print(sep);
   file.print(-ax);
   file.print(sep);

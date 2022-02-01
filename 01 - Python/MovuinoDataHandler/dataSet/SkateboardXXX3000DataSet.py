@@ -39,8 +39,8 @@ class SkateboardXXX3000DataSet():
         self.pos = [np.array([0, 0, 0])]
         self.ThetaGyr = [np.array([0, 0, 0])]
 
-        self.interpolate_skate_data()
-
+        #self.interpolate_skate_data()
+        self.interpolateData = self.rawData
         # Time list in seconds
         self.time = list(self.interpolateData["time"])
         self.interpolateData["time"] = self.time
