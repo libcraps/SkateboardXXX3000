@@ -14,7 +14,7 @@ from scipy.interpolate import interp1d
 
 from scipy.signal import find_peaks
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_160122\\record_3.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_160122\\record_3_interpolated.csv"
 
 
 #--- Opening file ---
@@ -95,9 +95,9 @@ for i in peaks_tricks:
     else:
         tricks_interval.append([time_win[i]-dt_i, time_win[i]+dt_i])
 
-#skateDataSet.DispRawData()
+#skateDataSet.dispRawData()
 time_list = np.array(skateDataSet.time)
-df.PlotVector(time_list, skateDataSet.acceleration, 'Acceleration (m/s2)', 321)
+df.plotVect(time_list, skateDataSet.acceleration, 'Acceleration (m/s2)', 321)
 plt.plot(time_win,sum_acc,'-o', markersize=2, color="grey")
 plt.plot(time_win[peaks_acc], sum_acc[peaks_acc], "v", markersize=5, color="orange", label="Peaks")
 plt.plot(time_win[peaks_tricks], sum_acc[peaks_tricks], "v", markersize=5, color="red", label="Peaks tricks")
@@ -114,7 +114,7 @@ plt.plot(time_win[peaks_acc], sum_acc[peaks_acc], "v", markersize=5, color="oran
 plt.plot(time_win[peaks_tricks], sum_acc[peaks_tricks], "v", markersize=5, color="red", label="Peaks tricks")
 plt.title("Norme de l'accélération fenêtrée")
 plt.grid()
-df.PlotVector(time_list, skateDataSet.gyroscope, 'Gyroscope (deg/s)', 322)
+df.plotVect(time_list, skateDataSet.gyroscope, 'Gyroscope (deg/s)', 322)
 plt.plot(time_win, sum_gyr,'-o', markersize=2, color="grey")
 plt.plot(time_win[peaks_gyr], sum_gyr[peaks_gyr], "v", markersize=5, color="orange", label="Peaks")
 plt.plot(time_win[peaks_tricks], sum_gyr[peaks_tricks], "v", markersize=5, color="red", label="Peaks tricks")
@@ -221,7 +221,7 @@ for k in range(len(tricks_interval)):
 
     time_list = skateDataSet.time[i_start:i_end]
     plt.subplot(321)
-    df.PlotVector(skateDataSet.time, skateDataSet.acceleration, 'Acceleration (m/s2)', 321)
+    df.plotVect(skateDataSet.time, skateDataSet.acceleration, 'Acceleration (m/s2)', 321)
     plt.plot(
         [skateDataSet.time[i_start], skateDataSet.time[i_start], skateDataSet.time[i_end], skateDataSet.time[i_end],
          skateDataSet.time[i_start]], [-abs(max(skateDataSet.normAcceleration[i_start:i_end])),
@@ -230,7 +230,7 @@ for k in range(len(tricks_interval)):
                                        -abs(max(skateDataSet.normAcceleration[i_start:i_end])),
                                        -abs(max(skateDataSet.normAcceleration[i_start:i_end]))], color="r")
     plt.subplot(322)
-    df.PlotVector(skateDataSet.time, skateDataSet.gyroscope, 'Gyroscope (deg/s)', 322)
+    df.plotVect(skateDataSet.time, skateDataSet.gyroscope, 'Gyroscope (deg/s)', 322)
     plt.plot(
         [skateDataSet.time[i_start], skateDataSet.time[i_start], skateDataSet.time[i_end], skateDataSet.time[i_end],
          skateDataSet.time[i_start]], [-abs(max(skateDataSet.normGyroscope[i_start:i_end])),
@@ -239,13 +239,13 @@ for k in range(len(tricks_interval)):
                                        -abs(max(skateDataSet.normGyroscope[i_start:i_end])),
                                        -abs(max(skateDataSet.normGyroscope[i_start:i_end]))], color="r")
     plt.subplot(323)
-    df.PlotVector(time_list, skateDataSet.acceleration[i_start:i_end], 'Acceleration (m/s2)', 323)
+    df.plotVect(time_list, skateDataSet.acceleration[:,i_start:i_end], 'Acceleration (m/s2)', 323)
     plt.legend(loc='upper right')
     plt.subplot(325)
     plt.plot(time_list, skateDataSet.normAcceleration[i_start:i_end], '-x',label='Norme Accélération', color="black")
     plt.legend(loc='upper right')
     plt.subplot(324)
-    df.PlotVector(time_list, skateDataSet.gyroscope[i_start:i_end], 'Gyroscope (deg/s)', 324)
+    df.plotVect(time_list, skateDataSet.gyroscope[:,i_start:i_end], 'Gyroscope (deg/s)', 324)
     plt.legend(loc='upper right')
     plt.subplot(326)
     plt.plot(time_list, skateDataSet.normGyroscope[i_start:i_end], '-x',label="Norme gyroscope", color="black")
@@ -273,7 +273,7 @@ for k in range(len(tricks_interval)):
         df_iso_tricks.to_csv(fileTricksPath, sep=",", index=False, index_label=False)
 
         tricks = sk.SkateboardXXX3000DataSet(fileTricksPath)
-        tricks.DispRawData()
+        tricks.dispRawData()
 
     elif toExtract == "o":
         new_mean_time = float(input("Nouveau temps moyen de la figure : "))

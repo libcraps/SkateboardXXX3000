@@ -78,8 +78,8 @@ class SensitivePenDataSet(MovuinoDataSet):
         """
         MovuinoDataSet.PlotImage(self)
 
-        df.PlotVector(self.time, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
-        df.PlotVector(self.time, self.magnetometer_lp, 'Magnetometer filtered (LP)', 335)
+        df.plotVector(self.time, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
+        df.plotVector(self.time, self.magnetometer_lp, 'Magnetometer filtered (LP)', 335)
 
         normMag = plt.subplot(338)
         normMag.plot(self.time, self.normMagnetometer, color="black")

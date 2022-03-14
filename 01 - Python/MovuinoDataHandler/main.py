@@ -13,20 +13,12 @@ from scipy import signal
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 # choose btw : ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip
 folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\"
-gen_filename = "record"  # generic name numbers will be added for duplicates
-
-serialPort = 'COM6'
 
 toExtract = False
 toDataManage = False
 toVisualize = True
 
-filter = 5
-
-# --------- Data Extraction from Movuino ----------
-if toExtract:
-    print("data extraction")
-    sk.SkateboardXXX3000DataSet.MovuinoExtraction(serialPort, folderPath, gen_filename)
+filter = 10
 
 # -------- Data processing ----------------------
 if toDataManage:
@@ -40,7 +32,6 @@ if toDataManage:
         #Filtering
         skateDataSet.acceleration_lp = fm.MeanFilter(skateDataSet.acceleration, filter)
         skateDataSet.gyroscope_lp = fm.MeanFilter(skateDataSet.gyroscope, filter)
-        skateDataSet.magnetometer_lp = fm.MeanFilter(skateDataSet.magnetometer, filter)
 
         #Integration of values :
         skateDataSet.velocity = ef.EulerIntegration(skateDataSet.acceleration, Te)
@@ -63,7 +54,7 @@ if toVisualize:
         skateDataSet = sk.SkateboardXXX3000DataSet(folderPath + filename)
         #skateDataSet.DataManage()
         Te = skateDataSet.Te
-        skateDataSet.DispRawData()
+        skateDataSet.dispRawData()
         """
         
         """

@@ -23,16 +23,14 @@ class SkateboardXXX3000DataSet():
         self.time = []
 
         # basic data from the movuino
-        self.acceleration = []
-        self.gyroscope = []
-
-        # basic data filtered
-        self.acceleration_lp = []
-        self.gyroscope_lp = []
+        self.acceleration = np.array([self.rawData["ax"], self.rawData["ay"], self.rawData["az"]])
+        self.gyroscope = np.array([self.rawData["gx"], self.rawData["gy"], self.rawData["gz"]]) * 180 / np.pi
 
         # norms
-        self.normAcceleration = []
-        self.normGyroscope = []
+        self.normAcceleration = np.linalg.norm(self.acceleration, axis=0)
+        self.normGyroscope = np.linalg.norm(self.gyroscope, axis=0)
+        self.rawData["normAccel"] = self.normAcceleration
+        self.rawData["normGyr"] = self.normGyroscope
 
         #Integration values
         self.velocity = [np.array([0, 0, 0])]
@@ -44,7 +42,6 @@ class SkateboardXXX3000DataSet():
         # Time list in seconds
         self.time = list(self.interpolateData["time"])
         self.interpolateData["time"] = self.time
-        print(len(self.time))
 
 
         # Sample rate
@@ -53,25 +50,11 @@ class SkateboardXXX3000DataSet():
         # Number of row
         self.nb_row = len(self.time)
 
-        #Linear interpolation if missing data :
 
-        # ------ STOCK COLUMN OF DF IN VARIABLES ------
-        for k in range(self.nb_row):  # We stock rawData in variables
-            self.acceleration.append(np.array([self.interpolateData["ax"][k], self.interpolateData["ay"][k], self.interpolateData["az"][k]]))
-            self.gyroscope.append(
-                np.array([self.interpolateData["gx"][k], self.interpolateData["gy"][k], self.interpolateData["gz"][k]]) * 180 / np.pi)
-
-            self.normAcceleration.append(np.linalg.norm(self.acceleration[k]))
-            self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
-
-        self.acceleration = np.array(self.acceleration)
-        self.gyroscope = np.array(self.gyroscope)
-
-        self.interpolateData["normAccel"] = self.normAcceleration
-        self.interpolateData["normGyr"] = self.normGyroscope
 
     def interpolate_skate_data(self, ecart_min=0.01):
         new_time = []
+        interpolateDf = pd.DataFrame()
         time = self.rawData["time"]
         # ------ CREATION D'UNE NOUVELLE LISTE DE TEMPS -----
         for k in range(len(time) - 1):
@@ -105,160 +88,18 @@ class SkateboardXXX3000DataSet():
         f = interp1d(xp, gz)
         gz_interp = f(new_time)
 
-        self.interpolateData["time"] = new_time
-        self.interpolateData["ax"] = ax_interp
-        self.interpolateData["ay"] = ay_interp
-        self.interpolateData["az"] = az_interp
-        self.interpolateData["gx"] = gx_interp
-        self.interpolateData["gy"] = gy_interp
-        self.interpolateData["gz"] = gz_interp
+        interpolateDf["time"] = new_time
+        interpolateDf["ax"] = ax_interp
+        interpolateDf["ay"] = ay_interp
+        interpolateDf["az"] = az_interp
+        interpolateDf["gx"] = gx_interp
+        interpolateDf["gy"] = gy_interp
+        interpolateDf["gz"] = gz_interp
 
-    def DataManage(self):
-        """
-
-        :return:
-        """
-        MovuinoDataSet.DataManage(self)
-
-        self.velocity = ef.EulerIntegration(self.acceleration, self.Te)
-        self.ThetaGyr = ef.EulerIntegration(self.gyroscope, self.Te)
-        self.pos = ef.EulerIntegration(self.velocity, self.Te)
-
-        #------ list into np array conversion ------
-        self.ThetaGyr = np.array(self.ThetaGyr)
-        self.pos = np.array(self.pos)
-        self.velocity = np.array(self.velocity)
-
-        self.AddingRawData()
-        self.StockIntoNewFile(self.filepath)
-
-    def StockIntoNewFile(self, filepath):
-        """
-
-        :param filepath:
-        :return:
-        """
-        self.rawData.to_csv(filepath + "_treated_" + self.name + ".csv", sep=",", index=False, index_label=False)
-
-    def VisualizeData(self):
-        self.PlotImage()
-        plt.show()
-
-    def PlotImage(self):
-        """
-
-        :return:
-        """
-        MovuinoDataSet.PlotImage(self)
-
-        df.PlotVector(self.time, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
-        df.PlotVector(self.time, self.gyroscope_lp, "Gyrocope filtered (LP)", 336)
-        df.PlotVector(self.time, self.ThetaGyr, 'Angle (integration of gyroscope) (deg)', 339)
-
-        normAcc = plt.subplot(335)
-        normAcc.plot(self.time, self.normAcceleration, color="black")
-        normAcc.set_title("Norm Acceleration")
-
-        patchX = mpatches.Patch(color='red', label='x')
-        patchY = mpatches.Patch(color='green', label='y')
-        patchZ = mpatches.Patch(color='blue', label='z')
-        plt.legend(handles=[patchX, patchY, patchZ], loc="center right", bbox_to_anchor=(-2.5, 3.6), ncol=1)
-
-    def StockProcessedData(self, filepath):
-        """
-
-        :return:
-        """
-        self.processedData["normAccel"] = self.normAcceleration
-        self.processedData["normGyr"] = self.normGyroscope
-
-        self.processedData["ax_filter"] = self.acceleration_lp[:, 0]
-        self.processedData["ay_filter"] = self.acceleration_lp[:, 1]
-        self.processedData["az_filter"] = self.acceleration_lp[:, 2]
-
-        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0]
-        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1]
-        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2]
-
-        self.processedData["thetaGyrx"] = self.ThetaGyr[:, 0]
-        self.processedData["thetaGyry"] = self.ThetaGyr[:, 1]
-        self.processedData["thetaGyrz"] = self.ThetaGyr[:, 2]
-
-        self.processedData["vx"] = self.velocity[:, 0]
-        self.processedData["vy"] = self.velocity[:, 1]
-        self.processedData["vz"] = self.velocity[:, 2]
-
-        self.processedData["posx"] = self.pos[:, 0]
-        self.processedData["posy"] = self.pos[:, 1]
-        self.processedData["posz"] = self.pos[:, 2]
-        self.processedData.to_csv(filepath + "_treated_" + self.name + ".csv", sep=",", index=False, index_label=False)
+        return interpolateDf
 
     @staticmethod
-    def PlotCompleteFile(filepath, sep, dec):
-        """
-
-        :param filepath:
-        :param sep:
-        :param dec:
-        :return:
-        """
-        data = pd.read_csv(filepath + ".csv", sep=sep, decimal=dec)
-        timeList = data["time"]
-        accel = [data["ax"], data["ay"], data["az"]]
-        gyr = [data["gx"], data["gy"], data["gz"]]
-        thetaGyr = [data["thetaGyrx"], data["thetaGyry"],data["thetaGyrz"]]
-        pos = [data["posx"], data["posy"],data["posz"]]
-        velocity = [data["vx"], data["vy"],data["vz"]]
-        df.plotVect(timeList, accel, "Acceleration m/s2", 331)
-        df.plotVect(timeList, gyr, "Gyroscope m/s", 332)
-        df.plotVect(timeList, velocity, "Velocity m/s", 334)
-        df.plotVect(timeList, thetaGyr, "gyr integration deg", 335)
-        df.plotVect(timeList, pos, "Position m", 337)
-
-        plt.show()
-        return
-    def stockProcessedData(self, filepath):
-        """
-
-        :param self:
-        :param folderpath:
-        :return:
-        """
-
-        self.processedData = self.rawData.copy()
-
-        self.processedData["normAccel"] = self.normAcceleration
-        self.processedData["normGyr"] = self.normGyroscope
-
-        self.processedData["ax_filter"] = self.acceleration_lp[:, 0]
-        self.processedData["ay_filter"] = self.acceleration_lp[:, 1]
-        self.processedData["az_filter"] = self.acceleration_lp[:, 2]
-
-        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0]
-        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1]
-        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2]
-
-        self.processedData["gx"] = self.gyroscope[:, 0]
-        self.processedData["gy"] = self.gyroscope[:, 1]
-        self.processedData["gz"] = self.gyroscope[:, 2]
-
-        self.processedData["thetaGyrx"] = self.ThetaGyr[:, 0]
-        self.processedData["thetaGyry"] = self.ThetaGyr[:, 1]
-        self.processedData["thetaGyrz"] = self.ThetaGyr[:, 2]
-
-        self.processedData["vx"] = self.velocity[:, 0]
-        self.processedData["vy"] = self.velocity[:, 1]
-        self.processedData["vz"] = self.velocity[:, 2]
-
-        self.processedData["posx"] = self.pos[:, 0]
-        self.processedData["posy"] = self.pos[:, 1]
-        self.processedData["posz"] = self.pos[:, 2]
-        print("Stocking data in : " + filepath)
-        self.processedData.to_csv(filepath, sep=",", index=False, index_label=False)
-
-
-    @staticmethod
-    def MovuinoExtraction(serialPort, folderpath, gen_filename):
+    def movuinoExtraction(serialPort, folderpath, gen_filename):
         isReading = False
         ExtractionCompleted = False
         print("-> Opening serial port {}".format(serialPort))
@@ -303,10 +144,10 @@ class SkateboardXXX3000DataSet():
                 isReading = True
                 print("Record begins")
 
-    def DispRawData(self):
+    def dispRawData(self):
         time_list = self.time
-        df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)
-        df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 223)
+        df.plotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)
+        df.plotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 223)
         plt.subplot(224)
         plt.plot(time_list, self.normGyroscope, label="Norme gyroscope", color="black")
         plt.legend(loc='upper right')
@@ -315,15 +156,15 @@ class SkateboardXXX3000DataSet():
         plt.legend(loc='upper right')
         plt.show()
 
-    def DispProcessedData(self):
+    def dispProcessedData(self):
         """
         Add processed data usefull for skateboarding
         :return:
         """
         time_list = self.time
-        df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 331)
-        df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 333)
-        df.PlotVector(time_list, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
+        df.plotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 331)
+        df.plotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 333)
+        df.plotVector(time_list, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
 
 
 

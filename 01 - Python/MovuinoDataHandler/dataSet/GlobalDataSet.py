@@ -71,9 +71,9 @@ class GlobalDataSet(MovuinoDataSet):
         self.e2 = np.array(self.e2)
         self.e3 = np.array(self.e3)
 
-        df.PlotVector(self.time, self.e1, "x", 337)
-        df.PlotVector(self.time, self.e2, "y", 338)
-        df.PlotVector(self.time, self.e3, "z", 339)
+        df.plotVector(self.time, self.e1, "x", 337)
+        df.plotVector(self.time, self.e2, "y", 338)
+        df.plotVector(self.time, self.e3, "z", 339)
 
 
 
@@ -133,8 +133,8 @@ class GlobalDataSet(MovuinoDataSet):
     def PlotImage(self):
         MovuinoDataSet.PlotImage(self)
 
-        #df.PlotVector(self.time, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
-        #df.PlotVector(self.time, self.magnetometer_lp, 'Magnetometer filtered (LP)', 335)
+        #df.plotVector(self.time, self.acceleration_lp, 'Acceleration filtered (LP)', 334)
+        #df.plotVector(self.time, self.magnetometer_lp, 'Magnetometer filtered (LP)', 335)
 
         normMag = plt.subplot(335)
         normMag.plot(self.time, self.normMagnetometer, color="black")

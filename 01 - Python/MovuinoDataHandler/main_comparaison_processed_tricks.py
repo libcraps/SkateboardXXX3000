@@ -17,18 +17,18 @@ from scipy import signal
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 tricks="ollie"
-folderPath_1 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_1_treated.csv"
-folderPath_2 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_2_treated.csv"
-folderPath_3 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_3_treated.csv"
+folderPath_1 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_1_interpolated_processed.csv"
+folderPath_2 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_2_interpolated_processed.csv"
+folderPath_3 = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"+tricks+"_3_interpolated_processed.csv"
 
-folderPath_tricks = "..\\..\\06 - Data\\Isolated_Tricks\\heelflip\\heelflip_2_treated.csv"
+folderPath_tricks = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\360_flip_2_interpolated_processed.csv"
 
-folderPath_ollie = "..\\..\\06 - Data\\Isolated_Tricks\\ollie\\ollie_1_treated.csv"
-folderPath_kickflip = "..\\..\\06 - Data\\Isolated_Tricks\\kickflip\\kickflip_1_treated.csv"
-folderPath_heelflip = "..\\..\\06 - Data\\Isolated_Tricks\\heelflip\\heelflip_1_treated.csv"
-folderPath_pop_shov = "..\\..\\06 - Data\\Isolated_Tricks\\pop_shovit\\pop_shovit_1_treated.csv"
-folderPath_fs_shov = "..\\..\\06 - Data\\Isolated_Tricks\\fs_shovit\\fs_shovit_1_treated.csv"
-folderPath_360_flip = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\360_flip_1_treated.csv"
+folderPath_ollie = "..\\..\\06 - Data\\Isolated_Tricks\\ollie\\ollie_1_interpolated_processed.csv"
+folderPath_kickflip = "..\\..\\06 - Data\\Isolated_Tricks\\kickflip\\kickflip_1_interpolated_processed.csv"
+folderPath_heelflip = "..\\..\\06 - Data\\Isolated_Tricks\\heelflip\\heelflip_1_interpolated_processed.csv"
+folderPath_pop_shov = "..\\..\\06 - Data\\Isolated_Tricks\\pop_shovit\\pop_shovit_1_interpolated_processed.csv"
+folderPath_fs_shov = "..\\..\\06 - Data\\Isolated_Tricks\\fs_shovit\\fs_shovit_1_interpolated_processed.csv"
+folderPath_360_flip = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\360_flip_1_interpolated_processed.csv"
 # -------- Data processing ----------------------
 
 
@@ -40,7 +40,7 @@ dataSet_fs_shov = sk.SkateboardXXX3000DataSet(folderPath_fs_shov) #4
 dataSet_360_flip = sk.SkateboardXXX3000DataSet(folderPath_360_flip) #5
 
 dataSet_tricks = sk.SkateboardXXX3000DataSet(folderPath_tricks)
-
+"""
 sp_ollie = np.fft.fft(dataSet_kickflip.rawData["gx_normalized_1"], n=8*len(dataSet_kickflip.rawData["gx"]))
 freq_ollie = np.fft.fftfreq(len(sp_ollie), 0.001/dataSet_kickflip.Te)
 sp_heel = np.fft.fft(dataSet_heelflip.rawData["gx_normalized_1"], n=8*len(dataSet_heelflip.rawData["gx"]))
@@ -51,7 +51,7 @@ plt.plot(freq_ollie,np.abs(sp_ollie), color="b")
 plt.plot(freq_heel,np.abs(sp_heel), color="orange")
 plt.plot(freq_360, np.abs(sp_360), color="black")
 plt.show()
-
+"""
 def correlate_tricks(dataSet1, dataSet2):
     cor = [0]*6
     cor_gx = signal.correlate(dataSet1.rawData["gx_normalized_1"], dataSet2.rawData["gx_normalized_1"])
@@ -110,10 +110,10 @@ print("Mean cor : ", np.argmax(cor_mean))
 
 #l = list(cor.keys())
 
+"""
 dataSet1 = sk.SkateboardXXX3000DataSet(folderPath_1) #0
 dataSet2 = sk.SkateboardXXX3000DataSet(folderPath_2) #0
 dataSet3 = sk.SkateboardXXX3000DataSet(folderPath_3) #0
-
 
 normGyroscope = list(dataSet1.rawData["normGyr"])
 time = list(dataSet1.rawData["time"])
@@ -134,11 +134,10 @@ index_mean_loc = sa.mean_time(normGyroscope)
 print("Index mean : " + str(index_mean_loc))
 print("Time mean : " + str(time[index_mean_loc]))
 
-"""
 dataSet1.time = list((dataSet1.rawData["time"]-8.2)/(8.85-8.2))
 dataSet2.time = list((dataSet2.rawData["time"]-14.85)/(15.5-14.85))
 dataSet3.time = list((dataSet3.rawData["time"]-5.5)/(6.1-5.5))
-"""
+
 
 plt.subplot(321)
 plt.plot(dataSet1.time, dataSet1.rawData["gx_normalized"], color="r")
@@ -188,3 +187,4 @@ plt.subplot(313)
 plt.plot(signal.correlate(dataSet1.rawData["ax_normalized"], dataSet2.rawData["ax_normalized"]), color="brown")
 plt.plot(signal.correlate(dataSet1.rawData["ax_normalized"], dataSet3.rawData["ax_normalized"]), color="grey")
 plt.show()
+"""

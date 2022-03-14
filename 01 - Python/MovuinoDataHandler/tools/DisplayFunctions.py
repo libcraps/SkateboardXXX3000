@@ -19,7 +19,7 @@ def Display(title, time, shape, *args):
     plt.title(title)
     plt.show()
 
-def PlotVector(t, v, title, pos):
+def plotVector(t, v, title, pos):
     """
 
     :param t:

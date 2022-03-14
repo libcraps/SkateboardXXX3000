@@ -170,9 +170,9 @@ class MovuinoDataSet():
 
         :return:
         """
-        df.PlotVector(self.time, self.acceleration, 'Acceleration (m/s2)', 331)
-        df.PlotVector(self.time, self.magnetometer, 'Magnetometer', 332)
-        df.PlotVector(self.time, self.gyroscope, 'Gyroscope (deg/s)', 333)
+        df.plotVector(self.time, self.acceleration, 'Acceleration (m/s2)', 331)
+        df.plotVector(self.time, self.magnetometer, 'Magnetometer', 332)
+        df.plotVector(self.time, self.gyroscope, 'Gyroscope (deg/s)', 333)
 
     def AddingRawData(self):
         """

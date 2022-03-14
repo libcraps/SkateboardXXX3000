@@ -3,7 +3,7 @@ void printMovuinoData()
   /*
    * Print 9 axes data from the movuino
    */
-  Serial.print(time);
+  Serial.print(time/1000);
   Serial.print("\t ");
   Serial.print(-ax);
   Serial.print("\t ");
@@ -19,7 +19,7 @@ void printMovuinoData()
   Serial.println();
 }
 void writeInFileMovuinoData(File file, String sep) {
-  file.print(time*1000);
+  file.print(time/1000);
   file.print(sep);
   file.print(-ax);
   file.print(sep);

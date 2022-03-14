@@ -7,7 +7,8 @@ import dataSet.GlobalDataSet as gds
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
 folderPath = "..\\data_usefull\\template\\"
-fileName = "record_1_treated_skateboardXXX3000"
+folderPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_031021\\"
+fileName = "record_test_1"
 
 start = 1
 end = 5
