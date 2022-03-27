@@ -26,7 +26,7 @@ void addNewRecord(String filepath)
       Serial.println("Error opening file for writing");
       return;
     }
-    file.println("-----------------   NEW RECORD   ---------------------");
+    file.println("XXX_newRecord");
     initialiseFileMovuinoData(file, sep);
 }
 

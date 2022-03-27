@@ -6,8 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 
-
-
 ############   SETTINGS   #############
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet

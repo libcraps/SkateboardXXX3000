@@ -5,15 +5,15 @@ import matplotlib.pyplot as plt
 ############   SETTINGS   #############
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\"
+folderPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_190322\\"
 gen_filename = "record"  # generic name, numbers will be added for duplicates
 
 serialPort = 'COM6'
 
 # --------- Data Extraction from Movuino ----------
 
-#print("data extraction")
-#sk.SkateboardXXX3000DataSet.movuinoExtraction(serialPort, folderPath, gen_filename)
+print("data extraction")
+sk.SkateboardXXX3000DataSet.movuinoExtraction(serialPort, folderPath, gen_filename)
 
 # --------- Interpolation of data -----------------
 
@@ -21,6 +21,7 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
     for file in fichiers:
         f = os.path.join(repertoire, file)
         skateDataSet = sk.SkateboardXXX3000DataSet(f)
+        """
         if skateDataSet.Te>10:
             print("milli")
             skateDataSet.time = [t/1000 for t in skateDataSet.time]
@@ -30,5 +31,6 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
             skateDataSet.time = [t * 1000 for t in skateDataSet.time]
             skateDataSet.rawData["time"] = skateDataSet.time
             skateDataSet.rawData.to_csv(f, sep=",", index=False, index_label=False)
+        """
         interpolateDf = skateDataSet.interpolate_skate_data(0.01)
         interpolateDf.to_csv(f[:-4] + "_interpolated" +".csv", sep=",", index=False, index_label=False)

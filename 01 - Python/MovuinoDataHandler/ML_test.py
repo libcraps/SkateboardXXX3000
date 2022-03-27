@@ -27,7 +27,7 @@ K = 3
 N = 1000
 
 #selection of label indices
-X = np.zeros([K*N,100*100]) #data matrix, one image per row
+X = np.zeros([K*N,120,9]) #data matrix, one image per row
 #Y = np.zeros([K*N,1]) #label indices
 Y = -np.ones([K*N,1]) #label indices
 labelNames = []

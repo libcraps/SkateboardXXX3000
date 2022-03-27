@@ -104,6 +104,10 @@ class SkateboardXXX3000DataSet():
         ExtractionCompleted = False
         print("-> Opening serial port {}".format(serialPort))
         arduino = serial.Serial(serialPort, baudrate=115200, timeout=1.)
+
+        # Send read SPIFF instruction to Movuino
+        #arduino.write(bytes("r", 'ascii'))
+
         line_byte = ''
         line_str = ''
         datafile = ''
@@ -126,7 +130,7 @@ class SkateboardXXX3000DataSet():
                     print("Add new file : {}".format(folderpath + filename))
                     file.write(datafile)
 
-            if "XXX_newRecord" in line_str and isReading == True:
+            if "XXX_newRecord" in line_str and isReading == True: #XXX_newRecord
                 with open(folderpath +filename, "w") as file:
                     print("Add new file : {}".format(folderpath + filename))
                     file.write(datafile)
@@ -146,12 +150,12 @@ class SkateboardXXX3000DataSet():
 
     def dispRawData(self):
         time_list = self.time
-        df.plotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)
-        df.plotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 223)
+        df.plotVector(time_list, self.acceleration.T, 'Acceleration (m/s2)', 221)
+        df.plotVector(time_list, self.gyroscope.T, 'Gyroscope (deg/s)', 222)
         plt.subplot(224)
         plt.plot(time_list, self.normGyroscope, label="Norme gyroscope", color="black")
         plt.legend(loc='upper right')
-        plt.subplot(222)
+        plt.subplot(223)
         plt.plot(time_list, self.normAcceleration, label='Norme Accélération',color="black")
         plt.legend(loc='upper right')
         plt.show()

@@ -29,9 +29,8 @@ folderPath_heelflip = "..\\..\\06 - Data\\Isolated_Tricks\\heelflip\\heelflip_1_
 folderPath_pop_shov = "..\\..\\06 - Data\\Isolated_Tricks\\pop_shovit\\pop_shovit_1_interpolated_processed.csv"
 folderPath_fs_shov = "..\\..\\06 - Data\\Isolated_Tricks\\fs_shovit\\fs_shovit_1_interpolated_processed.csv"
 folderPath_360_flip = "..\\..\\06 - Data\\Isolated_Tricks\\360_flip\\360_flip_1_interpolated_processed.csv"
+
 # -------- Data processing ----------------------
-
-
 dataSet_ollie = sk.SkateboardXXX3000DataSet(folderPath_ollie) #0
 dataSet_kickflip = sk.SkateboardXXX3000DataSet(folderPath_kickflip) #1
 dataSet_heelflip = sk.SkateboardXXX3000DataSet(folderPath_heelflip) #2

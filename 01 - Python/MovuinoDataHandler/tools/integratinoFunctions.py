@@ -9,16 +9,13 @@ def EulerIntegration(Uprime, dt):
     :param dt:
     :return:
     """
-    U = [np.array([0, 0, 0])]
+    U = [0]
     n = len(Uprime)
     for k in range(n - 1):
-        Ux = Uprime[k][0] * dt + U[k][0]
-        Uy = Uprime[k][1] * dt + U[k][1]
-        Uz = Uprime[k][2] * dt + U[k][2]
-        U.append(np.array([Ux, Uy, Uz]))
+        U_ = Uprime[k] * dt + U[k]
+        U.append(U_)
     U=np.array(U)
     return U
-
 
 
 def Euler(T, A, y0):
