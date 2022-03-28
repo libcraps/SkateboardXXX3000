@@ -30,7 +30,19 @@ prominence = 3
 distance = 4
 
 #----------------
-
+#extract every event of the complete path
 time_win, tricks_interval_temp, peaks_gyr, peak_a, peaks_tricks = eventDetection(completeSequence, size_window,overlap,prominence,distance)
+events_interval = centerEvents(completeSequence,  tricks_interval_temp)
 
-tricks_interval = centerEvents(completeSequence,tricks_interval_temp)
+#------------
+
+for i, interval in enumerate(events_interval):
+    tricks = completeSequence.rawData.iloc[interval, :]
+    tricks = sk.SkateboardXXX3000DataSet.normalizedL2(tricks)
+    tricks = sk.SkateboardXXX3000DataSet.normalizedMax(tricks)
+
+    #distance euclidienne
+
+    #tricks pas tricks ?
+
+    #raté pas raté ?

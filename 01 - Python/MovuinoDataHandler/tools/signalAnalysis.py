@@ -18,19 +18,7 @@ def mean_time(dat):
     i_mean = int(E_t/E)
     return i_mean
 
-def normalizeDat(dat):
-    """
-    Normalized the data using the energie of the signal
-    :param dat:
-    :return:
-    """
-    dat_normalized = dat.copy()
 
-    norm_dat = np.sqrt(np.sum(dat**2))
-    for i in range(len(dat)):
-        dat_normalized[i]/=norm_dat
-
-    return dat_normalized
 
 def areaUnderCurve(x,y):
     """

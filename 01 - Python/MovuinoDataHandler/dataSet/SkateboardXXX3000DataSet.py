@@ -54,8 +54,6 @@ class SkateboardXXX3000DataSet():
         # Number of row
         self.nb_row = len(self.time)
 
-
-
     def interpolate_skate_data(self, ecart_min=0.01):
         new_time = []
         interpolateDf = pd.DataFrame()
@@ -101,6 +99,37 @@ class SkateboardXXX3000DataSet():
         interpolateDf["gz"] = gz_interp
 
         return interpolateDf
+
+
+    @staticmethod
+    def normalizedL2(rawData):
+        # Normalizatio of the data
+
+        airG = np.trapz(rawData["normGyr"], rawData["time"])
+        airA = np.trapz(rawData["normAcc"], rawData["time"])
+
+        rawData['ax_normalized'] = rawData['ax'] / airA
+        rawData['ay_normalized'] = rawData['ay'] / airA
+        rawData['az_normalized'] = rawData['az'] / airA
+
+        rawData['gx_normalized'] = rawData['gx'] / airG
+        rawData['gy_normalized'] = rawData['gy'] / airG
+        rawData['gz_normalized'] = rawData['gz'] / airG
+
+        return rawData
+
+    @staticmethod
+    def normalizedMax(rawData):
+        # Normalizatio of the data
+        rawData['ax_normalized_1'] = rawData['ax'] / np.amax(abs(rawData['ax']))
+        rawData['ay_normalized_1'] = rawData['ay'] / np.amax(abs(rawData['ay']))
+        rawData['az_normalized_1'] = rawData['az'] / np.amax(abs(rawData['az']))
+
+        rawData['gx_normalized_1'] = rawData['gx'] / np.amax(abs(rawData['gx']))
+        rawData['gz_normalized_1'] = rawData['gz'] / np.amax(abs(rawData['gz']))
+        rawData['gy_normalized_1'] = rawData['gy'] / np.amax(abs(rawData['gy']))
+
+        return rawData
 
     @staticmethod
     def movuinoExtraction(serialPort, folderpath, gen_filename):
