@@ -14,7 +14,7 @@ from scipy.interpolate import interp1d
 
 from scipy.signal import find_peaks
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_181021\\record_14_interpolated.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121\\record_9_interpolated.csv"
 
 
 #--- Opening file ---
@@ -66,7 +66,7 @@ while window[1] < len(skateDataSet.time):
 sum_gyr = np.array(sum_gyr)
 sum_acc = np.array(sum_acc)
 peaks_gyr, _gyr = find_peaks(sum_gyr, prominence=prominence, distance=distance)
-peaks_acc, _acc = find_peaks(sum_acc, prominence=prominence-2, distance=distance)
+peaks_acc, _acc = find_peaks(sum_acc, prominence=prominence-1, distance=distance-2)
 time_win = np.array(time_win)
 
 peaks_tricks = []
