@@ -25,20 +25,30 @@ filter = 20
 # -------- Data processing ----------------------
 
 listeFichiers = []
-
+liste_len=[]
+liste_dt=[]
+err=[]
 for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
-    for file in fichiers:
-        f = os.path.join(repertoire, file)
-        skateDataSet = sk.SkateboardXXX3000DataSet(f)
-        Te = skateDataSet.Te
+    if "OLD" not in repertoire:
+        for file in fichiers:
+            print(repertoire)
+            f = os.path.join(repertoire, file)
+            skateDataSet = sk.SkateboardXXX3000DataSet(f)
+            Te = skateDataSet.Te
 
-        print("sample frequency : " + str(1 / Te))
-        skateDataSet.rawData = sk.SkateboardXXX3000DataSet.normalizedL2(skateDataSet.rawData)
-        skateDataSet.rawData = sk.SkateboardXXX3000DataSet.normalizedMax(skateDataSet.rawData)
-
-        # Stock in processed.csv
-        skateDataSet.rawData.to_csv(f, sep=",", index=False, index_label=False)
-
-
+            print("sample frequency : " + str(1 / Te))
+            skateDataSet.rawData = sk.SkateboardXXX3000DataSet.normalizedL2(skateDataSet.rawData)
+            liste_dt.append(list(skateDataSet.rawData["time"])[-1]-skateDataSet.rawData["time"][0])
+            liste_len.append(len(skateDataSet.rawData["time"]))
+            if liste_len[-1]<1.15:
+                err.append(file)
 
 
+            # Stock in processed.csv
+            #skateDataSet.rawData.to_csv(f, sep=",", index=False, index_label=False)
+
+
+print(liste_len)
+print(liste_dt)
+
+print(np.round(skateDataSet.rawData["time"],2))

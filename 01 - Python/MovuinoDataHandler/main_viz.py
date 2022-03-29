@@ -2,13 +2,21 @@ import dataSet.SkateboardXXX3000DataSet as sk
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import tools.DisplayFunctions as df
+import tools.displayFunctions as df
 import tools.integratinoFunctions as i
 
-folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\"
+folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\notTricks\\notTricks_success_7.csv"
 #folderPath = "..\\..\\06 - Data\\Raw_sequences\\"
-folderPath = "..\\..\\06 - Data\\Raw_Sequences\\sesh_190322\\"
+#folderPath = "..\\..\\06 - Data\\Raw_Sequences\\sesh_190322\\"
 
+
+pop = sk.SkateboardXXX3000DataSet(folderPath)
+print(pop.time[0])
+print(pop.time[-1])
+print(pop.nb_row)
+pop.dispRawData()
+
+"""
 for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
     for file in fichiers:
         f = os.path.join(repertoire, file)
@@ -28,7 +36,6 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
         plt.show()
 
 
-"""
 skateDataSet = sk.SkateboardXXX3000DataSet(folderPath)
 dx = skateDataSet.Te
 test=np.array([[3,2,1,0], [1,1,1,1],[0,1,4,9]])

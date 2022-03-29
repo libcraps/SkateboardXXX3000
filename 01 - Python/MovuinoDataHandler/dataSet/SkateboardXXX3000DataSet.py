@@ -106,7 +106,7 @@ class SkateboardXXX3000DataSet():
         # Normalizatio of the data
 
         airG = np.trapz(rawData["normGyr"], rawData["time"])
-        airA = np.trapz(rawData["normAcc"], rawData["time"])
+        airA = np.trapz(rawData["normAccel"], rawData["time"])
 
         rawData['ax_normalized'] = rawData['ax'] / airA
         rawData['ay_normalized'] = rawData['ay'] / airA
@@ -115,19 +115,6 @@ class SkateboardXXX3000DataSet():
         rawData['gx_normalized'] = rawData['gx'] / airG
         rawData['gy_normalized'] = rawData['gy'] / airG
         rawData['gz_normalized'] = rawData['gz'] / airG
-
-        return rawData
-
-    @staticmethod
-    def normalizedMax(rawData):
-        # Normalizatio of the data
-        rawData['ax_normalized_1'] = rawData['ax'] / np.amax(abs(rawData['ax']))
-        rawData['ay_normalized_1'] = rawData['ay'] / np.amax(abs(rawData['ay']))
-        rawData['az_normalized_1'] = rawData['az'] / np.amax(abs(rawData['az']))
-
-        rawData['gx_normalized_1'] = rawData['gx'] / np.amax(abs(rawData['gx']))
-        rawData['gz_normalized_1'] = rawData['gz'] / np.amax(abs(rawData['gz']))
-        rawData['gy_normalized_1'] = rawData['gy'] / np.amax(abs(rawData['gy']))
 
         return rawData
 

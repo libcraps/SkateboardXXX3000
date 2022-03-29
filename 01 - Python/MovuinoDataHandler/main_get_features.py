@@ -40,26 +40,7 @@ def divide(lst, n):
 split_gyrX = divide(popShovDataSet.gyroscope[2,:],nb_features_channel)
 split_gyrX_2 = divide(popShovDataSet_2.gyroscope[2,:],nb_features_channel)
 
-def mean_moving_window(data, size_window, overlap):
-    if size_window%2 == 0 :
-        size_window+=1
 
-    window = [0, size_window]
-    retard = size_window // 2
-    output=[]
-    time_win = []
-
-    output = []
-
-    dat = np.pad(data, (int(size_window // 2), int(size_window // 2)))
-
-    while window[1] < len(data):
-        output.append(np.mean(dat[window[0]:window[1]]))
-
-        window[0] += size_window - overlap
-        window[1] += size_window - overlap
-
-    return np.array(output)
 
 """
 for i,l in enumerate(split_gyrX):
@@ -73,8 +54,8 @@ for i,l in enumerate(split_gyrX_2):
 size_window = 8
 overlap = 4
 
-features = mean_moving_window(popShovDataSet.gyroscope[1,:], size_window, overlap)
-features_2 = mean_moving_window(popShovDataSet_2.gyroscope[1,:], size_window, overlap)
+features = sa.mean_moving_window(popShovDataSet.gyroscope[1,:], size_window, overlap)
+features_2 = sa.mean_moving_window(popShovDataSet_2.gyroscope[1,:], size_window, overlap)
 x = [k for k in range(len(features))]
 width = 1
 height = features
