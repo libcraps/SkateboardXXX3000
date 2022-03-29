@@ -9,7 +9,6 @@ from scipy.interpolate import interp1d
 
 from scipy.signal import find_peaks
 
-from main_isolation_tricks import eventDetection, centerEvents
 
 ############   SETTINGS   #############
 completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_9_interpolated.csv"
@@ -31,16 +30,14 @@ distance = 4
 
 #----------------
 #extract every event of the complete path
-time_win, tricks_interval_temp, peaks_gyr, peak_a, peaks_tricks = eventDetection(completeSequence, size_window,overlap,prominence,distance)
-events_interval = centerEvents(completeSequence,  tricks_interval_temp)
+time_win, tricks_interval_temp, peaks_gyr, peak_a, peaks_tricks = sa.eventDetection(completeSequence, size_window,overlap,prominence,distance)
+events_interval = sa.centerEvents(completeSequence,  tricks_interval_temp)
 
 #------------
 
 for i, interval in enumerate(events_interval):
-    tricks = completeSequence.rawData.iloc[interval, :]
-    tricks = sk.SkateboardXXX3000DataSet.normalizedL2(tricks)
-    tricks = sk.SkateboardXXX3000DataSet.normalizedMax(tricks)
-
+    tricks = completeSequence.rawData.loc[interval[0]:interval[1], :]
+    tricks = sk.SkateboardXXX3000DataSet.normalizedL2(tricks.copy())
     #distance euclidienne
 
     #tricks pas tricks ?

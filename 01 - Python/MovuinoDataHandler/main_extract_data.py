@@ -32,5 +32,5 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
             skateDataSet.rawData["time"] = skateDataSet.time
             skateDataSet.rawData.to_csv(f, sep=",", index=False, index_label=False)
         """
-        interpolateDf = skateDataSet.interpolate_skate_data(0.01)
+        interpolateDf = sk.SkateboardXXX3000DataSet.interpolate_skate_data(skateDataSet.rawData,0.01)
         interpolateDf.to_csv(f[:-4] + "_interpolated" +".csv", sep=",", index=False, index_label=False)
