@@ -3,6 +3,7 @@ from scipy.interpolate import interp1d
 import pandas as pd
 from scipy.signal import find_peaks
 import numpy as np
+from scipy import signal
 
 def meanTime(dat):
     """
@@ -147,3 +148,21 @@ def mean_moving_window(data, size_window, overlap):
         window[1] += size_window - overlap
 
     return np.array(output)
+
+def correlate_tricks(dataSet1, dataSet2):
+    cor = [0]*6
+    cor_gx = signal.correlate(dataSet1["gx_normalized_1"], dataSet2["gx_normalized_1"])
+    cor_gy = signal.correlate(dataSet1["gy_normalized_1"], dataSet2["gy_normalized_1"])
+    cor_gz = signal.correlate(dataSet1["gz_normalized_1"], dataSet2["gz_normalized_1"])
+    cor_ay = signal.correlate(dataSet1["ay_normalized_1"], dataSet2["ay_normalized_1"])
+    cor_ax = signal.correlate(dataSet1["ax_normalized_1"], dataSet2["ax_normalized_1"])
+    cor_az = signal.correlate(dataSet1["az_normalized_1"], dataSet2["az_normalized_1"])
+
+    cor[0] = max(cor_ax)
+    cor[1] = max(cor_ay)
+    cor[2] = max(cor_az)
+    cor[3] = max(cor_gx)
+    cor[4] = max(cor_gy)
+    cor[5] = max(cor_gz)
+
+    return cor

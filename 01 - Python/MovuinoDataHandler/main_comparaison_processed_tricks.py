@@ -11,7 +11,7 @@ import tools.DisplayFunctions as df
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import signal
+
 
 ############   SETTINGS   #############
 
@@ -51,23 +51,7 @@ plt.plot(freq_heel,np.abs(sp_heel), color="orange")
 plt.plot(freq_360, np.abs(sp_360), color="black")
 plt.show()
 """
-def correlate_tricks(dataSet1, dataSet2):
-    cor = [0]*6
-    cor_gx = signal.correlate(dataSet1["gx_normalized_1"], dataSet2["gx_normalized_1"])
-    cor_gy = signal.correlate(dataSet1["gy_normalized_1"], dataSet2["gy_normalized_1"])
-    cor_gz = signal.correlate(dataSet1["gz_normalized_1"], dataSet2["gz_normalized_1"])
-    cor_ay = signal.correlate(dataSet1["ay_normalized_1"], dataSet2["ay_normalized_1"])
-    cor_ax = signal.correlate(dataSet1["ax_normalized_1"], dataSet2["ax_normalized_1"])
-    cor_az = signal.correlate(dataSet1["az_normalized_1"], dataSet2["az_normalized_1"])
 
-    cor[0] = max(cor_ax)
-    cor[1] = max(cor_ay)
-    cor[2] = max(cor_az)
-    cor[3] = max(cor_gx)
-    cor[4] = max(cor_gy)
-    cor[5] = max(cor_gz)
-
-    return cor
 """
 cor = {}
 cor["cor_ollie"] = correlate_tricks(dataSet_tricks, dataSet_ollie)
@@ -77,12 +61,12 @@ cor["cor_pop_shovit"] = correlate_tricks(dataSet_tricks, dataSet_pop_shov)
 cor["cor_fs_shovit"] = correlate_tricks(dataSet_tricks, dataSet_fs_shov)
 cor["cor_360flip"] = correlate_tricks(dataSet_tricks, dataSet_360_flip)
 """
-cor1 = correlate_tricks(dataSet_tricks.rawData, dataSet_ollie.rawData)
-cor2 = correlate_tricks(dataSet_tricks.rawData, dataSet_kickflip.rawData)
-cor3 = correlate_tricks(dataSet_tricks.rawData, dataSet_heelflip.rawData)
-cor4 = correlate_tricks(dataSet_tricks.rawData, dataSet_pop_shov.rawData)
-cor5 = correlate_tricks(dataSet_tricks.rawData, dataSet_fs_shov.rawData)
-cor6 = correlate_tricks(dataSet_tricks.rawData, dataSet_360_flip.rawData)
+cor1 = sa.correlate_tricks(dataSet_tricks.rawData, dataSet_ollie.rawData)
+cor2 = sa.correlate_tricks(dataSet_tricks.rawData, dataSet_kickflip.rawData)
+cor3 = sa.correlate_tricks(dataSet_tricks.rawData, dataSet_heelflip.rawData)
+cor4 = sa.correlate_tricks(dataSet_tricks.rawData, dataSet_pop_shov.rawData)
+cor5 = sa.correlate_tricks(dataSet_tricks.rawData, dataSet_fs_shov.rawData)
+cor6 = sa.correlate_tricks(dataSet_tricks.rawData, dataSet_360_flip.rawData)
 
 print(cor1)
 print(cor2)

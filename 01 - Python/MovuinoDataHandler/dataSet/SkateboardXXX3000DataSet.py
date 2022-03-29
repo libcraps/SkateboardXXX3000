@@ -54,10 +54,11 @@ class SkateboardXXX3000DataSet():
         # Number of row
         self.nb_row = len(self.time)
 
-    def interpolate_skate_data(self, ecart_min=0.01):
+    @staticmethod
+    def interpolate_skate_data(dataset, ecart_min=0.01):
         new_time = []
         interpolateDf = pd.DataFrame()
-        time = self.rawData["time"]
+        time = dataset["time"]
         # ------ CREATION D'UNE NOUVELLE LISTE DE TEMPS -----
         for k in range(len(time) - 1):
             t_0 = time[k]
@@ -70,12 +71,12 @@ class SkateboardXXX3000DataSet():
                     new_time.append(time[k] + i * ecart_min)
 
         xp = time
-        ax = self.rawData["ax"]
-        ay = self.rawData["ay"]
-        az = self.rawData["az"]
-        gx = self.rawData["gx"]
-        gy = self.rawData["gy"]
-        gz = self.rawData["gz"]
+        ax = dataset["ax"]
+        ay = dataset["ay"]
+        az = dataset["az"]
+        gx = dataset["gx"]
+        gy = dataset["gy"]
+        gz = dataset["gz"]
 
         f = interp1d(xp, ax)
         ax_interp = f(new_time)
