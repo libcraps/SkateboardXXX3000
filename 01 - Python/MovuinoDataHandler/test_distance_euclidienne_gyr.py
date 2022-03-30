@@ -86,9 +86,6 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
             f = os.path.join(repertoire, file)
             trickDataSet = sk.SkateboardXXX3000DataSet(f)
             Te = trickDataSet.Te
-
-            print(f)
-
             tricksGyr_normalized = arrayGyrNormalize(trickDataSet.rawData)
             dist_euc_file = np.zeros(shape=(6, 1))
             dist_euc_file[4] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_ollie, axis=0))
@@ -112,8 +109,8 @@ min_list_H1 = np.amin(dist_euc_H1,axis=1)[:,0]
 ind_list_H1 = np.argmin(dist_euc_H1,axis=1)[:,0]
 
 
-plt.hist(min_list,bins=30,color="r", alpha=0.8)
-plt.hist(min_list_H1,bins=30,color="b", alpha=0.8)
+plt.hist(min_list, bins=15, color="r", alpha=0.8)
+plt.hist(min_list_H1, bins=15, color="b", alpha=0.8)
 plt.show()
 
 print(ind_list)
