@@ -12,7 +12,7 @@ from scipy.signal import find_peaks
 
 ############   SETTINGS   #############
 completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_9_interpolated.csv"
-
+referenceTricksPath = "..\\..\\06 - Data\\Reference_tricks\\"
 
 #--- Opening file ---
 print("Opening : " + completeSequencesPath)
@@ -34,6 +34,8 @@ time_win, tricks_interval_temp, peaks_gyr, peak_a, peaks_tricks = sa.eventDetect
 events_interval = sa.centerEvents(completeSequence,  tricks_interval_temp)
 
 #------------
+
+
 
 for i, interval in enumerate(events_interval):
     tricks = completeSequence.rawData.loc[interval[0]:interval[1], :]
