@@ -29,7 +29,7 @@ Te = trickDataSet.Te
 """
 
 def arrayGyrNormalize(rawData):
-    return np.array([rawData["gx_normalized"], rawData["gy_normalized"], rawData["gz_normalized"]])
+    return np.array([rawData["ax"], rawData["ay"], rawData["az"]])
 
 def arrayAccNormalize(rawData):
     return np.array([rawData["ax_normalized"], rawData["ay_normalized"], rawData["az_normalized"]])
@@ -109,8 +109,12 @@ min_list_H1 = np.amin(dist_euc_H1,axis=1)[:,0]
 ind_list_H1 = np.argmin(dist_euc_H1,axis=1)[:,0]
 
 
-plt.hist(min_list, bins=15, color="r", alpha=0.8)
-plt.hist(min_list_H1, bins=15, color="b", alpha=0.8)
+plt.hist(min_list, bins=15,  alpha=0.8, label="Tricks")
+plt.hist(min_list_H1, bins=15, alpha=0.8, label="Not Tricks")
+plt.title("Distance euclidienne minimum - Accélération")
+plt.legend()
+plt.xlabel("Valeurs minimums")
+plt.ylabel("Fréquences")
 plt.show()
 
 print(ind_list)
@@ -118,42 +122,3 @@ print(Y)
 
 print(Y==ind_list)
 
-"""
-dist_euc_shov_H1 = np.array(dist_euc_shov_H1)
-dist_euc_ollie_H1 = np.array(dist_euc_ollie_H1)
-dist_euc_kickflip_H1 = np.array(dist_euc_kickflip_H1)
-dist_euc_treflip_H1 = np.array(dist_euc_treflip_H1)
-dist_euc_heelflip_H1 = np.array(dist_euc_ollie_H1)
-dist_euc_popshov_H1= np.array(dist_euc_popshov_H1)
-min_dist_H1 = np.amin(np.array(
-    [dist_euc_kickflip_H1, dist_euc_shov_H1, dist_euc_ollie_H1, dist_euc_heelflip_H1, dist_euc_treflip_H1, dist_euc_popshov_H1]),
-    axis=0)
-min_dist = np.amin(np.array([dist_euc_kickflip,dist_euc_shov,dist_euc_ollie,dist_euc_heelflip,dist_euc_treflip,dist_euc_popshov]), axis=0)
-print(min_dist.shape)
-plt.hist(dist_euc_kickflip[:,-2],alpha=0.7,bins=50)
-plt.hist(min_dist[:,-2],bins=50,color="b")
-plt.hist(min_dist_H1[:,-2],bins=50,color="r")
-plt.show()
-
-
-t = [i for i in range(len(trickDataSet.rawData["time"]))]
-plt.plot(t,dist_df["gx"]*180/np.pi,"r")
-plt.plot(t,dist_df["gy"]*180/np.pi,"green")
-plt.plot(t,dist_df["gz"]*180/np.pi,"b")
-plt.show()
-print(dist_df)
-"""
-
-"""
-for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
-    if "OLD" not in repertoire:
-        for file in fichiers:
-            print(repertoire)
-            f = os.path.join(repertoire, file)
-            trickDataSet = sk.SkateboardXXX3000DataSet(f)
-            Te = trickDataSet.Te
-
-            dist_df = trickDataSet.rawData - ref_fs_shovit.rawData
-            print(di)
-
-"""
