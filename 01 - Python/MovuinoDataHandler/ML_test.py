@@ -12,9 +12,10 @@ folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\"
 labelNamesAll = []
 
 for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
-    labelNamesAll.append(sousRepertoires)
-    for file in fichiers:
-        if "interpolated" in file:
+
+    if "fail" not in sousRepertoires:
+        labelNamesAll.append(sousRepertoires)
+        for file in fichiers:
             print(file)
             f = os.path.join(repertoire, file)
             skateDataSet = sk.SkateboardXXX3000DataSet(f)
@@ -27,7 +28,7 @@ K = 3
 N = 1000
 
 #selection of label indices
-X = np.zeros([K*N,120,9]) #data matrix, one image per row
+X = np.zeros([K*N]) #data matrix, one image per row
 #Y = np.zeros([K*N,1]) #label indices
 Y = -np.ones([K*N,1]) #label indices
 labelNames = []

@@ -28,59 +28,100 @@ trickDataSet = sk.SkateboardXXX3000DataSet(tricksPath)
 Te = trickDataSet.Te
 """
 
-dist_euc_shov=[]
-dist_euc_ollie=[]
-dist_euc_kickflip=[]
-dist_euc_treflip=[]
-dist_euc_heelflip=[]
-dist_euc_popshov=[]
+def arrayGyrNormalize(rawData):
+    return np.array([rawData["gx_normalized"], rawData["gy_normalized"], rawData["gz_normalized"]])
+
+def arrayAccNormalize(rawData):
+    return np.array([rawData["ax_normalized"], rawData["ay_normalized"], rawData["az_normalized"]])
 
 
-dist_euc_shov_H1=[]
-dist_euc_ollie_H1=[]
-dist_euc_kickflip_H1=[]
-dist_euc_treflip_H1=[]
-dist_euc_heelflip_H1=[]
-dist_euc_popshov_H1=[]
+gyrNormalize_360Flip = arrayGyrNormalize(ref_360flip.rawData)
+gyrNormalize_ollie = arrayGyrNormalize(ref_ollie.rawData)
+gyrNormalize_kickflip = arrayGyrNormalize(ref_kickflip.rawData)
+gyrNormalize_heelflip = arrayGyrNormalize(ref_heelflip.rawData)
+gyrNormalize_pop_shovit = arrayGyrNormalize(ref_pop_shovit.rawData)
+gyrNormalize_fs_shovit = arrayGyrNormalize(ref_fs_shovit.rawData)
+
+
+dist_euc = []
+dist_euc_H1 = []
+
+Y=[]
+label=[]
+for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
+            label.append(sousRepertoires)
+
+label = label[0]
+for i,name in enumerate(label) :
+    if ("notTricks" in name) or ("fail" in name):
+            del label[i]
+
 
 for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
-    if ("notTricks" not in repertoire) or ("fail" not in repertoire):
+    if ("notTricks" not in repertoire):
+        if ("fail" not in repertoire):
+            for file in fichiers:
+
+                f = os.path.join(repertoire, file)
+                trickDataSet = sk.SkateboardXXX3000DataSet(f)
+                Te = trickDataSet.Te
+
+                for i,name in enumerate(label):
+                    if name in file:
+                        Y.append(i)
+
+                tricksGyr_normalized = arrayGyrNormalize(trickDataSet.rawData)
+                dist_euc_file = np.zeros(shape=(6, 1))
+                dist_euc_file[4] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_ollie, axis=0))
+                dist_euc_file[3] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_kickflip, axis=0))
+                dist_euc_file[2] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_heelflip, axis=0))
+                dist_euc_file[5] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_pop_shovit, axis=0))
+                dist_euc_file[1] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_fs_shovit, axis=0))
+                dist_euc_file[0] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_360Flip, axis=0))
+
+                dist_euc.append(dist_euc_file)
+    if ("notTricks" in repertoire):
         for file in fichiers:
-            print(repertoire)
+
             f = os.path.join(repertoire, file)
             trickDataSet = sk.SkateboardXXX3000DataSet(f)
             Te = trickDataSet.Te
 
-            dist_euc_shov.append(np.linalg.norm(trickDataSet.rawData - ref_fs_shovit.rawData, axis=0)[1:15])
-            dist_euc_ollie.append(np.linalg.norm(trickDataSet.rawData - ref_ollie.rawData, axis=0)[1:15])
-            dist_euc_kickflip.append(np.linalg.norm(trickDataSet.rawData - ref_kickflip.rawData, axis=0)[1:15])
-            dist_euc_popshov.append(np.linalg.norm(trickDataSet.rawData - ref_pop_shovit.rawData, axis=0)[1:15])
-            dist_euc_heelflip.append(np.linalg.norm(trickDataSet.rawData - ref_heelflip.rawData, axis=0)[1:15])
-            dist_euc_treflip.append(np.linalg.norm(trickDataSet.rawData - ref_360flip.rawData, axis=0)[1:15])
+            print(f)
 
-    if "notTricks" in repertoire:
-        for file in fichiers:
-            print(repertoire)
-            f = os.path.join(repertoire, file)
-            trickDataSet = sk.SkateboardXXX3000DataSet(f)
-            Te = trickDataSet.Te
+            tricksGyr_normalized = arrayGyrNormalize(trickDataSet.rawData)
+            dist_euc_file = np.zeros(shape=(6, 1))
+            dist_euc_file[4] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_ollie, axis=0))
+            dist_euc_file[3] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_kickflip, axis=0))
+            dist_euc_file[2] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_heelflip, axis=0))
+            dist_euc_file[5] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_pop_shovit, axis=0))
+            dist_euc_file[1] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_fs_shovit, axis=0))
+            dist_euc_file[0] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_360Flip, axis=0))
 
-            dist_euc_shov_H1.append(np.linalg.norm(trickDataSet.rawData - ref_fs_shovit.rawData, axis=0)[1:15])
-            dist_euc_ollie_H1.append(np.linalg.norm(trickDataSet.rawData - ref_ollie.rawData, axis=0)[1:15])
-            dist_euc_kickflip_H1.append(np.linalg.norm(trickDataSet.rawData - ref_kickflip.rawData, axis=0)[1:15])
-            dist_euc_popshov_H1.append(np.linalg.norm(trickDataSet.rawData - ref_pop_shovit.rawData, axis=0)[1:15])
-            dist_euc_heelflip_H1.append(np.linalg.norm(trickDataSet.rawData - ref_heelflip.rawData, axis=0)[1:15])
-            dist_euc_treflip_H1.append(np.linalg.norm(trickDataSet.rawData - ref_360flip.rawData, axis=0)[1:15])
+            dist_euc_H1.append(dist_euc_file)
 
+print(label)
+dist_euc = np.array(dist_euc)
+dist_euc_H1 = np.array(dist_euc_H1)
+print(dist_euc.shape)
 
-dist_euc_shov = np.array(dist_euc_shov)
-dist_euc_ollie = np.array(dist_euc_ollie)
-dist_euc_kickflip = np.array(dist_euc_kickflip)
-dist_euc_treflip = np.array(dist_euc_treflip)
-dist_euc_heelflip = np.array(dist_euc_ollie)
-dist_euc_popshov= np.array(dist_euc_popshov)
+min_list = np.amin(dist_euc,axis=1)[:,0]
+ind_list = np.argmin(dist_euc,axis=1)[:,0]
+
+min_list_H1 = np.amin(dist_euc_H1,axis=1)[:,0]
+ind_list_H1 = np.argmin(dist_euc_H1,axis=1)[:,0]
 
 
+plt.hist(min_list,bins=30,color="r", alpha=0.8)
+plt.hist(min_list_H1,bins=30,color="b", alpha=0.8)
+plt.show()
+
+print(ind_list)
+print(Y)
+
+print(Y==ind_list)
+
+"""
 dist_euc_shov_H1 = np.array(dist_euc_shov_H1)
 dist_euc_ollie_H1 = np.array(dist_euc_ollie_H1)
 dist_euc_kickflip_H1 = np.array(dist_euc_kickflip_H1)
@@ -93,16 +134,11 @@ min_dist_H1 = np.amin(np.array(
 min_dist = np.amin(np.array([dist_euc_kickflip,dist_euc_shov,dist_euc_ollie,dist_euc_heelflip,dist_euc_treflip,dist_euc_popshov]), axis=0)
 print(min_dist.shape)
 plt.hist(dist_euc_kickflip[:,-2],alpha=0.7,bins=50)
-plt.hist(dist_euc_ollie[:,-2],alpha=0.7,bins=50)
-plt.hist(dist_euc_shov[:,-2],alpha=0.7,bins=50)
-plt.hist(dist_euc_popshov[:,-2],alpha=0.7,bins=50)
-plt.hist(dist_euc_treflip[:,-2],alpha=0.7,bins=50)
-plt.hist(dist_euc_heelflip[:,-2],alpha=0.7,bins=50)
 plt.hist(min_dist[:,-2],bins=50,color="b")
 plt.hist(min_dist_H1[:,-2],bins=50,color="r")
 plt.show()
 
-"""
+
 t = [i for i in range(len(trickDataSet.rawData["time"]))]
 plt.plot(t,dist_df["gx"]*180/np.pi,"r")
 plt.plot(t,dist_df["gy"]*180/np.pi,"green")
