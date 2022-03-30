@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import signal
+from sklearn.metrics import confusion_matrix
 
 
 tricksPath = "..\\..\\06 - Data\\Isolated_tricks\\"
@@ -29,7 +30,7 @@ Te = trickDataSet.Te
 """
 
 def arrayGyrNormalize(rawData):
-    return np.array([rawData["ax"], rawData["ay"], rawData["az"]])
+    return np.array([rawData["gx_normalized"], rawData["gy_normalized"], rawData["gz_normalized"]])
 
 def arrayAccNormalize(rawData):
     return np.array([rawData["ax_normalized"], rawData["ay_normalized"], rawData["az_normalized"]])
@@ -53,7 +54,7 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
 
 label = label[0]
 for i,name in enumerate(label) :
-    if ("fail" in name):
+    if ("fail" in name) or ("notTricks" in name):
         del label[i]
 
 
@@ -80,40 +81,16 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
                 dist_euc_file[0] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_360Flip, axis=0))
 
                 dist_euc.append(dist_euc_file)
-    if ("notTricks" in repertoire):
-        for file in fichiers:
-
-            f = os.path.join(repertoire, file)
-            trickDataSet = sk.SkateboardXXX3000DataSet(f)
-            Te = trickDataSet.Te
-            tricksGyr_normalized = arrayGyrNormalize(trickDataSet.rawData)
-            dist_euc_file = np.zeros(shape=(6, 1))
-            dist_euc_file[4] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_ollie, axis=0))
-            dist_euc_file[3] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_kickflip, axis=0))
-            dist_euc_file[2] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_heelflip, axis=0))
-            dist_euc_file[5] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_pop_shovit, axis=0))
-            dist_euc_file[1] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_fs_shovit, axis=0))
-            dist_euc_file[0] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_360Flip, axis=0))
-
-            dist_euc_H1.append(dist_euc_file)
-            for i, name in enumerate(label):
-                if name in file:
-                    Y.append(i)
 
 print(label)
 dist_euc = np.array(dist_euc)
-dist_euc_H1 = np.array(dist_euc_H1)
+
 print(dist_euc.shape)
 
 min_list = np.amin(dist_euc,axis=1)[:,0]
 ind_list = np.argmin(dist_euc,axis=1)[:,0]
 
-min_list_H1 = np.amin(dist_euc_H1,axis=1)[:,0]
-ind_list_H1 = np.argmin(dist_euc_H1,axis=1)[:,0]
-
-
 plt.hist(min_list, bins=15,  alpha=0.8, label="Tricks")
-plt.hist(min_list_H1, bins=15, alpha=0.8, label="Not Tricks")
 plt.title("Distance euclidienne minimum - Accélération")
 plt.legend()
 plt.xlabel("Valeurs minimums")
@@ -124,3 +101,17 @@ print(ind_list)
 print(Y)
 
 print(Y==ind_list)
+
+print(confusion_matrix(Y,ind_list))
+
+import seaborn as sn
+import pandas as pd
+import matplotlib.pyplot as plt
+
+array = confusion_matrix(Y,ind_list)
+df_cm = pd.DataFrame(array, index = [i for i in label],
+                  columns = [i for i in label])
+plt.figure(figsize = (10,7))
+sn.heatmap(df_cm, annot=True, cmap="gray")
+plt.title("Confusion matrix normalisée - tricks classification")
+plt.show()
