@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import signal
+import sklearn
+from sklearn.metrics import precision_recall_curve
 
 
 tricksPath = "..\\..\\06 - Data\\Isolated_tricks\\"
@@ -27,6 +29,24 @@ ref_fs_shovit = sk.SkateboardXXX3000DataSet(referenceTricksPath + "fs_shovit_ref
 trickDataSet = sk.SkateboardXXX3000DataSet(tricksPath)
 Te = trickDataSet.Te
 """
+
+
+def f1_score(precisions, recalls):
+    mult = precisions * recalls
+    add = precisions + recalls
+    f1s = 2 * mult / add
+    return f1s
+
+
+def best_threshold(f1s, thresholds):
+    threshold = thresholds[np.argmax(f1s)]
+    return threshold
+
+
+def area(precisions, recalls):
+    auprc = 0
+    auprc = np.trapz(precisions[::-1], recalls[::-1], dx=1.0)
+    return auprc
 
 def arrayGyrNormalize(rawData):
     return np.array([rawData["gx_normalized"], rawData["gy_normalized"], rawData["gz_normalized"]])
@@ -48,13 +68,7 @@ dist_euc_H1 = []
 
 Y=[]
 label=[]
-for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
-            label.append(sousRepertoires)
 
-label = label[0]
-for i,name in enumerate(label) :
-    if ("notTricks" in name) or ("fail" in name):
-            del label[i]
 
 
 for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
@@ -66,9 +80,7 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
                 trickDataSet = sk.SkateboardXXX3000DataSet(f)
                 Te = trickDataSet.Te
 
-                for i,name in enumerate(label):
-                    if name in file:
-                        Y.append(i)
+                Y.append(0)
 
                 tricksGyr_normalized = arrayGyrNormalize(trickDataSet.rawData)
                 dist_euc_file = np.zeros(shape=(6, 1))
@@ -96,6 +108,7 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
             dist_euc_file[0] = np.mean(np.linalg.norm(tricksGyr_normalized - gyrNormalize_360Flip, axis=0))
 
             dist_euc_H1.append(dist_euc_file)
+            Y.append(1)
 
 print(label)
 dist_euc = np.array(dist_euc)
@@ -109,51 +122,39 @@ min_list_H1 = np.amin(dist_euc_H1,axis=1)[:,0]
 ind_list_H1 = np.argmin(dist_euc_H1,axis=1)[:,0]
 
 
-plt.hist(min_list, bins=15, color="r", alpha=0.8)
-plt.hist(min_list_H1, bins=15, color="b", alpha=0.8)
+plt.hist(min_list, bins=15,  alpha=0.8, label="Tricks")
+plt.hist(min_list_H1, bins=15, alpha=0.8, label="Not Tricks")
+plt.title("Distance euclidienne minimum - Accélération")
+plt.legend()
+plt.xlabel("Valeurs minimums")
+plt.ylabel("Fréquences")
 plt.show()
 
-print(ind_list)
-print(Y)
+Y_pred = np.concatenate([min_list, min_list_H1])
+Y_true = np.concatenate([np.zeros(min_list.shape), np.ones(min_list_H1.shape)])
+precisions, recalls, thresholds = precision_recall_curve(Y_true, Y_pred)
 
-print(Y==ind_list)
 
-"""
-dist_euc_shov_H1 = np.array(dist_euc_shov_H1)
-dist_euc_ollie_H1 = np.array(dist_euc_ollie_H1)
-dist_euc_kickflip_H1 = np.array(dist_euc_kickflip_H1)
-dist_euc_treflip_H1 = np.array(dist_euc_treflip_H1)
-dist_euc_heelflip_H1 = np.array(dist_euc_ollie_H1)
-dist_euc_popshov_H1= np.array(dist_euc_popshov_H1)
-min_dist_H1 = np.amin(np.array(
-    [dist_euc_kickflip_H1, dist_euc_shov_H1, dist_euc_ollie_H1, dist_euc_heelflip_H1, dist_euc_treflip_H1, dist_euc_popshov_H1]),
-    axis=0)
-min_dist = np.amin(np.array([dist_euc_kickflip,dist_euc_shov,dist_euc_ollie,dist_euc_heelflip,dist_euc_treflip,dist_euc_popshov]), axis=0)
-print(min_dist.shape)
-plt.hist(dist_euc_kickflip[:,-2],alpha=0.7,bins=50)
-plt.hist(min_dist[:,-2],bins=50,color="b")
-plt.hist(min_dist_H1[:,-2],bins=50,color="r")
+plt.figure(figsize=(4, 4))
+plt.plot(recalls, precisions)
+plt.xlabel("Recall")
+plt.ylabel("Precision")
+plt.xlim(0, 1.05)
+plt.ylim(0, 1.05)
+plt.grid(linestyle="--")
+plt.title("ROC curve pour la distance euclidienne minim faites sur le gyroscope normalisé \n AUPCR : {}".format(round(area(precisions,recalls),5)))
 plt.show()
 
 
-t = [i for i in range(len(trickDataSet.rawData["time"]))]
-plt.plot(t,dist_df["gx"]*180/np.pi,"r")
-plt.plot(t,dist_df["gy"]*180/np.pi,"green")
-plt.plot(t,dist_df["gz"]*180/np.pi,"b")
+
+f1s = f1_score(precisions,recalls)
+best_f1_thresh = best_threshold(f1s, thresholds)
+plt.plot(thresholds,f1s[:-1])
+plt.plot(best_f1_thresh, np.amax(f1s),"r+--")
+plt.title("Evolution du F1 score en fonction du seuil - Gyroscope normalisé \n F1 max pour seuil = {}".format(round(best_f1_thresh,2)))
+plt.xlabel("Seuil")
+plt.ylabel("f1 score")
 plt.show()
-print(dist_df)
-"""
 
-"""
-for (repertoire, sousRepertoires, fichiers) in os.walk(tricksPath):
-    if "OLD" not in repertoire:
-        for file in fichiers:
-            print(repertoire)
-            f = os.path.join(repertoire, file)
-            trickDataSet = sk.SkateboardXXX3000DataSet(f)
-            Te = trickDataSet.Te
-
-            dist_df = trickDataSet.rawData - ref_fs_shovit.rawData
-            print(di)
-
-"""
+print("Best F1 score : {}".format(round(np.amax(f1s),2)))
+print("AUPCR : {}".format(round(area(precisions,recalls),2)))
