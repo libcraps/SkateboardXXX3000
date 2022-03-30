@@ -11,7 +11,7 @@ from scipy.signal import find_peaks
 
 
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_3_interpolated.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_9_interpolated.csv"
 referenceTricksPath = "..\\..\\06 - Data\\Reference_tricks\\"
 
 ref_360flip = sk.SkateboardXXX3000DataSet(referenceTricksPath + "360_flip_reference.csv")
@@ -105,8 +105,7 @@ gyrNormalize_heelflip = arrayGyrNormalize(ref_heelflip.rawData)
 gyrNormalize_pop_shovit = arrayGyrNormalize(ref_pop_shovit.rawData)
 gyrNormalize_fs_shovit = arrayGyrNormalize(ref_fs_shovit.rawData)
 
-label=['360_flip', 'fs_shovit', 'heelflip', 'kickflip', 'ollie', 'pop_shovit']
-
+label=['360_flip', 'fs_shovit', 'heelflip', 'kickflip', 'ollie', 'pop_shovit','Not tricks']
 Y_pred=[]
 
 for i, interval in enumerate(events_interval):
@@ -129,25 +128,26 @@ for i, interval in enumerate(events_interval):
     ind = np.argmin(dist_euc_file)
     #tricks pas tricks ?
     if minVal > seuil:
-        Y_pred.append(-1)
+        Y_pred.append(len(label)-1)
     else :
         Y_pred.append(ind)
 
     #raté pas raté ?
 
 
-
+plt.figure(figsize=(10,20))
 time_list = np.array(completeSequence.time)
-df.plotVect(time_list, completeSequence.acceleration, 'Acceleration (m/s2)', 321)
+
+df.plotVect(time_list, completeSequence.acceleration, 'Acceleration (m/s2)', 221)
 plt.xlabel("Temps (s)")
 plt.legend(loc='upper right')
 plt.grid()
-plt.subplot(323)
+plt.subplot(223)
 plt.plot(time_list, completeSequence.normAcceleration, label='Norme Accélération', color="black")
 plt.legend(loc='upper right')
 plt.grid()
-plt.subplot(325)
-df.plotVect(time_list, completeSequence.gyroscope, 'Gyroscope (deg/s)', 322)
+plt.show()
+df.plotVect(time_list, completeSequence.gyroscope, 'Gyroscope (deg/s)', 211)
 
 for i, interval in enumerate(events_interval):
     i_start = interval[0]
@@ -159,16 +159,13 @@ for i, interval in enumerate(events_interval):
                                        abs(max(completeSequence.normGyroscope[i_start:i_end])),
                                        -abs(max(completeSequence.normGyroscope[i_start:i_end])),
                                        -abs(max(completeSequence.normGyroscope[i_start:i_end]))], color="r")
-    plt.text(completeSequence.time[i_start], max(completeSequence.normGyroscope[i_start:i_end])*1.1,"Prediction \n {}".format(label[Y_pred[i]]))
-
-plt.subplot(322)
-df.plotVect(completeSequence.time, completeSequence.gyroscope, 'Gyroscope (deg/s)', 322)
+    plt.text(completeSequence.time[i_start], max(completeSequence.normGyroscope[i_start:i_end])+50,"{}".format(label[Y_pred[i]],fontsize=20))
 plt.legend(loc='upper right')
 plt.xlabel("Temps (s)")
 plt.grid()
-plt.subplot(324)
+plt.ylim([-max(completeSequence.normGyroscope)*1.2,max(completeSequence.normGyroscope)*1.2])
+plt.subplot(212)
 plt.plot(time_list, completeSequence.normGyroscope, label="Norme gyroscope", color="black")
-
 plt.legend(loc='upper right')
 plt.grid()
 plt.show()

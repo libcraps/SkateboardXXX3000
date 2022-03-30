@@ -29,9 +29,9 @@ def plotVector(t, v, title, pos):
     :return:
     """
     fig = plt.subplot(pos)
-    fig.plot(t, v[:, 0], color="r", label="x")
-    fig.plot(t, v[:, 1], color="green", label="y")
-    fig.plot(t, v[:, 2], color="blue", label="z")
+    fig.plot(t, v[:, 0], color="r", alpha=0.8, label="x")
+    fig.plot(t, v[:, 1], color="green", alpha=0.8, label="y")
+    fig.plot(t, v[:, 2], color="blue", alpha=0.8, label="z")
     fig.set_title(title)
 
 

@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import signal
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 
 tricksPath = "..\\..\\06 - Data\\Isolated_tricks\\"
@@ -108,4 +108,12 @@ df_cm = pd.DataFrame(array, index = [i for i in label],
 plt.figure(figsize = (10,7))
 sn.heatmap(df_cm, annot=True, cmap="gray")
 plt.title("Confusion matrix normalisée - tricks classification")
+plt.show()
+
+
+disp = ConfusionMatrixDisplay(confusion_matrix=array,
+                          display_labels=label)
+
+disp.plot(cmap="gray")
+plt.title("Confusion matrix - tricks classification")
 plt.show()

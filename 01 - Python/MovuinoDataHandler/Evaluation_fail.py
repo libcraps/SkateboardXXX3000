@@ -101,8 +101,8 @@ ind_list = np.argmin(dist_euc,axis=1)[:,0]
 min_list_H1 = np.amin(dist_euc_H1,axis=1)[:,0]
 ind_list_H1 = np.argmin(dist_euc_H1,axis=1)[:,0]
 
-plt.hist(min_list, bins=15,  alpha=0.8, label="Tricks")
-plt.hist(min_list_H1, bins=15, alpha=0.8, label="Not Tricks")
+plt.hist(min_list, bins=15,  alpha=0.8, label="Success")
+plt.hist(min_list_H1, bins=15, alpha=0.8, label="Fail")
 plt.title("Distance euclidienne minimum - Accélération normalisée")
 plt.legend()
 plt.xlabel("Valeurs minimums")
