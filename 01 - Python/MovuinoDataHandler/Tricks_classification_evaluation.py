@@ -23,12 +23,6 @@ ref_heelflip = sk.SkateboardXXX3000DataSet(referenceTricksPath + "heelflip_refer
 ref_pop_shovit = sk.SkateboardXXX3000DataSet(referenceTricksPath + "pop_shovit_reference.csv")
 ref_fs_shovit = sk.SkateboardXXX3000DataSet(referenceTricksPath + "fs_shovit_reference.csv")
 
-
-"""
-trickDataSet = sk.SkateboardXXX3000DataSet(tricksPath)
-Te = trickDataSet.Te
-"""
-
 def arrayGyrNormalize(rawData):
     return np.array([rawData["gx_normalized"], rawData["gy_normalized"], rawData["gz_normalized"]])
 
