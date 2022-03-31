@@ -14,7 +14,7 @@ from scipy.interpolate import interp1d
 
 from scipy.signal import find_peaks
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_190322_\\record_9_interpolated.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_3_interpolated.csv"
 
 
 #--- Opening file ---
@@ -29,6 +29,15 @@ Te = skateDataSet.Te/1000
 Te = skateDataSet.Te
 print("sample period : " + str(Te))
 print("sample frequency : " + str(1 / Te))
+
+list_dt = [skateDataSet.time[i]-skateDataSet.time[i-1] for i in range(1,skateDataSet.nb_row)]
+ecart_min = min(list_dt)
+list_dt=np.pad(list_dt, (1,0))
+plt.plot(skateDataSet.time,list_dt)
+plt.title("Sample rate evolution")
+plt.ylabel("dt (s)")
+plt.xlabel("Time (s)")
+plt.show()
 
 #------- PEAK DETECTION ----------
 size_window = int(1/Te)

@@ -32,6 +32,8 @@ def plotVector(t, v, title, pos):
     fig.plot(t, v[:, 0], color="r", alpha=0.8, label="x")
     fig.plot(t, v[:, 1], color="green", alpha=0.8, label="y")
     fig.plot(t, v[:, 2], color="blue", alpha=0.8, label="z")
+    fig.legend()
+    fig.grid()
     fig.set_title(title)
 
 
