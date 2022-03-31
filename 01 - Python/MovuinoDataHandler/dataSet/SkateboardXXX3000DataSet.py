@@ -176,9 +176,11 @@ class SkateboardXXX3000DataSet():
         plt.subplot(224)
         plt.plot(time_list, self.normGyroscope, label="Norme gyroscope", color="black")
         plt.legend(loc='upper right')
+        plt.grid()
         plt.subplot(223)
         plt.plot(time_list, self.normAcceleration, label='Norme Accélération',color="black")
         plt.legend(loc='upper right')
+        plt.grid()
         plt.show()
 
     def dispProcessedData(self):

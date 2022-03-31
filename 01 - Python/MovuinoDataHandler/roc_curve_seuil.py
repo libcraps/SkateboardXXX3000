@@ -158,3 +158,7 @@ plt.show()
 
 print("Best F1 score : {}".format(round(np.amax(f1s),2)))
 print("AUPCR : {}".format(round(area(precisions,recalls),2)))
+
+print("Precision : {}".format(precisions[np.argmax(f1s)]))
+print("Rappel : {}".format(recalls[np.argmax(f1s)]))
+
