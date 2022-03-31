@@ -113,3 +113,15 @@ plt.title("Confusion matrix - tricks classification")
 plt.show()
 
 print(mt.accuracy_score(Y,ind_list))
+
+precisionScore_sklearn_microavg = mt.precision_score(Y, ind_list, average='micro')
+#
+# Average is assigned macro
+#
+precisionScore_sklearn_macroavg = mt.precision_score(Y, ind_list, average='macro')
+
+precisionScore_sklearn_weightedavg = mt.precision_score(Y, ind_list, average='weighted')
+
+print(precisionScore_sklearn_macroavg)
+print(precisionScore_sklearn_microavg)
+print(precisionScore_sklearn_weightedavg)

@@ -108,10 +108,20 @@ plt.legend()
 plt.xlabel("Valeurs minimums")
 plt.show()
 
+
+
 Y_pred = np.concatenate([min_list, min_list_H1])
 Y_true = np.concatenate([np.zeros(min_list.shape), np.ones(min_list_H1.shape)])
-precisions, recalls, thresholds = precision_recall_curve(Y_true, Y_pred)
 
+tot = len(min_list) + len(min_list_H1)
+h0 = len(min_list)/tot
+h1 = len(min_list_H1)/tot
+
+wheigth = np.concatenate([np.ones(min_list.shape)*h0, np.ones(min_list_H1.shape)*h1])
+precisions, recalls, thresholds = precision_recall_curve(Y_true, Y_pred,sample_weight=wheigth)
+
+print(len(min_list))
+print(len(min_list_H1))
 
 plt.figure(figsize=(4, 4))
 plt.plot(recalls, precisions)
@@ -134,3 +144,5 @@ plt.show()
 
 print("Best F1 score : {}".format(round(np.amax(f1s),2)))
 print("AUPCR : {}".format(round(area(precisions,recalls),2)))
+print("Precision : {}".format(precisions[np.argmax(f1s)]))
+print("Rappel : {}".format(recalls[np.argmax(f1s)]))

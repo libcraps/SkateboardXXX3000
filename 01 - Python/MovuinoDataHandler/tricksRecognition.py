@@ -96,7 +96,7 @@ events_interval = sa.centerEvents(completeSequence,  tricks_interval_temp)
 
 #------------
 
-seuil = 0.01
+seuil = 0.0121
 
 gyrNormalize_360Flip = arrayGyrNormalize(ref_360flip.rawData)
 gyrNormalize_ollie = arrayGyrNormalize(ref_ollie.rawData)
