@@ -124,7 +124,7 @@ ind_list_H1 = np.argmin(dist_euc_H1,axis=1)[:,0]
 
 plt.hist(min_list, bins=15,  alpha=0.8, label="Tricks")
 plt.hist(min_list_H1, bins=15, alpha=0.8, label="Not Tricks")
-plt.title("Distance euclidienne minimum - Accélération")
+plt.title("Distance euclidienne minimum - Gyroscope")
 plt.legend()
 plt.xlabel("Valeurs minimums")
 plt.ylabel("Fréquences")
@@ -132,7 +132,16 @@ plt.show()
 
 Y_pred = np.concatenate([min_list, min_list_H1])
 Y_true = np.concatenate([np.zeros(min_list.shape), np.ones(min_list_H1.shape)])
-precisions, recalls, thresholds = precision_recall_curve(Y_true, Y_pred)
+
+tot = len(min_list) + len(min_list_H1)
+h0 = len(min_list)/tot
+h1 = len(min_list_H1)/tot
+print(len(min_list))
+print(len(min_list_H1))
+
+wheigth = np.concatenate([np.ones(min_list.shape)*h1, np.ones(min_list_H1.shape)*h0])
+
+precisions, recalls, thresholds = precision_recall_curve(Y_true, Y_pred,sample_weight=wheigth)
 
 
 plt.figure(figsize=(4, 4))
@@ -151,7 +160,7 @@ f1s = f1_score(precisions,recalls)
 best_f1_thresh = best_threshold(f1s, thresholds)
 plt.plot(thresholds,f1s[:-1])
 plt.plot(best_f1_thresh, np.amax(f1s),"r+--")
-plt.title("Evolution du F1 score en fonction du seuil - Gyroscope normalisé \n F1 max pour seuil = {}".format(round(best_f1_thresh,2)))
+plt.title("Evolution du F1 score en fonction du seuil - Gyroscope normalisé \n F1 max pour seuil = {}".format(best_f1_thresh))
 plt.xlabel("Seuil")
 plt.ylabel("f1 score")
 plt.show()

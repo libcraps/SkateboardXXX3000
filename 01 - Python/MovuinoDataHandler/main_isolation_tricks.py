@@ -14,7 +14,7 @@ from scipy.interpolate import interp1d
 
 from scipy.signal import find_peaks
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_3_interpolated.csv"
+completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_7_interpolated.csv"
 
 
 #--- Opening file ---
