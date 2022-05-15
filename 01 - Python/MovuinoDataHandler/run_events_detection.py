@@ -3,16 +3,18 @@ Program for event detection
 
 """
 
-import dataSet.SkateboardXXX3000DataSet as sk
-import pandas as pd
-import tools.signalAnalysis as sa
-import tools.displayFunctions as df
 import os
+
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from scipy.interpolate import interp1d
-
 from scipy.signal import find_peaks
+
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.display_functions as df
+import tools.signal_analysis as sa
+
 ############   SETTINGS   #############
 completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_7_interpolated.csv"
 

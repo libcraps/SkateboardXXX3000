@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import signal
 
+
 def MeanFilter(dat_to_filter, nbPoint):
     """
 

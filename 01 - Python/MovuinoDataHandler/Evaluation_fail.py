@@ -1,10 +1,11 @@
 
-import dataSet.SkateboardXXX3000DataSet as sk
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.metrics import precision_recall_curve
 
+import dataSet.SkateboardXXX3000DataSet as sk
 
 tricksPath = "..\\..\\06 - Data\\Isolated_tricks\\"
 referenceTricksPath = "..\\..\\06 - Data\\Reference_tricks\\"

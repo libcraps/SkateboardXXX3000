@@ -1,7 +1,10 @@
-import dataSet.SkateboardXXX3000DataSet as sk
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+import dataSet.SkateboardXXX3000DataSet as sk
+
 ############   SETTINGS   #############
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 

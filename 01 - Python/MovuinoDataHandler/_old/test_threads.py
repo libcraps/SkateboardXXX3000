@@ -1,6 +1,7 @@
 import threading
-from threading import Thread
 import time
+from threading import Thread
+
 
 class test(Thread):
     compteur = 0

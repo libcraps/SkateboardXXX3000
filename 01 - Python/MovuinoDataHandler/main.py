@@ -1,10 +1,12 @@
+import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import signal
+
 import dataSet.SkateboardXXX3000DataSet as sk
 import tools.FilterMethods as fm
-import tools.integratinoFunctions as ef
-import os
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import signal
+import tools.integratino_functions as ef
 
 ############   SETTINGS   #############
 

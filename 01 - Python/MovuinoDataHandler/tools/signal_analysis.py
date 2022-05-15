@@ -1,9 +1,10 @@
 
-from scipy.interpolate import interp1d
-import pandas as pd
-from scipy.signal import find_peaks
 import numpy as np
+import pandas as pd
 from scipy import signal
+from scipy.interpolate import interp1d
+from scipy.signal import find_peaks
+
 
 def meanTime(dat):
     """

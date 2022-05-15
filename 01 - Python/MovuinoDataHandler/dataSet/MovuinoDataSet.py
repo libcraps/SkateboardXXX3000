@@ -1,20 +1,22 @@
-import threading
-from threading import Thread
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib.transforms import Bbox
-from matplotlib.ticker import MultipleLocator
-import pandas as pd
-import numpy as np
-import tools.FilterMethods as fm
-import tools.integratinoFunctions as ef
-import tools.GetAngleMethods as gam
-import tools.DisplayFunctions as df
-from scipy import signal
-from scipy.spatial.transform import Rotation as R
 import math
 import sys
+import threading
 import time
+from threading import Thread
+
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib.ticker import MultipleLocator
+from matplotlib.transforms import Bbox
+from scipy import signal
+from scipy.spatial.transform import Rotation as R
+
+import tools.DisplayFunctions as df
+import tools.FilterMethods as fm
+import tools.get_angle_methods as gam
+import tools.integratino_functions as ef
 
 
 class MovuinoDataSet():

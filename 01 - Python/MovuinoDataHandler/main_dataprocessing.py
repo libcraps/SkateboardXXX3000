@@ -3,14 +3,16 @@ Program for the dataprocessing of isolated tricks
 
 """
 
-import dataSet.SkateboardXXX3000DataSet as sk
-import tools.integratinoFunctions as ef
-import tools.signalAnalysis as sa
 import os
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy import signal
+
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.integratino_functions as ef
+import tools.signal_analysis as sa
 
 
 def Insert_row_(row_number, df, row_value):
@@ -91,7 +93,7 @@ for (repertoire, sousRepertoires, fichiers) in os.walk(folderPath):
             Te = trickDataSet.Te
 
             newDF = correctionInterpolation(trickDataSet.rawData)
-            newDF = sk.SkateboardXXX3000DataSet.normalizedL2(newDF)
+            newDF = sk.SkateboardXXX3000DataSet.normalized_L2(newDF)
             try :
                 del newDF['ax_normalized_1']
                 del newDF['ay_normalized_1']

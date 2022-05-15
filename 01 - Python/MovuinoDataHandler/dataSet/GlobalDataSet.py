@@ -1,5 +1,6 @@
 from dataSet.MovuinoDataSet import *
 
+
 class GlobalDataSet(MovuinoDataSet):
     """
     Class created mainly for debugging, it has for purpose to stock most of the data that we may need

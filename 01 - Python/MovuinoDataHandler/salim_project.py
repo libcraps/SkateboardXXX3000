@@ -1,10 +1,13 @@
-import dataSet.SkateboardXXX3000DataSet as sk
-import pandas as pd
-import tools.signalAnalysis as sa
 import os
+
 import matplotlib.pyplot as plt
-import tools.DisplayFunctions as df
 import numpy as np
+import pandas as pd
+
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.DisplayFunctions as df
+import tools.signal_analysis as sa
+
 ############   SETTINGS   #############
 
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet

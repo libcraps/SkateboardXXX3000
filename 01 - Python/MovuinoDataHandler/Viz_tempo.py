@@ -3,11 +3,13 @@ Fichier qui sert a sortir les figures manquantes du rapport
 """
 
 import os
-import dataSet.SkateboardXXX3000DataSet as sk
-import tools.displayFunctions as df
-import numpy as np
-import matplotlib.pyplot as plt
 import random
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.display_functions as df
 
 tricks="kickflip"
 tricks="pop_shovit"

@@ -1,18 +1,19 @@
 """
 
 """
-import dataSet.SkateboardXXX3000DataSet as sk
-import tools.integratinoFunctions as ef
-import tools.signalAnalysis as sa
-import random
 import os
+import random
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from scipy import signal
 import sklearn
+from scipy import signal
 from sklearn.metrics import precision_recall_curve
 
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.integratino_functions as ef
+import tools.signal_analysis as sa
 
 tricksPath = "..\\..\\06 - Data\\Isolated_tricks\\"
 referenceTricksPath = "..\\..\\06 - Data\\Reference_tricks\\"

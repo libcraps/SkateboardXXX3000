@@ -1,5 +1,6 @@
-import numpy as np
 import math
+
+import numpy as np
 
 """
 Usefull mainly for the sensitiv pen, it has some methods that calculates angle of the mvunio

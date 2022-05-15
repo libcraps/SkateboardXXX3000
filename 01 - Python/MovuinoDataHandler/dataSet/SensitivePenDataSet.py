@@ -1,5 +1,7 @@
-from dataSet.MovuinoDataSet import *
 import numpy as np
+
+from dataSet.MovuinoDataSet import *
+
 
 class SensitivePenDataSet(MovuinoDataSet):
     """Class that represent a data set of the sensitiv pen.

@@ -1,11 +1,14 @@
-from scipy.interpolate import interp1d
-import tools.displayFunctions as df
-import tools.filterMethods as fm
-import pandas as pd
-import matplotlib.pyplot as plt
-import serial
-import numpy as np
 import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import serial
+from scipy.interpolate import interp1d
+
+import tools.display_functions as df
+import tools.filter_methods as fm
+
 
 class SkateboardXXX3000DataSet():
     """
@@ -103,7 +106,7 @@ class SkateboardXXX3000DataSet():
 
 
     @staticmethod
-    def normalizedL2(rawData):
+    def normalized_L2(rawData):
         # Normalizatio of the data
 
         airG = np.trapz(rawData["normGyr"], rawData["time"])

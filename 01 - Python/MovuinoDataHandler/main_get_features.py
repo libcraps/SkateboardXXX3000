@@ -3,15 +3,17 @@ Program for the dataprocessing of isolated tricks
 
 """
 
-import dataSet.SkateboardXXX3000DataSet as sk
-import tools.FilterMethods as fm
-import tools.integratinoFunctions as ef
-import tools.signalAnalysis as sa
-import tools.DisplayFunctions as df
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy import signal
+
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.DisplayFunctions as df
+import tools.FilterMethods as fm
+import tools.integratino_functions as ef
+import tools.signal_analysis as sa
 
 ############   SETTINGS   #############
 

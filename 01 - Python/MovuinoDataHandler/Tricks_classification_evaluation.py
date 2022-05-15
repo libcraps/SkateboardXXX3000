@@ -1,18 +1,19 @@
 """
 
 """
-import dataSet.SkateboardXXX3000DataSet as sk
-import tools.integratinoFunctions as ef
-import tools.signalAnalysis as sa
-import random
 import os
+import random
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from scipy import signal
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import sklearn.metrics as mt
+from scipy import signal
+from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.integratino_functions as ef
+import tools.signal_analysis as sa
 
 tricksPath = "..\\..\\06 - Data\\Isolated_tricks\\"
 referenceTricksPath = "..\\..\\06 - Data\\Reference_tricks\\"
@@ -99,9 +100,9 @@ print(Y==ind_list)
 
 print(confusion_matrix(Y,ind_list))
 
-import seaborn as sn
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sn
 
 array = confusion_matrix(Y,ind_list)
 

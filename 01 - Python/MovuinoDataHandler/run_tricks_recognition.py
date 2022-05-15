@@ -1,14 +1,14 @@
-import dataSet.SkateboardXXX3000DataSet as sk
-import pandas as pd
-import tools.signalAnalysis as sa
-import tools.displayFunctions as df
 import os
+
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from scipy.interpolate import interp1d
-
 from scipy.signal import find_peaks
 
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.display_functions as df
+import tools.signal_analysis as sa
 
 ############   SETTINGS   #############
 completeSequencesPath = "..\\..\\06 - Data\\Raw_sequences\\sesh_151121_\\record_9_interpolated.csv"
@@ -24,7 +24,7 @@ ref_fs_shovit = sk.SkateboardXXX3000DataSet(referenceTricksPath + "fs_shovit_ref
 def arrayGyrNormalize(rawData):
     return np.array([rawData["gx_normalized"], rawData["gy_normalized"], rawData["gz_normalized"]])
 
-def Insert_row_(row_number, df, row_value):
+def insert_row_(row_number, df, row_value):
     df2 = df[row_number:]
     df1 = df[0:row_number]
     df1.loc[0] = row_value
@@ -51,7 +51,7 @@ def correctionInterpolation(rawData):
                 if i % 2 == 1:
                     temp = df["time"][0]
                     temp -= 0.01
-                    df = Insert_row_(0, df, [temp,
+                    df = insert_row_(0, df, [temp,
                                              df["ax"][0],
                                              df["ay"][0],
                                              df["az"][0],
@@ -112,7 +112,7 @@ for i, interval in enumerate(events_interval):
     tricks = completeSequence.rawData.loc[interval[0]:interval[1], :]
 
     newDF = correctionInterpolation(tricks)
-    newDF = sk.SkateboardXXX3000DataSet.normalizedL2(newDF.copy())
+    newDF = sk.SkateboardXXX3000DataSet.normalized_L2(newDF.copy())
 
     #distance euclidienne
     tricksGyr_normalized = arrayGyrNormalize(newDF)

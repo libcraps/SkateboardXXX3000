@@ -1,11 +1,13 @@
-import dataSet.SkateboardXXX3000DataSet as sk
 import os
-import numpy as np
-import matplotlib.pyplot as plt
-import tools.displayFunctions as df
-import tools.integratinoFunctions as i
 import random
+
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+
+import dataSet.SkateboardXXX3000DataSet as sk
+import tools.display_functions as df
+import tools.integratino_functions as i
 
 tricks_name = "fs_shovit"
 folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\"
