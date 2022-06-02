@@ -8,14 +8,14 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-import dataSet.SkateboardXXX3000DataSet as sk
+import movuinos.SkateboardXXX3000DataSet as sk
 import tools.display_functions as df
 
 tricks="kickflip"
 tricks="pop_shovit"
-folderPath = "..\\..\\06 - Data\\Isolated_Tricks\\"+tricks+"\\"
+folderPath = "..\\..\\06_Data\\Isolated_Tricks\\"+tricks+"\\"
 
-referenceTricksPath = "..\\..\\06 - Data\\Reference_tricks\\"
+referenceTricksPath = "..\\..\\06_Data\\Reference_tricks\\"
 
 ref_360flip = sk.SkateboardXXX3000DataSet(referenceTricksPath + "360_flip_reference.csv")
 ref_ollie = sk.SkateboardXXX3000DataSet(referenceTricksPath + "ollie_reference.csv")

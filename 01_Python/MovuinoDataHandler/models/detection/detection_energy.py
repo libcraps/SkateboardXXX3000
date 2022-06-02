@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from scipy import signal
 from scipy.interpolate import interp1d
+import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 from models.detection.detection_template_class import DetectionTricks
 
@@ -18,6 +19,8 @@ class DetectionEnergy(DetectionTricks):
         self.peaks_tricks = []
 
         self.events_interval = [[]]
+
+        self.last_complete_sequence=None
     
     def event_detection(self, skate_dataset, size_window,overlap, prominence, distance):
         if size_window % 2 == 0:
@@ -114,7 +117,3 @@ class DetectionEnergy(DetectionTricks):
         self.events_interval = self.center_events(data,  self.tricks_interval_temp)
 
         return self.events_interval
-        
-
-        
-    
