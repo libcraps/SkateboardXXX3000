@@ -34,7 +34,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-*_data/
+
 
 .idea/workspace.xml
 *.pyc
