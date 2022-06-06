@@ -53,4 +53,5 @@ def plotVect(t, v, title, pos):
     fig.plot(t, v[0], color="r",label="x")
     fig.plot(t, v[1], color="green",label="y")
     fig.plot(t, v[2], color="blue",label="z")
+    fig.grid()
     fig.set_title(title)

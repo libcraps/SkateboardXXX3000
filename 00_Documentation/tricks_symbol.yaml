@@ -1,0 +1,8 @@
+tricks_symbol :
+	bs_ps : "Backside pop-shovit"
+	fs_ps : "Frontside pop-shovit"
+	o : "Ollie"
+	n : "Nollie"
+	kf : "Kickflip"
+	hf : "Heelflip"
+	360f : "360 flip"
