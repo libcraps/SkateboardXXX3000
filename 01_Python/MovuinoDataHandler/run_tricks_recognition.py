@@ -15,7 +15,7 @@ import models.detection.detection_energy as dt
 import models.classification.reference_tricks_classification as rtc
 
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06_Data\\Raw_sequences\\sesh_151121_\\record_7_interpolated.csv"
+completeSequencesPath = "..\\..\\06_Data\\sequences\\sesh_151121\\raw\\record_7_interpolated.csv"
 reference_tricks_path = "..\\..\\06_Data\\Reference_tricks\\"
 
 #--- Opening file ---
@@ -37,54 +37,16 @@ seuil = 0.0121
 
 #----------------
 #extract every event of the complete path
+
 detection_model = dt.DetectionEnergy()
 events_interval = detection_model.detect(complete_sequence, size_window, overlap, prominence, distance)
 
 classification_model = rtc.ReferenceTricksClassification(reference_tricks_path, seuil)
 Y_pred = classification_model.classify(events_interval, complete_sequence)
 label = classification_model.label
-
 #raté pas raté ?
 
-plt.figure(figsize=(10,20))
-time_list = np.array(complete_sequence.time)
 
-df.plotVect(time_list, complete_sequence.acceleration, 'Acceleration (m/s2)', 221)
-plt.xlabel("Temps (s)")
-plt.legend(loc='upper right')
-plt.grid()
-plt.subplot(223)
-plt.plot(time_list, complete_sequence.normAcceleration, label='Norme Accélération', color="black")
-plt.legend(loc='upper right')
-plt.grid()
-df.plotVect(time_list, complete_sequence.gyroscope, 'Gyroscope (deg/s)', 222)
-plt.xlabel("Temps (s)")
-plt.legend(loc='upper right')
-plt.grid()
-plt.subplot(224)
-plt.plot(time_list, complete_sequence.normGyroscope, label='Norme Accélération', color="black")
-plt.legend(loc='upper right')
-plt.grid()
-plt.show()
-df.plotVect(time_list, complete_sequence.gyroscope, 'Gyroscope (deg/s)', 211)
+df.plot_tricks_recognition_result(complete_sequence, events_interval, label, Y_pred)
 
-for i, interval in enumerate(events_interval):
-    i_start = interval[0]
-    i_end = interval[1]
-    plt.plot(
-        [complete_sequence.time[i_start], complete_sequence.time[i_start], complete_sequence.time[i_end], complete_sequence.time[i_end],
-         complete_sequence.time[i_start]], [-abs(max(complete_sequence.normGyroscope[i_start:i_end])),
-                                            abs(max(complete_sequence.normGyroscope[i_start:i_end])),
-                                            abs(max(complete_sequence.normGyroscope[i_start:i_end])),
-                                            -abs(max(complete_sequence.normGyroscope[i_start:i_end])),
-                                            -abs(max(complete_sequence.normGyroscope[i_start:i_end]))], color="r")
-    plt.text(complete_sequence.time[i_start], max(complete_sequence.normGyroscope[i_start:i_end]) + 50, "{}".format(label[Y_pred[i]], fontsize=20))
-plt.legend(loc='upper right')
-plt.xlabel("Temps (s)")
-plt.grid()
-plt.ylim([-max(complete_sequence.normGyroscope) * 1.2, max(complete_sequence.normGyroscope) * 1.2])
-plt.subplot(212)
-plt.plot(time_list, complete_sequence.normGyroscope, label="Norme gyroscope", color="black")
-plt.legend(loc='upper right')
-plt.grid()
-plt.show()
+
