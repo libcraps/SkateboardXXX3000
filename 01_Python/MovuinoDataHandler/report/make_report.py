@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
+import jinja2
+from pathlib import Path
 
-from omegaconf.dictconfig import DictConfig
-
-from steps.make_model_report_detect import make_model_report_detect
-from steps.make_model_report_segment import make_report_segment
-from tools.model_report_detect import bold_max_metrics, dict_to_latex
-
-
-def make_model_report(
-    det_metrics_per_model, seg_metrics_per_model, config:DictConfig,_config: DictConfig
-):
+def make_report(data):
 
     beginning = """
     \\documentclass[a4paper,11pt]{article}
@@ -65,8 +58,8 @@ def make_model_report(
 
     %%%START HERE!
     %%%Input the RD number and report title here. It will update the title and header automatically :)
-    \\newcommand\\rd{RD\\_999}
-    \\newcommand\\rdtitle{Rokken Report Template}
+    \\newcommand\\rd{Rapport}
+    \\newcommand\\rdtitle{SkateboardXXX3000}
 
     \\rhead{\\rd \\hspace{0.5mm} \\rdtitle}
     \\lhead{}
@@ -79,18 +72,23 @@ def make_model_report(
     \\end{document}
     """
 
-    bold_max_metrics(det_metrics_per_model[0])
-    render_det = (
-        "\\section{DETECTION}\n\\subsection{Model Comparison}"
-        + dict_to_latex(det_metrics_per_model[0])
-        + "\n\\subsection{Comparison by Group}\\begin{itemize}[leftmargin=0cm]"
-        + det_metrics_per_model[1]
-        + "\n\\end{itemize}"
+    latex_jinja_env = jinja2.Environment(
+    block_start_string="\BLOCK{",
+    block_end_string="}",
+    variable_start_string="\VAR{",
+    variable_end_string="}",
+    comment_start_string="\#{",
+    comment_end_string="}",
+    line_statement_prefix="%%",
+    line_comment_prefix="%#",
+    trim_blocks=False,
+    lstrip_blocks=False,
+    autoescape=False,
+    loader=jinja2.FileSystemLoader(Path("./report/")),
     )
 
-    render_seg = make_report_segment(metrics_per_model=seg_metrics_per_model,config=config.segment).result()
+    print(Path("report/").exists())
+    template = latex_jinja_env.get_template("template_coach.tex")
+    render = template.render(data)
 
-    # render_det=""
-    # render_seg="ok"
-
-    return beginning + render_det + render_seg + end
+    return beginning + render + end

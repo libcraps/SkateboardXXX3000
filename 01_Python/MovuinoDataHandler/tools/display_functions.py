@@ -56,7 +56,7 @@ def plotVect(t, v, title, pos):
     fig.grid()
     fig.set_title(title)
 
-def plot_tricks_recognition_result(complete_sequence, events_interval, label, Y_pred):
+def plot_tricks_recognition_result(complete_sequence, events_interval, label, Y_pred, save=False,path=""):
     plt.figure(figsize=(10, 20))
     time_list = np.array(complete_sequence.time)
 
@@ -77,8 +77,8 @@ def plot_tricks_recognition_result(complete_sequence, events_interval, label, Y_
     plt.legend(loc='upper right')
     plt.grid()
     plt.show()
-    plotVect(time_list, complete_sequence.gyroscope, 'Gyroscope (deg/s)', 211)
 
+    plotVect(time_list, complete_sequence.gyroscope, 'Gyroscope (deg/s)', 211)
     for i, interval in enumerate(events_interval):
         i_start = interval[0]
         i_end = interval[1]
@@ -100,4 +100,6 @@ def plot_tricks_recognition_result(complete_sequence, events_interval, label, Y_
     plt.plot(time_list, complete_sequence.normGyroscope, label="Norme gyroscope", color="black")
     plt.legend(loc='upper right')
     plt.grid()
+    if save:
+        plt.savefig(path)
     plt.show()
