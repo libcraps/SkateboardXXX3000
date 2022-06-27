@@ -1,0 +1,94 @@
+
+\newpage
+\section{SEGMENTATION}
+Result:
+
+\subsection{Subgroup per model}
+\begin{itemize}[leftmargin=0cm]
+%% for iname, idata in eval["subgroup_per_model"].items()
+  \vspace*{0.4cm}
+  \item \begin{description}
+    \small
+    \item model name : \VAR{ iname | replace("_", "\_") -}
+    \vspace*{0.1cm}
+    \item \VAR{idata.style.to_latex(
+      position="H",
+      position_float="centering",
+      hrules=True,
+      multirow_align="t",
+      multicol_align="r") |
+    replace("@cg", "\\cellcolor{green!") |
+    replace("@cr", "\\cellcolor{red!")|
+    replace("@pm","$\pm$")| replace("@lb","{") |
+    replace("@rb","}")|
+    replace("@fns","\\footnotesize")|
+    replace("@bf", "")|
+    replace("@mrb", "")|
+    replace("_", "\_") -}
+      \end{description}
+%% endfor
+\end{itemize}
+
+
+\newpage
+
+\subsection{Model per subgroup}
+\begin{itemize}[leftmargin=0cm]
+%% for iname, idata in eval["model_per_subgroup"].items()
+\vspace*{0.4cm}
+  \item \begin{description}
+    \small
+    \item Subgroup : \VAR{ iname | replace("_", "\_") -}
+    \vspace*{0.1cm}
+    \item \VAR{idata.style.to_latex(
+      position="H",
+      position_float="centering",
+      hrules=True,
+      multirow_align="t",
+      multicol_align="r")|
+    replace("@cg", "\\cellcolor{green!") |
+    replace("@cr", "\\cellcolor{red!")|
+    replace("@pm","$\pm$")| replace("@lb","{") |
+    replace("@rb","}")|
+    replace("@mrb","}")|
+    replace("@fns","\\footnotesize")|
+    replace("@bf", "\\textbf{")|
+    replace("_", "\_") -}
+  \end{description}
+
+%% endfor
+\end{itemize}
+
+
+
+\newpage
+
+\subsection{Model per subgroup sumup}
+\begin{itemize}[leftmargin=0cm]
+%% for iname, idata in eval["model_per_subgroup_sumup"].items()
+\vspace*{0.4cm}
+  \item \begin{description}
+    \small
+    \item Subgroup : \VAR{ iname | replace("_", "\_") -}
+    \vspace*{0.1cm}
+    \item \VAR{idata.style.to_latex(
+      position="H",
+      position_float="centering",
+      hrules=True,
+      multirow_align="t",
+      multicol_align="r")|
+    replace("@cg", "\\cellcolor{green!") |
+    replace("@cr", "\\cellcolor{red!")|
+    replace("@pm","$\pm$")| replace("@lb","{") |
+    replace("@rb","}")|
+    replace("@mrb","}")|
+    replace("@fns","\\footnotesize")|
+    replace("@bf", "\\textbf{")|
+    replace("_", "\_") -}
+  \end{description}
+
+%% endfor
+\end{itemize}
+
+
+
