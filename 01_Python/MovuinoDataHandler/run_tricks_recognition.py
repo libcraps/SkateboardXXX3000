@@ -15,8 +15,8 @@ import models.detection.detection_energy as dt
 import models.classification.reference_tricks_classification as rtc
 
 ############   SETTINGS   #############
-completeSequencesPath = "..\\..\\06_Data\\sequences\\sesh_151121\\raw\\record_7_interpolated.csv"
-reference_tricks_path = "..\\..\\06_Data\\Reference_tricks\\"
+completeSequencesPath = "../../06_Data/sequences/sesh_151121/raw/record_7_interpolated.csv"
+reference_tricks_path = "../../06_Data/Reference_tricks/"
 
 #--- Opening file ---
 print("Opening : " + completeSequencesPath)
