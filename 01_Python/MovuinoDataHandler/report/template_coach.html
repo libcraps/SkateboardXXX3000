@@ -1,0 +1,17 @@
+
+<head>
+  <title>Rapport de session</title>
+</head>
+
+<body>
+<p>Record : \VAR{data["filename"]}</p>
+<p>Nombre de tricks identifies : \VAR{data["nb_tricks"]}</p>
+
+<h1>Detail des tricks</h1>
+%% for name in data["tricks"]
+  <li>
+  <p>\VAR{name}</p>
+  </li>
+%% endfor
+
+</body>

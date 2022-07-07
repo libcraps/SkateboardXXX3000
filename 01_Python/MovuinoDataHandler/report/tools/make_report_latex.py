@@ -3,7 +3,7 @@ import os
 import jinja2
 from pathlib import Path
 
-def make_report(data):
+def make_report_latex(data):
 
     beginning = """
     \\documentclass[a4paper,11pt]{article}

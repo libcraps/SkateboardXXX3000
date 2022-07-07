@@ -28,24 +28,24 @@ class Quaternion:
         rotMat = np.array([[c00, c01, c02], [c10, c11, c12], [c20, c21, c22]])
         return rotMat
 
-# def get_euler_angles(q):
-#     m = get_rot_mat(q)
-#     test = -m[2, 0]
-#     if test > 0.99999:
-#         yaw = 0
-#         pitch = np.pi / 2
-#         roll = np.arctan2(m[0, 1], m[0, 2])
-#     elif test < -0.99999:
-#         yaw = 0
-#         pitch = -np.pi / 2
-#         roll = np.arctan2(-m[0, 1], -m[0, 2])
-#     else:
-#         yaw = np.arctan2(m[1, 0], m[0, 0])
-#         pitch = np.arcsin(-m[2, 0])
-#         roll = np.arctan2(m[2, 1], m[2, 2])
+    def get_euler_angles(self):
+        m = self.get_rot_mat()
+        test = -m[2, 0]
+        if test > 0.99999:
+            yaw = 0
+            pitch = np.pi / 2
+            roll = np.arctan2(m[0, 1], m[0, 2])
+        elif test < -0.99999:
+            yaw = 0
+            pitch = -np.pi / 2
+            roll = np.arctan2(-m[0, 1], -m[0, 2])
+        else:
+            yaw = np.arctan2(m[1, 0], m[0, 0])
+            pitch = np.arcsin(-m[2, 0])
+            roll = np.arctan2(m[2, 1], m[2, 2])
 
-#     # yaw = rad2deg(yaw)
-#     # pitch = rad2deg(pitch)
-#     # roll = rad2deg(roll)
+        yaw = yaw*180/np.pi
+        pitch = pitch*180/np.pi
+        roll = roll*180/np.pi
 
-#     return yaw, pitch, roll
+        return yaw, pitch, roll

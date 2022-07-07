@@ -6,6 +6,15 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.signal import find_peaks
 
+import os
+import jinja2
+import pdfkit
+import pandas as pd
+import numpy as np
+from datetime import date
+# Marche pas avec mon environnement conda
+from pdflatex import PDFLaTeX
+
 import movuinos.SkateboardXXX3000DataSet as sk
 import tools.display_functions as df
 import tools.signal_analysis as sa
@@ -14,9 +23,13 @@ import tools.correction_interpolation as ci
 import models.detection.detection_energy as dt
 import models.classification.reference_tricks_classification as rtc
 
-from report.make_report import make_report
+from report.tools.make_report_latex import make_report_latex
+from report.tools.make_report_html import make_report_html
+from report.tools.html2pdf import html2pdf
 
 ############   SETTINGS   #############
+
+print("run_tricks_recognition")
 completeSequencesPath = "../../06_Data/sequences/sesh_151121/raw/record_7_interpolated.csv"
 reference_tricks_path = "../../06_Data/Reference_tricks/"
 
@@ -55,23 +68,19 @@ for y in Y_pred:
 df.plot_tricks_recognition_result(complete_sequence, events_interval, label, Y_pred,save=True, path="./report/figures/result_glob.png")
 
 report={}
-report["file_name"]=complete_sequence
+report["filename"]=complete_sequence.filepath
 report["nb_tricks"]=len(Y_pred)
 report["tricks"]=tricks_with_name
 data_report = {"data":report}
 
-tex = make_report(data_report)
-
-with open("./report/sesh_report/result.tex","w") as f:
+tex = make_report_html(data_report)
+print(report["filename"])
+with open("./report/sesh_report/result.html","w") as f:
     f.write(tex)
 
-# Marche pas avec mon environnement conda
-# from pdflatex import PDFLaTeX
-
-# pdfl = PDFLaTeX.from_texfile("./report/sesh_report/result.tex")
-# pdf, log, completed_process = pdfl.create_pdf(keep_pdf_file=True, keep_log_file=True)
-
-
+html_path="./report/sesh_report/result.html"
+pdf_path = "./report/sesh_report/result.pdf"
+html2pdf(html_path, pdf_path)
 
 
 
