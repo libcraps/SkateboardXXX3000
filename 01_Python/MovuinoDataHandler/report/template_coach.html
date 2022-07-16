@@ -7,11 +7,26 @@
 <p>Record : \VAR{data["filename"]}</p>
 <p>Nombre de tricks identifies : \VAR{data["nb_tricks"]}</p>
 
+<img src="C:\Users\Pierre\Documents\GitHub\SkateboardXXX3000\01_Python\MovuinoDataHandler\report\figures\result_glob.png">
+
+
 <h1>Detail des tricks</h1>
 %% for name in data["tricks"]
+  <ul type="disc">
   <li>
-  <p>\VAR{name}</p>
+    <div name="trick">
+      <p>\VAR{name} : </p>
+      <ul type="circle">
+        <li>
+          <p> height : \VAR{data["detail"][name]["height"]} </p>
+        </li>
+        <li>
+          <p> azimuth : \VAR{data["detail"][name]["azimuth"]} </p>
+        </li>
+      </ul>
+    </div>
   </li>
+  </ul>
 %% endfor
 
 </body>

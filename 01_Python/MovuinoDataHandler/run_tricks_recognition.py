@@ -20,6 +20,8 @@ import tools.display_functions as df
 import tools.signal_analysis as sa
 import tools.correction_interpolation as ci
 
+from tools.get_tricks_features import get_tricks_features
+
 import models.detection.detection_energy as dt
 import models.classification.reference_tricks_classification as rtc
 
@@ -71,6 +73,9 @@ report={}
 report["filename"]=complete_sequence.filepath
 report["nb_tricks"]=len(Y_pred)
 report["tricks"]=tricks_with_name
+
+report["detail"] = get_tricks_features(complete_sequence, events_interval, tricks_with_name)
+
 data_report = {"data":report}
 
 tex = make_report_html(data_report)
