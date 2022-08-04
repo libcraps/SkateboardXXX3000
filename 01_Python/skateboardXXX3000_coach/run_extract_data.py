@@ -8,7 +8,7 @@ import movuinos.SkateboardXXX3000DataSet as sk
 ############   SETTINGS   #############
 device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-folderPath = "..\\..\\06_Data\\sequences\\data_test\\"
+folderPath = "..\\..\\06_Data\\sequences\\sesh_300722\\"
 Path(folderPath).mkdir(exist_ok=True)
 gen_filename = "record"  # generic name, numbers will be added for duplicates
 
