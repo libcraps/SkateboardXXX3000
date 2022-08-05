@@ -15,31 +15,30 @@ import movuinos.SkateboardXXX3000DataSet as sk
 import tools.display_functions as df
 import tools.signal_analysis as sa
 
+import yaml
+
+from pathlib import Path
+
 ############   SETTINGS   #############
-complete_sequences_path = "..\\..\\06_Data\\sequences\\data_test\\record_2.csv"
 
+sequence_path = Path("..\\..\\..\\..\\06_Data\\sequences\\sesh_190322\\")
+raw_path = sequence_path / "raw"
+gt_path = sequence_path / "gt"
 
+file_name = "record_1_interpolated.csv"
+gt_file_name = file_name[:-4] + ".yaml"
+print(raw_path.exists())
+print(gt_path.exists())
+print(str(gt_file_name))
 #--- Opening file ---
-print("Opening : " + complete_sequences_path)
-complete_sequence = sk.SkateboardXXX3000DataSet(complete_sequences_path)
 
-"""
-skateDataSet.time =[t/1000 for t in skateDataSet.time]
-skateDataSet.interpolateData["time"] /=1000
-Te = skateDataSet.Te/1000
-"""
+file_path = raw_path / file_name
+print("Opening : " + file_path.name)
+complete_sequence = sk.SkateboardXXX3000DataSet(str(file_path))
+
 Te = complete_sequence.Te
 print("sample period : " + str(Te))
 print("sample frequency : " + str(1 / Te))
-
-list_dt = [complete_sequence.time[i] - complete_sequence.time[i - 1] for i in range(1, complete_sequence.nb_row)]
-ecart_min = min(list_dt)
-list_dt=np.pad(list_dt, (1,0))
-plt.plot(complete_sequence.time, list_dt)
-plt.title("Sample rate evolution")
-plt.ylabel("dt (s)")
-plt.xlabel("Time (s)")
-plt.show()
 
 #------- PEAK DETECTION ----------
 size_window = int(1/Te)
@@ -138,8 +137,14 @@ plt.grid()
 plt.tight_layout()
 plt.show()
 
-#------------ PEAKS ISOLATION ------------------
+label = []
+df_label = pd.DataFrame(columns=["time","tricks","success"])
 
+df_label["time"] = complete_sequence.time
+df_label = df_label.fillna(0)
+
+print(df_label)
+#------------ PEAKS ISOLATION ------------------
 for k in range(len(tricks_interval)):
     #We're looking for the best index that matches with the time interval
     i_start = int(float(tricks_interval[k][0]-0.1)/Te)
@@ -222,41 +227,31 @@ for k in range(len(tricks_interval)):
     plt.grid()
     plt.tight_layout()
     plt.show()
-    """
-    g=np.cumsum(skateDataSet.normGyroscope[i_start:i_end])
-    print(max(g))
-    print(skateDataSet.time[i_start +np.argmin(np.abs(g-np.amax(g)/2))])
-    plt.plot(g)
-    plt.plot([0, 120],[np.amax(g)/2, np.amax(g)/2],'r+--')
-    plt.plot([np.argmin(np.abs(g-np.amax(g)/2)), np.argmin(np.abs(g-np.amax(g)/2))],[0, np.amax(g)],'r+--')
-    plt.show()
-
-    plt.plot(np.abs(g-np.amax(g)/2))
-    plt.show()
-    """
 
 
-#---- File extraction ----
+    #---- File extraction ----
     toExtract = str(input("Voulez vous extraire les données d'une figure y/n - other (o):"))
-
     if toExtract == "y":
         # Tricks to isolate
-        tricks_name = str(input("Quelle figure voulez vous extraitre (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip, fs_180, bs_180, notTricks) :"))
-        isSuccess = str(input("Est ce que la figure est réussi y/n - other (o):"))
-        succes = "success"
-        if isSuccess == "n":
-            succes = "fail"
+        tricks_name = str(input("Quelle figure voulez vous extraire (ollie, kickflip, heelflip, pop_shovit, fs_shovit, 360_flip, fs_180, bs_180, noting, fs_pivot,bs_pivot) :"))
 
-        listeFichiers = []
-        for (repertoire, sousRepertoires, fichiers) in os.walk("..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\"):
-            listeFichiers.extend(fichiers)
-        fileTricksPath = "..\\..\\06 - Data\\Isolated_Tricks\\" + tricks_name + "\\" + tricks_name + "_" + succes + "_"+str(len(listeFichiers)+1) + ".csv"
+        if tricks_name != "nothing":
+            isSuccess = str(input("Est ce que la figure est réussi y/n - other (o):"))
+            succes = "success"
+            if isSuccess == "n":
+                succes = "fail"
+            beginning = float(input("Beginning of the trick : "))
+            end = float(input("End of the trick : "))
 
-        df_iso_tricks = complete_sequence.rawData.iloc[i_start:i_end, :]
+            label.append(f"{tricks_name}_{succes}_start_{beginning}_end_{end}")
 
-        dir = os.path.dirname(fileTricksPath)
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        df_iso_tricks.to_csv(fileTricksPath, sep=",", index=False, index_label=False)
+            df_label.loc[(df_label["time"] >= beginning) & (df_label["time"] <= end), "tricks"] = tricks_name
+            df_label.loc[(df_label["time"] >= beginning) & (df_label["time"] <= end), "success"] = int(isSuccess != "n")
 
-        tricks = sk.SkateboardXXX3000DataSet(fileTricksPath)
+
+print(df_label)
+print(label)
+with open(gt_path / gt_file_name, 'w') as outfile:
+    yaml.dump(label, outfile, default_flow_style=False)
+
+df_label.to_csv(gt_path/file_name, index=False)
