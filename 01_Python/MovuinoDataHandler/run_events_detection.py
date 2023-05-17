@@ -16,7 +16,7 @@ import tools.display_functions as df
 import tools.signal_analysis as sa
 
 ############   SETTINGS   #############
-complete_sequences_path = "..\\..\\06_Data\\sequences\\data_test\\record_2.csv"
+complete_sequences_path = "../../06_Data/sequences/sesh_151121/raw/record_7_interpolated.csv"
 
 
 #--- Opening file ---

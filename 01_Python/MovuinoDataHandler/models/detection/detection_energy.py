@@ -47,8 +47,8 @@ class DetectionEnergy(DetectionTricks):
             window[0] += size_window - overlap
             window[1] += size_window - overlap
 
-        sum_gyr = np.array(sum_gyr)
-        sum_acc = np.array(sum_acc)
+        self.sum_gyr = np.array(sum_gyr)
+        self.sum_acc = np.array(sum_acc)
         peaks_gyr, _gyr = find_peaks(sum_gyr, prominence=prominence, distance=distance)
         peaks_acc, _acc = find_peaks(sum_acc, prominence=prominence - 1, distance=distance - 2)
         time_win = np.array(time_win)
@@ -71,15 +71,16 @@ class DetectionEnergy(DetectionTricks):
             else:
                 tricks_interval.append([time_win[i] - dt_i, time_win[i] + dt_i])
         #return super().detect()
-        return time_win, tricks_interval, peaks_gyr, peak_a, peaks_tricks
+        return time_win, tricks_interval, peaks_gyr, peaks_acc, peaks_tricks
         
     def center_events(self,skate_dataset,tricks_interval, dt_f = 0.6):
         time_list = []
         Te = skate_dataset.Te
+        Te=0.01
         for k in range(len(tricks_interval)):
             # We're looking for the best index that matches with the time interval
-            i_start = int(float(tricks_interval[k][0] - 0.1) / Te)
-            i_end = int(float(tricks_interval[k][1] - 0.1) / Te)
+            i_start = 0#int(float(tricks_interval[k][0] - 0.1) / Te)
+            i_end = 1#int(float(tricks_interval[k][1] - 0.1) / Te)
 
             while skate_dataset.time[i_start] < tricks_interval[k][0]:
                 i_start += 1

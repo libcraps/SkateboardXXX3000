@@ -32,7 +32,7 @@ from report.tools.html2pdf import html2pdf
 ############   SETTINGS   #############
 
 print("run_tricks_recognition")
-completeSequencesPath = "../../06_Data/sequences/sesh_151121/raw/record_7_interpolated.csv"
+completeSequencesPath = "../../06_Data/sequences/sesh_160122/raw/record_1_interpolated.csv"
 reference_tricks_path = "../../06_Data/Reference_tricks/"
 
 #--- Opening file ---
@@ -57,6 +57,46 @@ seuil = 0.0121
 
 detection_model = dt.DetectionEnergy()
 events_interval = detection_model.detect(complete_sequence, size_window, overlap, prominence, distance)
+
+time_list = np.array(complete_sequence.time)
+df.plotVect(time_list, complete_sequence.acceleration, 'Acceleration (m/s2)', 321)
+plt.plot(detection_model.time_win,detection_model.sum_acc,'-o', markersize=2, color="grey")
+plt.plot(detection_model.time_win[detection_model.peaks_a], detection_model.sum_acc[detection_model.peaks_a], "v", markersize=5, color="orange", label="Peaks")
+plt.plot(detection_model.time_win[detection_model.peaks_tricks], detection_model.sum_acc[detection_model.peaks_tricks], "v", markersize=5, color="red", label="Peaks tricks")
+plt.xlabel("Temps (s)")
+plt.legend(loc='upper right')
+plt.grid()
+plt.subplot(323)
+plt.plot(time_list, complete_sequence.normAcceleration, label='Norme Accélération', color="black")
+plt.legend(loc='upper right')
+plt.grid()
+plt.subplot(325)
+plt.plot(detection_model.time_win,detection_model.sum_acc,'-o', markersize=2)
+plt.plot(detection_model.time_win[detection_model.peaks_a], detection_model.sum_acc[detection_model.peaks_a], "v", markersize=5, color="orange", label="Peaks")
+plt.plot(detection_model.time_win[detection_model.peaks_tricks], detection_model.sum_acc[detection_model.peaks_tricks], "v", markersize=5, color="red", label="Peaks tricks")
+plt.title("Norme de l'accélération fenêtrée")
+plt.grid()
+df.plotVect(time_list, complete_sequence.gyroscope, 'Gyroscope (deg/s)', 322)
+plt.plot(detection_model.time_win, detection_model.sum_gyr,'-o', markersize=2, color="grey")
+plt.plot(detection_model.time_win[detection_model.peaks_gyr], detection_model.sum_gyr[detection_model.peaks_gyr], "v", markersize=5, color="orange", label="Peaks")
+plt.plot(detection_model.time_win[detection_model.peaks_tricks], detection_model.sum_gyr[detection_model.peaks_tricks], "v", markersize=5, color="red", label="Peaks tricks")
+plt.legend(loc='upper right')
+plt.xlabel("Temps (s)")
+plt.grid()
+plt.subplot(324)
+plt.plot(time_list, complete_sequence.normGyroscope, label="Norme gyroscope", color="black")
+plt.legend(loc='upper right')
+plt.grid()
+
+plt.subplot(326)
+plt.plot(detection_model.time_win, detection_model.sum_gyr,'-o', markersize=2)
+plt.plot(detection_model.time_win[detection_model.peaks_gyr], detection_model.sum_gyr[detection_model.peaks_gyr], "v", markersize=5, color="orange", label="Peaks")
+plt.plot(detection_model.time_win[detection_model.peaks_tricks], detection_model.sum_gyr[detection_model.peaks_tricks], "v", markersize=5, color="red", label="Peaks tricks")
+plt.title("Norme du gyroscope fenêtrée")
+
+plt.grid()
+plt.tight_layout()
+plt.show()
 
 classification_model = rtc.ReferenceTricksClassification(reference_tricks_path, seuil)
 Y_pred = classification_model.classify(events_interval, complete_sequence)

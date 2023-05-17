@@ -112,6 +112,8 @@ class SkateboardXXX3000DataSet():
         airG = np.trapz(rawData["normGyr"], rawData["time"])
         airA = np.trapz(rawData["normAccel"], rawData["time"])
 
+        
+
         rawData['ax_normalized'] = rawData['ax'] / airA
         rawData['ay_normalized'] = rawData['ay'] / airA
         rawData['az_normalized'] = rawData['az'] / airA

@@ -54,6 +54,8 @@ def plotVect(t, v, title, pos):
     fig.plot(t, v[1], color="green",label="y")
     fig.plot(t, v[2], color="blue",label="z")
     fig.grid()
+    plt.grid()
+    
     fig.set_title(title)
 
 def plot_tricks_recognition_result(complete_sequence, events_interval, label, Y_pred, save=False,path=""):
